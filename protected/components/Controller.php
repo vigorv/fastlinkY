@@ -14,13 +14,6 @@ class Controller extends CController {
     public $ip;
     
 
-    public function filters() {
-        return array(
-            array(
-                'application.filters.AccessFilter',
-            ),
-        );
-    }
 
     public function init() {
         parent::init();
