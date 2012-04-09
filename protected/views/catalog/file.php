@@ -73,7 +73,7 @@ if (!empty($files[0])):
             ?>
             <!-- single playlist entry as an "template" -->
             <a href="<?= $url; ?>">
-                <?= $files[0]['name']; ?>
+                <?= $file['name']; ?>
             </a>            
             &nbsp;<button id="mainPlay" class="play" rel="#mies"><i class="icon-play"></i>
                 <div id="playlist" style="display:none;">
