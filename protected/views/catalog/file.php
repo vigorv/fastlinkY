@@ -77,7 +77,7 @@ if (!empty($files[0])):
             </a>            
             &nbsp;<button id="mainPlay" class="play" rel="#mies"><i class="icon-play"></i>
                 <div id="playlist" style="display:none;">
-                    <a href="<?= $url; ?>">
+                    <a href="<?= $aurl; ?>">
                         <?= $file['name']; ?>
                     </a>      
                 </div>
@@ -158,7 +158,7 @@ if (!empty($files[0])):
                     <a href="<?= $url; ?>"><?= $name; ?></a>
                     &nbsp;<button class="play" rel="#mies"><i class="icon-play"></i>
                         <div id="playlist" style="display:none;">
-                            <a href="<?= $url; ?>">
+                            <a href="<?= $aurl; ?>">
                                 <?= $name; ?>
                             </a>      
                         </div>
