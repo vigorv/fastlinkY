@@ -51,7 +51,7 @@ a:visited:hover {
     float: left;
     margin: 25px 15px 0px 0px;
     width: 90px;
-    
+    height:25px;
     border: 1px solid #26ade4;
     color: #999999;
     
@@ -99,11 +99,17 @@ div.logo a {
     float: left;
     margin: 25px 0px 0px 0px;
     width: 220px;
+    height:25px;
 
     border: 1px solid #26ade4;
     color: #999999;
     
     font-style: italic;
+}
+
+.center_block input{
+    height:25px;
+    
 }
 
 /*Середина*/
