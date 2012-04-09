@@ -15,7 +15,7 @@ class CatalogController extends Controller {
         $pages = new CPagination();
         $pages->pageSize = Yii::app()->params['filePerPage'];
         $str2 = filter_var($text, FILTER_SANITIZE_STRING);
-        $res=array();
+        $res = array();
         switch ($search_opt) {
             case 'bytitle':
                 if ($this->zone == '9') {
@@ -57,8 +57,7 @@ class CatalogController extends Controller {
     }
 
     public function actionViewv($id) {
-      $this->autoload($id);
-
+        $this->autoload($id);
     }
 
     public function actionFile($id = 0, $int1 = 0) {
@@ -80,7 +79,7 @@ class CatalogController extends Controller {
         $this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
     }
 
-    public function actionLoad($id=0) {
+    public function actionLoad($id = 0) {
 //$aliases = Configure::read('App.aliasUrls');
         $aliases = array('');
         $r = (empty($_SERVER['HTTP_REFERER'])) ? '' : $_SERVER['HTTP_REFERER'];
@@ -97,17 +96,21 @@ class CatalogController extends Controller {
             $letter = '';
             if ($file->sgroup == 1) {
                 $letter = strtolower($file->dir[0]);
-                $file->dir = $letter . '/' . $file->dir;
+                if (($letter >= '0' ) && ($letter <= '9')) {
+                    $letter = '0';
+                    $file->dir = '0-999/' . $file->dir;
+                } else
+                    $file->dir = $letter . '/' . $file->dir;
             }
 
             $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
-            if (count($servers)){
+            if (count($servers)) {
                 $server = $servers[array_rand($servers)];
-                $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone,$this->ip);
-                $url = 'http://' . $server['server_ip'] .':'.$server['server_port']. '/' . $file->dir . '/' . $file->original_name;
+                $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
+                $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
                 $this->render('view', array('url' => $url));
             } else
-                  $this->render('/elements/messages', array('msg' => 'Server not found'));
+                $this->render('/elements/messages', array('msg' => 'Server not found'));
         } else {
             $this->render('/elements/messages', array('msg' => 'What u want?'));
         }
