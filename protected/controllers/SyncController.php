@@ -43,7 +43,7 @@ class SyncController extends CController {
                     $file->user_id = $fileInfo['user_id'];
             } else {
                 echo base64_encode(serialize(array('error_message' => "guest uploads not allowed")));
-                Yii::app()->end();
+                exit();
             }
             $server = CFLServers::model()->find('server_ip = "' . $this->ip . '"');
             if ($server) {
@@ -52,7 +52,8 @@ class SyncController extends CController {
                     $file->group = $file->id;
                     $file->save();
                     echo base64_encode(serialize(array('id' => $file->id)));
-                }
+                } else
+                    echo base64_encode(serialize(array('error_message'=>'save failed')));                
             } else
                 echo base64_encode(serialize(array('error_message' => "unknown server")));
         } else
