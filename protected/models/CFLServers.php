@@ -17,50 +17,46 @@
  * @property integer $server_group
  * @property integer $zone_id
  */
-class CFLServers extends CActiveRecord
-{
+class CFLServers extends CActiveRecord {
+
     /**
      * Returns the static model of the specified AR class.
      * @return Servers the static model class
      */
-    public static function model($className=__CLASS__)
-    {
+    public static function model($className = __CLASS__) {
         return parent::model($className);
     }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName()
-    {
+    public function tableName() {
         return '{{servers}}';
     }
 
     /**
      * @return array validation rules for model attributes.
      */
-    public function rules()
-    {
+    public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('server_port, server_is_active, server_priority, server_group, zone_id', 'numerical', 'integerOnly'=>true),
-            array('server_addr, server_desc', 'length', 'max'=>64),
+            array('server_port, server_is_active, server_priority, server_group, zone_id', 'numerical', 'integerOnly' => true),
+            array('server_addr, server_desc', 'length', 'max' => 64),
             //array('server_ip', 'match', 'pattern'=>'/^(\d{1,15})|(INET_ATON\(\'(?:\d{1,3}\.){3}\d{1,3}\'\))$/i'),
             //array('server_ip', 'length', 'max'=>10),
-            array('server_ipv6', 'length', 'max'=>16),
-            array('server_letter', 'length', 'max'=>32),
+            array('server_ipv6', 'length', 'max' => 16),
+            array('server_letter', 'length', 'max' => 32),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('server_id, server_addr, server_ip, server_port, server_desc, server_ipv6, server_is_active, server_priority, server_letter, server_group, zone_id', 'safe', 'on'=>'search'),
+            array('server_id, server_addr, server_ip, server_port, server_desc, server_ipv6, server_is_active, server_priority, server_letter, server_group, zone_id', 'safe', 'on' => 'search'),
         );
     }
 
     /**
      * @return array relational rules.
      */
-    public function relations()
-    {
+    public function relations() {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
@@ -70,8 +66,7 @@ class CFLServers extends CActiveRecord
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return array(
             'server_id' => 'Server',
             'server_addr' => 'Server Addr',
@@ -91,31 +86,30 @@ class CFLServers extends CActiveRecord
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search()
-    {
+    public function search() {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
-        $criteria=new CDbCriteria;
-        $criteria->select='*,inet_ntoa(server_ip) as server_ip';
+        $criteria = new CDbCriteria;
 
-        $criteria->compare('server_id',$this->server_id,true);
-        $criteria->compare('server_addr',$this->server_addr,true);
-        $criteria->compare('server_ip',$this->server_ip,true);
-        $criteria->compare('server_port',$this->server_port);
-        $criteria->compare('server_desc',$this->server_desc,true);
-        $criteria->compare('server_ipv6',$this->server_ipv6,true);
-        $criteria->compare('server_is_active',$this->server_is_active);
-        $criteria->compare('server_priority',$this->server_priority);
-        $criteria->compare('server_letter',$this->server_letter,true);
-        $criteria->compare('server_group',$this->server_group);
-        $criteria->compare('zone_id',$this->zone_id);
+        $criteria->compare('server_id', $this->server_id, true);
+        $criteria->compare('server_addr', $this->server_addr, true);
+        $criteria->compare('server_ip', $this->server_ip, true);
+        $criteria->compare('server_port', $this->server_port);
+        $criteria->compare('server_desc', $this->server_desc, true);
+        $criteria->compare('server_ipv6', $this->server_ipv6, true);
+        $criteria->compare('server_is_active', $this->server_is_active);
+        $criteria->compare('server_priority', $this->server_priority);
+        $criteria->compare('server_letter', $this->server_letter, true);
+        $criteria->compare('server_group', $this->server_group);
+        $criteria->compare('zone_id', $this->zone_id);
 
         return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-        ));
+                    'criteria' => $criteria, 'pagination' => array(
+                        'pageSize' => Yii::app()->params['admin_items_per_page']),
+                        )
+        );
     }
-
 
     public function getFullColumnsList() {
         return Yii::app()->db->cache(20)->createCommand('SHOW FULL COLUMNS FROM ' . $this->tableName())->queryAll();

@@ -1,7 +1,1 @@
-<?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-?>
+<h3>Загрузка файлов времено не работает</h3>

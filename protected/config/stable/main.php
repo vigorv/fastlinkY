@@ -76,7 +76,7 @@ return array(
         'db' => array(
             'connectionString' => 'mysql:host=localhost;dbname=fastlink2',
             'emulatePrepare' => true,
-            'username' => 'root',
+            'username' => 'fldbuser',
             'tablePrefix' => 'fl_',
             'password' => 'akl,gfhjkm',
             'charset' => 'utf8',
