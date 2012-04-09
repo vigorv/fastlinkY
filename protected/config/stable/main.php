@@ -16,13 +16,6 @@ return array(
     ),
     'modules' => array(
 // uncomment the following to enable the Gii tool
-
-        'gii' => array(
-            'class' => 'system.gii.GiiModule',
-            'password' => 'pwd',
-            // If removed, Gii defaults to localhost only. Edit carefully to taste.
-            'ipFilters' => array('92.63.196.253', '::1'),
-        ),
         'admin' => array(
             'defaultController' => 'site',
             'import' => array(
@@ -85,8 +78,16 @@ return array(
             'emulatePrepare' => true,
             'username' => 'root',
             'tablePrefix' => 'fl_',
-            'password' => 'vig2orv115',
+            'password' => 'akl,gfhjkm',
             'charset' => 'utf8',
+        ),
+        'dblog'=>array(
+            'connectionString' => 'mysql:host=dhz1.anka.ws;dbname=wsmedia',
+            'emulatePrepare'=>true,
+            'username'=>'wsmedia',
+            'tablePrefix'=>'',
+            'password'=>'6ND8vkHlNvwxUGPxfQIRz012',
+            'charset'=>'utf8'            
         ),
         'errorHandler' => array(
 // use 'site/error' action to display errors
@@ -101,7 +102,7 @@ return array(
                 ),
                 array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-                    'ipFilters' => array('127.0.0.1', '178.49.9.5', '92.63.196.253'),
+                    'ipFilters' => array('127.0.0.1', '178.49.9.12'),
                 ),
             // uncomment the following to show log messages on web pages
             /*
@@ -122,6 +123,8 @@ return array(
         '212.20.62.34_skey' => 'bananaphone',
         '92.63.196.253_skey' => 'bananaphone',
         '92.63.196.74_skey' => 'bananaphone',
+        'admin_items_per_page'=>30,
+        'news_categories_sg2'=>'51,50,59,76,70',
         'sendMail' => true,
         'imports' => true,
         'guestUploads' => true,
