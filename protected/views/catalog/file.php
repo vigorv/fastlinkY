@@ -78,7 +78,7 @@ if (!empty($files[0])):
             &nbsp;<button id="mainPlay" class="play" rel="#mies"><i class="icon-play"></i>
                 <div id="playlist" style="display:none;">
                     <a href="<?= $url; ?>">
-                        <?= $files[0]['name']; ?>
+                        <?= $file['name']; ?>
                     </a>      
                 </div>
             </button> 
@@ -89,7 +89,7 @@ if (!empty($files[0])):
         case 'mkv':
             ?>
             <a href="<?= $url; ?>">
-                <?= $files[0]['name']; ?>
+                <?= $file['name']; ?>
             </a> 
             <div class="overlay" id="mies2">
                 <object classid="clsid:67DABFBF-D0AB-41fa-9C46-CC0F21721616" width="560" height="450" codebase="http://go.divx.com/plugin/DivXBrowserPlugin.cab">
