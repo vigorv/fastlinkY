@@ -38,6 +38,7 @@ class SyncController extends CController {
             $file->title = $file->name = $fileInfo['name'];
             $file->original_name = $fileInfo['src'];
             $file->dir = $fileInfo['path'];
+            $file->dt = date("m/d/y g:i A");
             if (isset($fileInfo['user_id']) || (Yii::app()->params['guestUploads'] == true)) {
                 if (isset($fileInfo['user_id']))
                     $file->user_id = $fileInfo['user_id'];
@@ -48,6 +49,7 @@ class SyncController extends CController {
             $server = CFLServers::model()->find('server_ip = "' . $this->ip . '"');
             if ($server) {
                 $file->sgroup = $server->server_group;
+                $file->group=0;
                 if ($file->save()) {
                     $file->group = $file->id;
                     $file->save();
