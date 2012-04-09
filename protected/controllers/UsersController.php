@@ -30,11 +30,13 @@ class UsersController extends Controller {
     public function actionRegister($hash = '', $user_id = 0) {
         $model = new FLFormRegister();
         if ($hash == '') {
+            if (!Yii::app()->user->isGuest) {
+                $this->redirect('/');
+            }
             if (isset($_POST['ajax']) && $_POST['ajax'] === 'register-form') {
                 echo CActiveForm::validate($model);
                 Yii::app()->end();
             }
-
             if (isset($_POST['FLFormRegister'])) {
                 $model->attributes = $_POST['FLFormRegister'];
                 if ($model->validate() && $model->register()) {
@@ -42,10 +44,6 @@ class UsersController extends Controller {
                     $this->render('/elements/messages', array('msg' => $msg));
                     Yii::app()->end();
                 }
-            }
-
-            if (!Yii::app()->user->isGuest) {
-                $this->redirect('/');
             }
         } else {
             $hash = filter_var($hash, FILTER_SANITIZE_STRING);
@@ -99,9 +97,11 @@ class UsersController extends Controller {
     }
 
     public function actionRestore($hash = '') {
-
         $model = new FLFormRestore();
         if ($hash == '') {
+            if (!Yii::app()->user->isGuest) {
+                $this->redirect('/');
+            }
             if (isset($_POST['ajax']) && $_POST['ajax'] === 'restore-form') {
                 echo CActiveForm::validate($model);
                 Yii::app()->end();
@@ -142,7 +142,9 @@ class UsersController extends Controller {
     }
 
     public function actionExit() {
-
+        if (Yii::app()->user->isGuest) {
+            $this->redirect('/');
+        }
         if (isset($_POST['exit'])) {
             Yii::app()->user->logout();
             Yii::app()->session->regenerateID(true);
