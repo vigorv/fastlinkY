@@ -99,7 +99,7 @@ if (!empty($files[0])):
                     <param name="autoPlay" value="true" />
                     <param name="src" value="<?= $aurl; ?>" />
 
-                    <embed type="video/divx" src="<?= $aurl; ?>" custommode="none" width="560" height="450" autoPlay="false"  pluginspage="http://go.divx.com/plugin/download/">
+                    <embed type="video/divx" src="<?= $aurl; ?>" custommode="none" width="560" height="450" autoPlay="true"  pluginspage="http://go.divx.com/plugin/download/">
                     </embed>
                 </object>
             </div>
