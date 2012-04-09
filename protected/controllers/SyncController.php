@@ -22,13 +22,14 @@ class SyncController extends CController {
 //            echo $lhash.PHP_EOL;
             if ($rhash == $lhash) {
                 return true;
-            } else echo base64_encode(serialize(array('error_message' => "bad hash")));
-        } else echo base64_encode(serialize(array('error_message' => "nodata")));
+            } else
+                echo base64_encode(serialize(array('error_message' => "bad hash")));
+        } else
+            echo base64_encode(serialize(array('error_message' => "nodata")));
         exit();
     }
 
     public function actionUpload() {
-
         $fileInfo = unserialize(base64_decode($this->fdata));
         if ($fileInfo) {
             $file = new CFLCatalog();
@@ -37,8 +38,9 @@ class SyncController extends CController {
             $file->title = $file->name = $fileInfo['name'];
             $file->original_name = $fileInfo['src'];
             $file->dir = $fileInfo['path'];
-            if ((Yii::app()->user->id) || (Yii::app()->params['guestUploads'] == true)) {
-                $file->user_id = Yii::app()->user->id;
+            if (isset($fileInfo['user_id']) || (Yii::app()->params['guestUploads'] == true)) {
+                if (isset($fileInfo['user_id']))
+                    $file->user_id = $fileInfo['user_id'];
             } else {
                 echo base64_encode(serialize(array('error_message' => "guest uploads not allowed")));
                 Yii::app()->end();
@@ -47,18 +49,18 @@ class SyncController extends CController {
             if ($server) {
                 $file->sgroup = $server->server_group;
                 if ($file->save()) {
-                    $file->group=$file->id;
+                    $file->group = $file->id;
                     $file->save();
                     echo base64_encode(serialize(array('id' => $file->id)));
                 }
             } else
                 echo base64_encode(serialize(array('error_message' => "unknown server")));
-        } else 
+        } else
             echo base64_encode(serialize(array('error_message' => "bad data")));
         exit();
     }
-    
-     public function actionUploadA() {
+
+    public function actionUploadA() {
 
         $fileInfo = unserialize(base64_decode($this->fdata));
         if ($fileInfo) {
@@ -78,7 +80,7 @@ class SyncController extends CController {
             if ($server) {
                 $file->sgroup = $server->server_group;
                 if ($file->save()) {
-                    $file->group=0;
+                    $file->group = 0;
                     $file->save();
                     echo base64_encode(serialize(array('id' => $file->id)));
                 }
