@@ -1,0 +1,317 @@
+html,body {
+    margin:0;
+    padding:0;
+    background-color:#fff;
+    
+    color:#26ade4;
+    color:dimgrey;
+    text-align: left;
+}
+a:link {
+    color:#26ade4;
+    text-decoration: underline;
+}
+a:hover {
+    color:#26ade4;
+    text-decoration: none;
+}
+a:visited {
+    color:#26ade4;
+    text-decoration: underline;
+}
+a:visited:hover {
+    color:#26ade4;
+    text-decoration: none;
+}
+
+/*Топлайн*/
+#topline {
+    height: 100px;
+    width: 100%;
+    background: #d3d3d3;
+}
+
+/*Голова*/
+#head {
+    width: 960px;
+    height: 100px;
+    padding: 50px 0px 25px 0px;
+}
+#head div.authorisation {
+    float: left;
+    width: 220px;
+    height: 100px;
+    padding: 0px 10px 0px 10px;
+    
+    font-style: italic;
+    text-align: left;
+    color: #93a623;
+}
+#head div.authorisation input{
+    float: left;
+    margin: 25px 15px 0px 0px;
+    width: 90px;
+    
+    border: 1px solid #26ade4;
+    color: #999999;
+    
+    font-style: italic;
+}
+#head div.authorisation .button1 {
+    float: left;
+    margin: 25px 15px 0px 0px;
+    width: 20px;
+    
+    border: 1px solid #26ade4;
+    color: #999999;
+    
+    font-style: italic;
+}
+*html #head div.authorisation input{
+    margin: 5px 15px 0px 0px;
+}
+#head div.logo {
+    float: left;
+    width: 460px;
+    height: 100px;
+    padding: 0px 10px 0px 10px;
+    background: #efefef;
+    background: url(../images/logo-fastlink.png) no-repeat;
+    background-position: center center;
+}
+div.logo a {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+#head div.search {
+    float: left;
+    width: 220px;
+    height: 100px;
+    padding: 0px 10px 0px 10px;
+    
+    font-style: italic;
+    text-align: left;
+    color: #93a623;
+}
+#head div.search input{
+    float: left;
+    margin: 25px 0px 0px 0px;
+    width: 220px;
+
+    border: 1px solid #26ade4;
+    color: #999999;
+    
+    font-style: italic;
+}
+
+/*Середина*/
+#middle {
+    width: 1000px;
+    height: 400px;
+}
+#middle div.left_ad {
+    float: left;
+    width: 240px;
+    height: 400px;
+    margin: 0px 10px 0px 10px;
+    
+    font-style: italic;
+    background: #d3d3d3;
+}
+#middle div.center_block {
+    float: left;
+    width: 460px;
+    <!--
+    height: 400px;
+    -->
+    padding: 0px 10px 0px 10px;
+    text-align:left;
+}
+#middle div.right_ad {
+    float: left;
+    width: 240px;
+    height: 400px;
+    margin: 0px 10px 0px 10px;
+    
+    font-style: italic;
+    background: #d3d3d3;
+}
+
+/*Блок загрузки*/
+#upload {
+    width: 460px;
+    height: 175px;
+    background: url(../images/upload_bg.png) no-repeat;
+}
+#upload .header {
+    padding: 25px 0px 0px 15px;
+    
+    font-style: italic;
+    color: #26ade4;
+    text-align: left;
+}
+*html #upload .header {
+    padding: 15px 0px 0px 15px;
+}
+#upload .comm {
+    padding: 5px 0px 0px 15px;
+    
+    font-style: italic;
+    color: #999999;
+    text-align: left;
+}
+*html #upload .comm {
+    padding: 10px 0px 0px 15px;
+}
+#upload input {
+    float: left;
+    margin: 20px 0px 0px 15px;
+    width: 325px;
+
+    border: 1px solid #26ade4;
+    color: #999999;
+    
+    
+    font-style: italic;
+}
+*html #upload input {
+    margin: 5px 0px 0px 15px;
+}
+#upload .view_button {
+    margin: 5px 30px 0px 0px;
+    float: right;
+    width: 65px;
+
+    background: url(../images/view_button.png) no-repeat;
+}
+#upload .upload_button {
+    margin: 15px 0px 0px 0px;
+    width: 140px;
+
+    background: url(../images/upload_button.png) no-repeat;
+}
+
+/*Блок скачивания*/
+#download {
+    margin: 50px 0px 0px 0px;
+    width: 460px;
+    height: 175px;
+    background: url(../images/download_bg.png) no-repeat;
+}
+#download .header {
+    padding: 25px 0px 0px 15px;
+    
+    font-style: italic;
+    color: #26ade4;
+    text-align: left;
+}
+*html #download .header {
+    padding: 15px 0px 0px 15px;
+}
+#download .comm {
+    padding: 5px 0px 0px 15px;
+    
+    font-style: italic;
+    color: #999999;
+    text-align: left;
+}
+*html #download .comm {
+    padding: 10px 0px 0px 15px;
+}
+#download input {
+    float: left;
+    margin: 20px 0px 0px 15px;
+    width: 325px;
+
+    border: 1px solid #26ade4;
+    color: #999999;
+    
+    font-style: italic;
+}
+*html #download input {
+    margin: 5px 0px 0px 15px;
+}
+#download .view_button {
+    margin: 5px 30px 0px 0px;
+    float: right;
+    width: 65px;
+
+    background: url(../images/view_button.png) no-repeat;
+}
+#download .download_button {
+    margin: 15px 0px 0px 0px;
+    width: 101px;
+ 
+    background: url(../images/download_button.png) no-repeat;
+}
+
+/*Нижние баннеры*/
+#bottom_ad {
+    margin: 25px 0px 0px 0px;
+    width: 940px;
+    height: 60px;
+}
+#bottom_ad .bottom_ad1 {
+    float: left;
+    margin: 0px 10px 0px 0px;
+    width: 460px;
+    height: 60px;
+    background: #d3d3d3;
+}
+#bottom_ad .bottom_ad2 {
+    float: left;
+    margin: 0px 0px 0px 10px;
+    width: 460px;
+    height: 60px;
+    background: #d3d3d3;
+}
+
+/**/
+#bottom_copy {
+    width: 940px;
+    margin: 30px 10px 0px 10px;
+    border-top: 1px solid #e3e3e3;
+    clear: both;
+}
+
+
+.pagination li.hidden{
+    visibility: visible;
+}
+.pagination li.hidden a{
+    border: solid 1px #DEDEDE;
+    color: #888;
+}
+
+
+
+
+.overlay {
+    padding:40px;
+    width:576px;
+    display:none;
+    background-image:url(/img/white.png);
+}
+
+.close {
+    background:url(/images/16x16/actions/window_close.png) no-repeat;
+    position:absolute;
+    top:2px;
+    right:5px;
+    display:block;
+    width:35px;
+    height:35px;
+    cursor:pointer;
+}
+
+
+#player {
+    height:450px;
+    display:block;
+}
+
+.errorMessage{
+    color:red;
+}
