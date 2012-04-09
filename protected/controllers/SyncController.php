@@ -53,7 +53,8 @@ class SyncController extends CController {
                 }
             } else
                 echo base64_encode(serialize(array('error_message' => "unknown server")));
-        }
+        } else 
+            echo base64_encode(serialize(array('error_message' => "bad data")));
         exit();
     }
     
