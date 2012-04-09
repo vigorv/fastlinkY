@@ -81,7 +81,7 @@ class CatalogController extends Controller {
 
     public function actionLoad($id = 0) {
 //$aliases = Configure::read('App.aliasUrls');
-        $aliases = array('');
+        $aliases = array('46.4.83.84','fastlink.ws');
         $r = (empty($_SERVER['HTTP_REFERER'])) ? '' : $_SERVER['HTTP_REFERER'];
         if (in_array($r, $aliases)) {
             $this->redirect('/catalog/file/' . $id);
