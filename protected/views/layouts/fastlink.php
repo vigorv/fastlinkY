@@ -89,8 +89,8 @@
                 <?php if (Yii::app()->user->isGuest): ?>
                     <?= Yii::t('common', 'Auth'); ?> | <a href="/users/register"><?= Yii::t('common', 'Register'); ?></a>
                     <form id="top_auth" name="auth" method="post" action="/users/login" onSubmit="userLogin();return false;">
-                        <input name="FLFormLogin[username]" type="text" size="40" placeholder="Login" />
-                        <input name="FLFormLogin[password]" type="password" size="40" placeholder="Password" />
+                        <input name="FLFormLogin[username]" type="text" size="40" placeholder="<?= Yii::t('user', 'Username');?>" />
+                        <input name="FLFormLogin[password]" type="password" size="40" placeholder="<?= Yii::t('user', 'Password');?>" />
                         <input type="submit" style="visibility: hidden;"/>
                     </form>
                 <?php else: ?>

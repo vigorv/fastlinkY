@@ -9,6 +9,7 @@ return array(
     'Contacts' => 'Контакты',
     'Advertisement' => 'Реклама',
     'verifyCode'=>'Проверочный код',
-    'Cancel' =>'Отмена'
+    'Cancel' =>'Отмена',
+    'Search for file' => 'Поиск по имени'
 );
 ?>
