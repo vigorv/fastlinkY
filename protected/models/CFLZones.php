@@ -88,6 +88,10 @@ class CFLZones extends CActiveRecord
             'criteria'=>$criteria,
         ));
     }
+    
+    public function getFullColumnsList() {
+        return Yii::app()->db->cache(20)->createCommand('SHOW FULL COLUMNS FROM ' . $this->tableName())->queryAll();
+    }
 
     /**
      *
