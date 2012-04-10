@@ -81,7 +81,7 @@ class CatalogController extends Controller {
 
     public function actionLoad($id = 0) {
 //$aliases = Configure::read('App.aliasUrls');
-        $aliases = array('46.4.83.84','fastlink.ws');
+        $aliases = array('46.4.83.84', 'fastlink.ws', 'fastlink2.anka.ws');
         $r = (empty($_SERVER['HTTP_REFERER'])) ? '' : $_SERVER['HTTP_REFERER'];
         if (in_array($r, $aliases)) {
             $this->redirect('/catalog/file/' . $id);
@@ -94,23 +94,26 @@ class CatalogController extends Controller {
         if ($id > 0) {
             $file = CFLCatalog::model()->cache(1000)->findByPk($id);
             $letter = '';
-            if ($file->sgroup == 1) {
-                $letter = strtolower($file->dir[0]);
-                if (($letter >= '0' ) && ($letter <= '9')) {
-                    $letter = '0';
-                    $file->dir = '0-999/' . $file->dir;
-                } else
-                    $file->dir = $letter . '/' . $file->dir;
-            }
+            if ($file) {
+                if ($file->sgroup == 1) {
+                    $letter = strtolower($file->dir[0]);
+                    if (($letter >= '0' ) && ($letter <= '9')) {
+                        $letter = '0';
+                        $file->dir = '0-999/' . $file->dir;
+                    } else
+                        $file->dir = $letter . '/' . $file->dir;
+                }
 
-            $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
-            if (count($servers)) {
-                $server = $servers[array_rand($servers)];
-                $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
-                $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
-                $this->render('view', array('url' => $url));
+                $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
+                if (count($servers)) {
+                    $server = $servers[array_rand($servers)];
+                    $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
+                    $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
+                    $this->render('view', array('url' => $url));
+                } else
+                    $this->render('/elements/messages', array('msg' => 'Server not found'));
             } else
-                $this->render('/elements/messages', array('msg' => 'Server not found'));
+                $this->render('/elements/messages', array('msg' => 'File not found'));
         } else {
             $this->render('/elements/messages', array('msg' => 'What u want?'));
         }

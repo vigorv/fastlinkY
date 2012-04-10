@@ -238,4 +238,10 @@ class CFLCatalog extends CActiveRecord {
             return $this->cache(100)->findAllByAttributes(array('group' => $query, 'sgroup' => (int) $sgroup, 'tp' => (int) $gtype));
     }
 
+    public function setGid($gid,$lst_id){
+        $sql='UPDATE {{catalog}} set `group` = '.$gid.' WHERE `id` in ("' . $lst_id . '")';
+         //$sql;
+        return Yii::app()->db->createCommand($sql)->execute();
+    }
+    
 }
