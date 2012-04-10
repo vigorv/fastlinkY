@@ -75,6 +75,10 @@ class SiteController extends Controller {
         $flError->save();
         $this->render('error404');
     }
+    
+    public function actionError503(){
+        $this->render('error503');
+    }
 
     /**
      * Logs out the current user and redirect to homepage.
