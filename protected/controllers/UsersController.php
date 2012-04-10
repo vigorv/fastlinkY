@@ -146,6 +146,7 @@ class UsersController extends Controller {
             $this->redirect('/');
         }
         if (isset($_POST['exit'])) {
+            Yii::app()->user->setState('role','');
             Yii::app()->user->logout();
             Yii::app()->session->regenerateID(true);
         }

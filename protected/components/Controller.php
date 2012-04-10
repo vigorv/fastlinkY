@@ -12,8 +12,7 @@ class Controller extends CController {
     public $active = 0; //СОДЕРЖИМОЕ ПОЛЯ active ТЕКУЩЕГО ОБЪЕКТА
     public $zone;
     public $ip;
-    
-
+    public $userRole;
 
     public function init() {
         parent::init();
@@ -34,22 +33,26 @@ class Controller extends CController {
         $this->userGroupId = intval(Yii::app()->user->getState('dmUserGroupId'));
         $this->userPower = intval(Yii::app()->user->getState('dmUserPower'));
         $this->userInfo = Yii::app()->user->getState('dmUserInfo');
+        $this->userRole = Yii::app()->user->getState('role');
         if (!empty($this->userInfo)) {
             $this->userInfo = unserialize($this->userInfo);
         }
-        
+
         $ip = Yii::app()->user->getState('ip');
-        if (!empty($ip)){
+        if (!empty($ip)) {
             $this->ip = $ip;
         }
         else
             $this->ip = Yii::app()->request->getUserHostAddress();
         $this->zone = CFLZones::model()->getActiveZoneslst($this->ip);
 
-        
+
 
         if (Yii::app()->detectMobileBrowser->showMobile) {
             $this->layout = 'mobile';
+        }
+        if (isset($_GET['lay_mini'])) {
+            $this->layout = 'mini';
         }
         if (Yii::app()->request->isAjaxRequest) {
             //    $this->renderPartial('_ajaxContent', $data);

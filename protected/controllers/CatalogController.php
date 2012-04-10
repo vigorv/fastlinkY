@@ -106,9 +106,27 @@ class CatalogController extends Controller {
 
                 $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
                 if (count($servers)) {
+                    if ($this->userRole == "admin") {
+                        $url_list = array();
+                        foreach ($servers as $a_server) {
+                            $url_list[] = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
+                        }
+                        $eco_data ='<pre>';
+                        $eco_data .= print_r($url_list,true);
+                        $eco_data .= '</pre>';
+                        echo $eco_data;
+                        $this->render('/elements/messages',array('msg'=>"Processed"));
+                        exit();
+                    }
                     $server = $servers[array_rand($servers)];
                     $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
+
+
+
+
+
+
                     $this->render('view', array('url' => $url));
                 } else
                     $this->render('/elements/messages', array('msg' => 'Server not found'));
