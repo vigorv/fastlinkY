@@ -127,12 +127,12 @@ class CatalogController extends Controller
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
                     $this->render('view', array('url' => $url));
                 } else {
+                    CFLLogFiles::FileNotAviable($id, $file->catalog, $file->sgroup, $this->zone, $this->ip);
                     $this->render('/elements/messages', array('msg' => Yii::t('common', 'File no longer available')));
-                    CFLLogFiles::model()->FileNotAviable($id, $file->catalog, $file->sgroup, $this->zone, $this->ip);
                 }
             } else {
+                CFLLogFiles::FileNotExists($id, $this->zone, $this->ip);
                 $this->render('/elements/messages', array('msg' => Yii::t('common', 'File not found')));
-                CFLLogFiles::model()->FileNotExists($id, $this->zone, $this->ip);
             }
         } else {
             $this->render('/elements/messages', array('msg' => Yii::t('common', 'What u want?')));
