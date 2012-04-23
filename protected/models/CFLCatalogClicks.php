@@ -14,7 +14,7 @@ class CFLCatalogClicks extends CFLLogActiveRecord {
     /**
      *
      * @param string $className
-     * @return CFLCatalog
+     * @return CFLCatalogClicks
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
