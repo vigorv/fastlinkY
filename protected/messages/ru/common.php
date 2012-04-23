@@ -10,6 +10,9 @@ return array(
     'Advertisement' => 'Реклама',
     'verifyCode'=>'Проверочный код',
     'Cancel' =>'Отмена',
-    'Search for file' => 'Поиск по имени'
+    'Search for file' => 'Поиск по имени',
+    'File no longer available' => 'Файл более недоступен',
+    'File not found' => 'Файл не найден',
+    'What you want?' => 'Чего изволите?'
 );
 ?>

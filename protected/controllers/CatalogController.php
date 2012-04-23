@@ -1,15 +1,16 @@
 <?php
 
-class CatalogController extends Controller {
+class CatalogController extends Controller
+{
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         parent::beforeAction($action);
-
-
         return true;
     }
 
-    public function actionSearch($search_opt, $text, $sgroup = false, $gtype = false, $ajax = 0) {
+    public function actionSearch($search_opt, $text, $sgroup = false, $gtype = false, $ajax = 0)
+    {
         $items = array();
         $i = 0;
         $pages = new CPagination();
@@ -18,31 +19,27 @@ class CatalogController extends Controller {
         $res = array();
         switch ($search_opt) {
             case 'bytitle':
-                if ($this->zone == '9') {
-                    $res = CFLCatalog::model()->SearchByTitleInZone($str2, $pages, 9, 0);
-                }else
-                    $res = CFLCatalog::model()->SearchByTitle($str2, $pages, 0);
-
+//                if ($this->zone == '9') {
+                $res = CFLCatalog::model()->SearchByTitleInZone($str2, $pages, 9, 0);
+//                }else
+//                    $res = CFLCatalog::model()->SearchByTitle($str2, $pages, 0);
                 break;
             case 'bygroup':
-                $res = CFLCatalog::model()->SearchByGroup($str2, $sgroup, $gtype);
+//                $res = CFLCatalog::model()->SearchByGroup($str2, $sgroup, $gtype);
                 break;
         }
-
 
         foreach ($res as $r) {
             $items[$i]['url'] = Yii::app()->request->getBaseUrl(true) . '/catalog/file/' . $r['id'];
             $items[$i]['title'] = $r['title'];
             $items[$i]['filename'] = $r['original_name'];
-            if ($r['original_name'] == $str2) {//ЕСЛИ ИСКАЛИ ПО ИМЕНИ ФАЙЛА
+            if ($r['original_name'] == $str2) { //ЕСЛИ ИСКАЛИ ПО ИМЕНИ ФАЙЛА
                 //$items[$i]['url'] .= '?play'; //ПРИЗНАК ДЛЯ ОТОБРАЖЕНИЯ
                 //$items[$i]['title'] = $r['original_name'];
             }
             $items[$i]['content'] = $r['comment'];
             $i++;
         }
-
-
 
         if ($ajax) {
             echo serialize($items);
@@ -52,15 +49,18 @@ class CatalogController extends Controller {
             $this->render('search', array('items' => $items, 'pages' => $pages, 'search_text' => $str2));
     }
 
-    public function actionSearchAjax($search_opt, $text, $sgroup = false, $gtype = false) {
+    public function actionSearchAjax($search_opt, $text, $sgroup = false, $gtype = false)
+    {
         $this->actionSearch($search_opt, $text, $sgroup, $gtype, 1);
     }
 
-    public function actionViewv($id) {
+    public function actionViewv($id)
+    {
         $this->autoload($id);
     }
 
-    public function actionFile($id = 0, $int1 = 0) {
+    public function actionFile($id = 0, $int1 = 0)
+    {
         $files = array();
         $file = array();
         if ($id > 0) {
@@ -72,14 +72,15 @@ class CatalogController extends Controller {
                     $files[0] = $file;
                 }
             else
-                $this->render('/elements/messages', array('msg' => 'Unknown File'));
+                $this->render('/elements/messages', array('msg' => Yii::t('common', 'Unknown file')));
         } else
-            $this->render('/elements/messages', array('msg' => 'What u want?'));
+            $this->render('/elements/messages', array('msg' => Yii::t('common', 'What u want?')));
 
         $this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
     }
 
-    public function actionLoad($id = 0) {
+    public function actionLoad($id = 0)
+    {
 //$aliases = Configure::read('App.aliasUrls');
         $aliases = array('46.4.83.84', 'fastlink.ws', 'fastlink2.anka.ws');
         $r = (empty($_SERVER['HTTP_REFERER'])) ? '' : $_SERVER['HTTP_REFERER'];
@@ -90,14 +91,15 @@ class CatalogController extends Controller {
             $this->autoload($id);
     }
 
-    function autoload($id = 0) {
+    function autoload($id = 0)
+    {
         if ($id > 0) {
             $file = CFLCatalog::model()->cache(1000)->findByPk($id);
             $letter = '';
             if ($file) {
                 if ($file->sgroup == 1) {
                     $letter = strtolower($file->dir[0]);
-                    if (($letter >= '0' ) && ($letter <= '9')) {
+                    if (($letter >= '0') && ($letter <= '9')) {
                         $letter = '0';
                         $file->dir = '0-999/' . $file->dir;
                     } else
@@ -111,46 +113,45 @@ class CatalogController extends Controller {
                         foreach ($servers as $a_server) {
                             $url_list[] = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
                         }
-                        $eco_data ='<pre>';
-                        $eco_data .= print_r($url_list,true);
+                        $eco_data = '<pre>';
+                        $eco_data .= print_r($url_list, true);
                         $eco_data .= '</pre>';
                         echo $eco_data;
-                        $this->render('/elements/messages',array('msg'=>"Processed"));
+                        $this->render('/elements/messages', array('msg' => "Processed"));
                         exit();
                     }
                     $server = $servers[array_rand($servers)];
                     $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
-
-
-
-
-
-
                     $this->render('view', array('url' => $url));
-                } else
-                    $this->render('/elements/messages', array('msg' => 'Server not found'));
-            } else
-                $this->render('/elements/messages', array('msg' => 'File not found'));
+                } else {
+                    $this->render('/elements/messages', array('msg' => Yii::t('common', 'File no longer available')));
+                    CFLLogFiles::model()->FileNotAviable($id, $file->catalog, $file->sgroup, $this->zone, $this->ip);
+                }
+            } else {
+                $this->render('/elements/messages', array('msg' => Yii::t('common', 'File not found')));
+                CFLLogFiles::model()->FileNotExists($id, $this->zone, $this->ip);
+            }
         } else {
-            $this->render('/elements/messages', array('msg' => 'What u want?'));
+            $this->render('/elements/messages', array('msg' => Yii::t('common', 'What u want?')));
         }
     }
 
-    public function actionMeta($gid = 0, $sid = 0, $gtype = 0) {
+    public function actionMeta($gid = 0, $sid = 0, $gtype = 0)
+    {
         $this->layout = '/layouts/playlist';
         $files = array();
-        $sid = (int) $sid;
+        $sid = (int)$sid;
         //var_dump($_GET);
-        if (($gid > 0) && ($sid >= 0 )) {
+        if (($gid > 0) && ($sid >= 0)) {
             $criteria = new CDbCriteria();
             $criteria->condition = ' s.group = ' . $gid . ' and s.sgroup =' . $sid;
             $criteria->order = 's.name ASC';
             $criteria->alias = 's';
             //$files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group' => $id, 'sgroup' => $int1), array('order' => 'original_name ASC')); //order Catalog.orginal_name ASC	                               
             $files = CFLCatalog::model()->getCommandBuilder()
-                    ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
-                    ->queryAll();
+                ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
+                ->queryAll();
         }
 
         // header("Content-Type: application/metalink+xml; charset=utf-8");
@@ -183,7 +184,7 @@ class CatalogController extends Controller {
         // header("Content-disposition: attachment; filename=\"list.metalink\"");
         echo $out;
         exit();
-        header("Content-Type: application/xml; charset=utf-8");
+        //header("Content-Type: application/xml; charset=utf-8");
 
 //        echo $out;
     }
