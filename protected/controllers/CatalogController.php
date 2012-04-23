@@ -65,18 +65,20 @@ class CatalogController extends Controller
         $file = array();
         if ($id > 0) {
             $file = CFLCatalog::model()->cache(1000)->findByPk($id);
-            if ($file)
+            if ($file){
                 if (!empty($file['group'])) {
                     $files = CFLCatalog::model()->cache(1000)->findAllByAttributes(array('group' => $file['group'], 'sgroup' => $file['sgroup']), array('order' => 'name ASC')); //order Catalog.orginal_name ASC	                               
                 } else {
                     $files[0] = $file;
                 }
+                $this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
+            }
             else
                 $this->render('/elements/messages', array('msg' => Yii::t('common', 'Unknown file')));
         } else
             $this->render('/elements/messages', array('msg' => Yii::t('common', 'What u want?')));
 
-        $this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
+
     }
 
     public function actionLoad($id = 0)
