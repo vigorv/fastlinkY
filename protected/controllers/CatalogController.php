@@ -127,7 +127,7 @@ class CatalogController extends Controller
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
                     $this->render('view', array('url' => $url));
                 } else {
-                    CFLLogFiles::FileNotAviable($id, $file->catalog, $file->sgroup, $this->zone, $this->ip);
+                    CFLLogFiles::FileNotAviable($id, $file->group, $file->sgroup, $this->zone, $this->ip);
                     $this->render('/elements/messages', array('msg' => Yii::t('common', 'File no longer available')));
                 }
             } else {
