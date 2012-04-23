@@ -4,6 +4,7 @@ class CFLLogFiles
 {
 
     private static $_models=array();
+    private static $dblog;
 
     public static function model($className=__CLASS__)
     {
@@ -12,6 +13,19 @@ class CFLLogFiles
         else
         {
             $model=self::$_models[$className]=new $className(null);
+
+            if (self::$dblog !== null)
+                return self::$dblog;
+            else {
+                self::$dblog = Yii::app()->dblog;
+                if (self::$dblog instanceof CDbConnection) {
+                    self::$dblog->setActive(true);
+                    return self::$dblog;
+                }
+                else
+                    throw new CDbException(Yii::t('yii', 'Active Record requires a "db" CDbConnection application component.'));
+            }
+
             return $model;
         }
     }
