@@ -1,19 +1,19 @@
 <?php
 
-class CFLLogFiles extends CFLLogActiveRecord
+class CFLLogFiles
 {
 
-    /**
-     *
-     * @param string $className
-     * @return CFLLogFiles
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+    private static $_models=array();
 
-    public function tableName() {
-        return '{{catalog_log_files}}';
+    public static function model($className=__CLASS__)
+    {
+        if(isset(self::$_models[$className]))
+            return self::$_models[$className];
+        else
+        {
+            $model=self::$_models[$className]=new $className(null);
+            return $model;
+        }
     }
 
     public function FileNotAviable($file,$zone,$ip){
