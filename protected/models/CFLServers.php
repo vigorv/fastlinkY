@@ -20,8 +20,9 @@
 class CFLServers extends CActiveRecord {
 
     /**
-     * Returns the static model of the specified AR class.
-     * @return Servers the static model class
+     * @static
+     * @param string $className
+     * @return CFLServers
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -146,10 +147,10 @@ class CFLServers extends CActiveRecord {
 
     /**
      *
-     * @param type $lst_zones
-     * @param type $group
-     * @param type $letter
-     * @return type 
+     * @param string $lst_zones
+     * @param int $group
+     * @param string $letter
+     * @return mixed
      */
     public function getClientServers($lst_zones, $group, $letter) {
         $sv_criteria = new CDbCriteria();

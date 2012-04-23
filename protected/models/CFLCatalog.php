@@ -25,8 +25,9 @@
 class CFLCatalog extends CActiveRecord {
 
     /**
-     * Returns the static model of the specified AR class.
-     * @return CFLCatalog the static model class
+     * @static
+     * @param string $className
+     * @return CFLCatalog
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -177,11 +178,11 @@ class CFLCatalog extends CActiveRecord {
 
     /**
      * Actually for only default zone
-     * @param type $query
+     * @param string $query
      * @param CPagination $pages
-     * @param type $zone
-     * @param type $sphinx_search
-     * @return type 
+     * @param int $zone
+     * @param bool $sphinx_search
+     * @return mixed
      */
     public function SearchByTitleInZone($query, CPagination &$pages, $zone, $sphinx_search = true) {
         if (false) {
