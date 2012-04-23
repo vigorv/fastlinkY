@@ -27,7 +27,8 @@ class SiteController extends Controller {
     public function actionIndex() {
         // renders the view file 'protected/views/site/index.php'
         // using the default layout 'protected/views/layouts/main.php'
-        $this->render('index');
+//        $this->render('index');
+$this->redirect('site/upload');
     }
 
     /**
@@ -88,13 +89,9 @@ class SiteController extends Controller {
      * Render Form 
      */
     public function actionUpload($id = 0) {
-        $uploadServer = '';
-        if (($id == 2) && ($this->zone <> '9'))
+        $uploadServer = Yii::app()->params['uploadServer'];
+        if ($this->zone <> '9')
             $uploadServer = Yii::app()->params['uploadServer_sg2'];
-
-        if ($id == 0)
-            $uploadServer = Yii::app()->params['uploadServer'];
-
         $this->render('upload', array('uploadServer' => $uploadServer));
     }
 
