@@ -32,6 +32,8 @@ class UserIdentity extends CUserIdentity {
             $site_role = CFLSiteRoles::model()->findByPk($record->site_role_id);
             if ($site_role)
                 Yii::app()->user->setState('role', $site_role->site_role_title);
+            $ukey= CFLUsers::UKey($record);
+            Yii::app()->user->setState('ukey',$ukey);
         }
         return !$this->errorCode;
     }
