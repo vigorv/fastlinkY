@@ -1,15 +1,17 @@
 <?php
 
-class RMData {
+class RMData
+{
 
-    public static function xfieldsdataload($id) {
+    public static function xfieldsdataload($id)
+    {
 
         if ($id == "")
-            return;
-
+            return false;
+        $data = array();
         $xfieldsdata = explode("||", $id);
         foreach ($xfieldsdata as $xfielddata) {
-            list ( $xfielddataname, $xfielddatavalue ) = explode("|", $xfielddata);
+            list ($xfielddataname, $xfielddatavalue) = explode("|", $xfielddata);
             $xfielddataname = str_replace("&#124;", "|", $xfielddataname);
             $xfielddataname = str_replace("__NEWL__", "\r\n", $xfielddataname);
             $xfielddatavalue = str_replace("&#124;", "|", $xfielddatavalue);
@@ -19,7 +21,24 @@ class RMData {
         return $data;
     }
 
-    public function RunImport() {
+    public static function xfieldsdatasave($data)
+    {
+        $filecontents = "";
+        foreach ($data as $index => $value) {
+            $value = array_values($value);
+            foreach ($value as $index2 => $value2) {
+                $value2 = stripslashes($value2);
+                $value2 = str_replace("|", "&#124;", $value2);
+                $value2 = str_replace("\r\n", "__NEWL__", $value2);
+                $filecontents .= $value2 . ($index2 < count($value) - 1 ? "|" : "");
+            }
+            $filecontents .= ($index < count($data) - 1 ? "\r\n" : "");
+        }
+        return $filecontents;
+    }
+
+    public function RunImport()
+    {
 
         set_time_limit(0);
 
@@ -32,9 +51,8 @@ class RMData {
 
         $post_count = 0;
         $link_count = 0;
-
+        $total_count = 0;
         foreach ($reader as $row) {
-
             $xdata = RMData::xfieldsdataload($row['xfields']);
             $links = array();
             if (isset($xdata['m_direct_links']))
@@ -46,15 +64,18 @@ class RMData {
             if (isset($xdata['soft_direct_links']))
                 $links['s'] = $xdata['soft_direct_links'];
             foreach ($links as $key => $dir_links) {
+                $link_count = 0;
+                $links = array();
                 preg_match_all('/(Music|Movies|Games|Software)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
                 foreach ($matches[0] as $link) {
-//var_dump($link);continue;
+                    //var_dump($link);continue;
 //   $name = parse_url($link[0], PHP_URL_PATH);
                     $name = $link;
                     $cat_item = new CFLCatalog();
                     $cat_item->is_confirm = 1;
                     $cat_item->is_visible = 1;
                     //$cat_item->title = iconv('cp1251', 'UTF-8', $row['title2']);
+                    $title='';
                     if (strlen($row['title'])) {
                         $title = $row['title'];
                         if (strlen($row['title2']) && (strcasecmp($row['title2'], $row['title']) <> 0))
@@ -70,25 +91,39 @@ class RMData {
                     $cat_item->sgroup = 2;
                     $cat_item->dt = $row['date'];
                     $cat_item->group = $row['id'];
-                    if ($cat_item->save())
+                    if ($cat_item->save()) {
+                        $links[] = Yii::app()->createAbsoluteUrl('/catalog/file/' . $cat_item->id);
                         $link_count++;
+                    }
                     else {
                         var_dump($cat_item->getErrors());
                         Echo "ERROR";
                         //die();
                     }
                 }
-// exit;
+            }
+            if ($link_count) {
+                unset($xdata['m_direct_links']);
+                unset($xdata['games_direct_links']);
+                unset($xdata['soft_direct_links']);
+                unset($xdata['music_direct_links']);
+                $xdata['direct_links'] = implode(PHP_EOL, $links);
+                unset($links);
+                $xfields = RMData::xfieldsdatasave($xdata);
+                $command = Yii::app()->db->createCommand('Update ' . $itable . ' SET xfields ="' . $xfields . '" WHERE id =' . $row['id']);
+                $command->query();
+                $total_count = $total_count + $link_count;
             }
             $post_count++;
         }
-        echo "Processed " . $post_count . " posts. Created " . $link_count . " links";
+        echo "Processed " . $post_count . " posts. Created " . $total_count . " links";
     }
 
-    public function ConvertZones() {
+    public function ConvertZones()
+    {
         $zone_list = Yii::app()->db->createCommand()
-                        ->select('*')
-                        ->from('rum_i_zones')->queryAll();
+            ->select('*')
+            ->from('rum_i_zones')->queryAll();
         $i = 0;
         foreach ($zone_list as $zone) {
             $range = new CFLZonesRanges();
@@ -130,8 +165,8 @@ class RMData {
                     break;
                 case 'TERRAPACK':
                     continue;
-                    $range->zone_id = 12;
-                    break;
+                    //$range->zone_id = 12;
+                    //break;
             }
             if ($range->save())
                 $i++;
@@ -139,15 +174,16 @@ class RMData {
         echo "ENDED: " . $i . ' records';
     }
 
-    public function ConvertServers() {
+    public function ConvertServers()
+    {
         $server_list = Yii::app()->db->createCommand()
-                        ->select('*')
-                        ->from('servers_i_rum')->queryAll();
+            ->select('*')
+            ->from('servers_i_rum')->queryAll();
         $i = 0;
         foreach ($server_list as $servers) {
             $server = new CFLServers();
             $ip = parse_url($servers['server'], PHP_URL_HOST);
-            $server->server_ip = $ip;//sprintf('%u', ip2long($ip));
+            $server->server_ip = $ip; //sprintf('%u', ip2long($ip));
             $server->server_is_active = ($servers['active'] == 'Y');
             switch ($servers['type']) {
                 case 'ATLAS':
@@ -185,8 +221,8 @@ class RMData {
                     break;
                 case 'TERRAPACK':
                     continue;
-                    $server->zone_id = 12;
-                    break;
+                    //$server->zone_id = 12;
+                    //break;
                 case 'ALL':
                     $server->zone_id = 9;
                     break;
@@ -202,32 +238,35 @@ class RMData {
 
     /**
      *
-     * @return type 
+     * @return array
      */
-    public function FindNewsWithoutLinks() {
+    public function FindNewsWithoutLinks()
+    {
         return Yii::app()->db->createCommand()
-                        ->select('rc.id')
-                        ->from('{{catalog}} c')
-                        ->rightJoin('rum_i_cat rc', ' c.`group` = rc.id && c.sgroup = 2')
-                        //     ->group('c.group')
-                        ->where('c.id is NULL and  !(rc.category  in ('.Yii::app()->params['news_categories_sg2'].'))')
-                        ->queryAll();
+            ->select('rc.id')
+            ->from('{{catalog}} c')
+            ->rightJoin('rum_i_cat rc', ' c.`group` = rc.id && c.sgroup = 2')
+        //     ->group('c.group')
+            ->where('c.id is NULL and  !(rc.category  in (' . Yii::app()->params['news_categories_sg2'] . '))')
+            ->queryAll();
     }
 
     /**
      *
-     * @return type 
+     * @return array
      */
-    public function FindLinksWithoutNews() {
+    public function FindLinksWithoutNews()
+    {
         return Yii::app()->db->createCommand()
-                        ->select('c.id')
-                        ->from('{{catalog}} c')
-                        ->leftJoin('rum_i_cat rc', ' c.group = rc.id')
-                        ->where('rc.id is NULL && c.sgroup = 2')
-                        ->queryAll();
+            ->select('c.id')
+            ->from('{{catalog}} c')
+            ->leftJoin('rum_i_cat rc', ' c.group = rc.id')
+            ->where('rc.id is NULL && c.sgroup = 2')
+            ->queryAll();
     }
 
-    public function CheckImport($id) {
+    public function CheckImport($id)
+    {
         set_time_limit(0);
 
         $itable = 'rum_i_cat';
@@ -269,6 +308,7 @@ class RMData {
                     $cat_item->is_confirm = 1;
                     $cat_item->is_visible = 1;
 //$cat_item->title = iconv('cp1251', 'UTF-8', $row['title2']);
+                    $title='';
                     if (strlen($row['title'])) {
                         $title = $row['title'];
                         if (strlen($row['title2']) && (strcasecmp($row['title2'], $row['title']) <> 0))
@@ -291,8 +331,8 @@ class RMData {
                 preg_match_all('/92.63.196.82\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
 
                 foreach ($matches[0] as $link) {
-                    
-                    $link=str_replace('92.63.196.82/', '',$link);
+
+                    $link = str_replace('92.63.196.82/', '', $link);
                     var_dump($link);
                     $link_count++;
 //var_dump($link);continue;
@@ -302,6 +342,7 @@ class RMData {
                     $cat_item->is_confirm = 1;
                     $cat_item->is_visible = 1;
 //$cat_item->title = iconv('cp1251', 'UTF-8', $row['title2']);
+                    $title='';
                     if (strlen($row['title'])) {
                         $title = $row['title'];
                         if (strlen($row['title2']) && (strcasecmp($row['title2'], $row['title']) <> 0))
@@ -321,9 +362,6 @@ class RMData {
                       $cat_item->group = $row['id'];
                      */
                 }
-
-
-
 // exit;
             }
             $post_count++;
