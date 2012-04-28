@@ -27,6 +27,7 @@ class RMData
         $i=1;
         $count_data=count($data);
         foreach ($data as $index => $value) {
+                $value= stripslashes($value);
                 $value = str_replace("|", "&#124;", $value);
                 $value = str_replace("\r\n", "__NEWL__", $value);
                 $index2 = str_replace("|", "&#124;", $index);
