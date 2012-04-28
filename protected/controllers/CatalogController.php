@@ -191,4 +191,67 @@ class CatalogController extends Controller
 //        echo $out;
     }
 
+    public function actionUser(){
+        if (Yii::app()->user->id){
+
+            $per_page = 20;
+
+            $criteria = new CDbCriteria();
+         //   $criteria->select = 's.id,s.name';
+            $criteria->condition = 'user_id='.Yii::app()->user->id;
+            $criteria->order = 's.name ASC';
+            $criteria->alias = 's';
+
+            $count = CFLCatalog::model()->count($criteria);
+
+            $pages = new CPagination($count);
+            $pages->pageSize = $per_page;
+            $pages->applyLimit($criteria);
+
+            $files = CFLCatalog::model()->getCommandBuilder()
+                ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
+                ->queryAll();
+            $this->render('user',array('list' => $files,'pages' => $pages));
+        } else{
+            echo Yii::t('common',"You are not registred");
+        }
+
+    }
+
+
+    public function actionDeleteFiles(){
+        if (Yii::app()->user->id){
+            if (isset($_POST['ids'])){
+                $fid =  $_POST['ids'];
+                if (count($fid)>30) exit;
+                $ids = implode(",", $fid);
+                $ids = filter_var($ids,FILTER_SANITIZE_STRING);
+                if($ids){
+                    $files = CFLCatalog::model()->findAll('id in ('.$ids.') AND user_id = '.Yii::app()->user->id);
+                    $dcount=0;
+                    /** @var CFLCatalog $file */
+                    foreach ($files as $file){
+                        switch ($file->sgroup){
+                            case 2: $server = Yii::app()->params['uploadServer_sg2'];break;
+                            case 4: $server = Yii::app()->params['uploadServer'];break;
+                            default: echo "not there ".$file->sgroup; Yii::app()->end();
+                        }
+                        $data=base64_encode($file->dir . '/' . $file->original_name);
+                        $skey=base64_encode(md5($data).Yii::app()->params['master_key']);
+                        $url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
+                        $result = file_get_contents($url);
+                        if ($result=="OK"){
+                            $file->delete();
+                            $dcount++;
+                        }
+                    }
+                    echo "Deleted $dcount";
+                    Yii::app()->end();
+                } else die('not list');
+            } else die('nothing');
+        } else
+            die('unknown');
+    }
+
+
 }

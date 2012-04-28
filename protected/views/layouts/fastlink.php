@@ -8,7 +8,7 @@
         <?php
         Yii::app()->getClientScript()->registerCoreScript('jquery');
         Yii::app()->getClientScript()->registerCoreScript('jquery.cookie');
-        Yii::app()->getClientScript()->registerCoreScript('jquery.form');
+        Yii::app()->getClientScript()->registerScriptFile('/js/jquery.form.js');
 
 
         Yii::app()->clientScript->registerScriptFile('/js/flowplayer-3.2.8.min.js');
@@ -94,8 +94,8 @@
                         <input type="submit" style="visibility: hidden;"/>
                     </form>
                 <?php else: ?>
-                    <h4><i class="icon-user"></i> <?= Yii::app()->user->name; ?><br/>
-                        IP: <?= $this->ip; ?> 
+                    <h4><i class="icon-user"></i> <?= Yii::app()->user->name; ?> <a href="/catalog/user"?><i class="icon-file"></i> <?=Yii::t('common','My files');?></a><br/>
+                        IP: <?= $this->ip; ?>
                     </h4><button  class="btn" name="logout" onClick="$.post('/users/exit',{exit:1},function(){window.location.reload();});"><?= Yii::t('common', 'Logout'); ?>
                     </button>
                 <?php endif; ?>

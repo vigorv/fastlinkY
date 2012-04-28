@@ -30,7 +30,8 @@ $user_id = Yii::app()->user->id;
     </div>
 </div>
 
-<div id="uploadResults">
+<div id="uploadResults" style="margin:10px">
+
 </div>
 
 <script language="javascript">
@@ -71,7 +72,7 @@ $user_id = Yii::app()->user->id;
     function startUpload(uqueue_id,preset)
     {
         
-        url = "http://<?= $uploadServer; ?>/files/uploads";        
+        url = "http://<?= $uploadServer; ?>/files/uploads?uid=<?=Yii::app()->user->id;?>&key=<?=Yii::app()->user->getState('ukey');?>";
         sendMultipleFiles({
             url: url,
             files:UploadList,

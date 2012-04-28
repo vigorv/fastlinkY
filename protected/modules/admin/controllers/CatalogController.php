@@ -70,6 +70,31 @@ class CatalogController extends AdmController {
         ));
     }
 
+
+    public function actionDelete($id){
+        $model = $this->loadModel($id);
+        $url=false;
+        if ($model){
+            $data = base64_encode($file->dir . '/' . $file->original_name);
+            $sdata = md5($data.Yii::app()->params['master_key']);
+         switch($model->sgroup){
+             case 2:
+                $url = 'http://'. Yii::app()->params['uploadServer_sg2'].'/file/delete';
+                break;
+             case 4:
+                $url = 'http://'. Yii::app()->params['uploadServer'].'/file/delete';
+                break;
+             default:
+         }
+            if($url){
+                $res=file_get_contents($url.'?data='.$data.'&skey='.sdata);
+                if ($res){
+                    $model->delete;
+                }
+            }
+        }
+    }
+
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.

@@ -25,7 +25,7 @@ class SyncController extends CController {
             if ($rhash == $lhash) {
                 return true;
             } else
-                echo base64_encode(serialize(array('error_message' => "bad hash")));
+                echo base64_encode(serialize(array('error_message' => "bad hash ".$ip)));
         } else
             echo base64_encode(serialize(array('error_message' => "nodata")));
         exit();
@@ -33,8 +33,20 @@ class SyncController extends CController {
 
     public function actionUpload() {
         $fileInfo = @unserialize(base64_decode($this->fdata));
+
         if ($fileInfo) {
             $file = new CFLCatalog();
+            if (isset($fileInfo['uid'])){
+                $record = CFLUsers::model()->findByPk($fileInfo['uid']);
+                if($record){
+                    $key= CFLUsers::UKey($record);
+                    if($key==$fileInfo['key']){
+                        $file->user_id = $fileInfo['uid'];
+                    }
+                }
+            }
+
+
             $file->chk_md5 = $fileInfo['md5'];
             $file->sz = $fileInfo['size'];
             $file->title = $file->name = $fileInfo['name'];
@@ -73,47 +85,6 @@ class SyncController extends CController {
         exit();
     }
 
-    public function actionUploadA() {
-        $fileInfo = @unserialize(base64_decode($this->fdata));
-        if ($fileInfo) {
-            $file = new CFLCatalog();
-            $file->chk_md5 = $fileInfo['md5'];
-            $file->sz = $fileInfo['size'];
-            $file->title = $file->name = $fileInfo['name'];
-            $file->original_name = $fileInfo['src'];
-            $file->dir = $fileInfo['path'];
-            $file->dt = date("m/d/y g:i A");
-            if (isset($fileInfo['user_id']) || (Yii::app()->params['guestUploads'] == true)) {
-                if (isset($fileInfo['user_id']))
-                    $file->user_id = $fileInfo['user_id'];
-            } else {
-                echo base64_encode(serialize(array('error_message' => "guest uploads not allowed")));
-                exit();
-            }
-            $server = CFLServers::model()->find('server_ip = "' . $this->ip . '"');
-            if ($server) {
-                $file->sgroup = $server->server_group;
-                if ($file->sgroup > 0) {
-                    if (isset($fileInfo['group']))
-                        $file->group = $fileInfo['group'];
-                    else
-                        $file->group = 0;
-                }
-                else
-                    $file->group = 0;
-                if ($file->save()) {
-                    if (($file->group == 0) && ($file->sgroup == 4))
-                        $file->group = $file->id;
-                    $file->save();
-                    echo base64_encode(serialize(array('id' => $file->id)));
-                } else
-                    echo base64_encode(serialize(array('error_message' => 'save failed')));
-            } else
-                echo base64_encode(serialize(array('error_message' => "unknown server")));
-        } else
-            echo base64_encode(serialize(array('error_message' => "bad data")));
-        exit();
-    }
 
     public function actionData() {
         $data = unserialize(base64_decode($this->fdata));
