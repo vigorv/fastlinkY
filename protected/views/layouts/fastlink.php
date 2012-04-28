@@ -90,7 +90,7 @@
                     <?= Yii::t('common', 'Auth'); ?> | <a href="/users/register"><?= Yii::t('common', 'Register'); ?></a>
                     <form id="top_auth" name="auth" method="post" action="/users/login" onSubmit="userLogin();return false;">
                         <input name="FLFormLogin[username]" type="text" size="40" placeholder="<?= Yii::t('user', 'Username');?>" />
-                        <input name="FLFormLogin[password]" type="password" size="40" placeholder="<?= Yii::t('user', 'Password');?>" />
+                        <input name="FLFormLogin[password]" type="password" size="40" onKeyPress="return submitenter(this,event);"; placeholder="<?= Yii::t('user', 'Password');?>" />
                         <input type="submit" style="visibility: hidden;"/>
                     </form>
                 <?php else: ?>
@@ -166,7 +166,7 @@
         </div>
     </center>
     <script language="javascript">
- 
+        <!--
         function userLogin(){
             $(this).ajaxSubmit(function(){
             
@@ -185,6 +185,24 @@
         $(function(){
             $('input[placeholder], textarea[placeholder]').placeholder();
         });
+
+
+        function submitenter(myfield,e)
+        {
+            var keycode;
+            if (window.event) keycode = window.event.keyCode;
+            else if (e) keycode = e.which;
+            else return true;
+
+            if (keycode == 13)
+            {
+                myfield.form.submit();
+                return false;
+            }
+            else
+                return true;
+        }
+        //-->
         
         
     
