@@ -112,6 +112,7 @@ class RMData
                 $xdata['direct_links'] = implode(PHP_EOL, $links);
                 unset($links);
                 $xfields = RMData::xfieldsdatasave($xdata);
+                $xfields= filter_var($xfields,FILTER_SANITIZE_STRING);
                 $command = Yii::app()->db->createCommand('Update ' . $itable . ' SET xfields ="' . $xfields . '" WHERE id =' . $row['id']);
                 $command->query();
                 $total_count = $total_count + $link_count;
