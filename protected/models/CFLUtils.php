@@ -38,4 +38,14 @@ class CFLUtils {
         return $string;
     }
 
+    public static function formatSize($number){
+        $postfixs = array('B', 'KB', 'MB', 'GB');
+        $postfix = 0;
+        while($number > 1024) {
+            $number = $number >> 10;
+            ++$postfix;
+        }
+        $number = round($number, 2);
+        return $number.' '.$postfixs[$postfix];
+    }
 }

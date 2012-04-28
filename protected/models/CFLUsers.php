@@ -160,4 +160,8 @@ class CFLUsers extends CActiveRecord {
         return md5($pwd . Yii::app()->getBaseUrl(true) . $salt);
     }
 
+    public static function UKey($record){
+        return md5($record->user_id.$record->password.'magic'.$record->last_visit);
+    }
+
 }
