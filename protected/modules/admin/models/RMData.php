@@ -24,16 +24,17 @@ class RMData
     public static function xfieldsdatasave($data)
     {
         $filecontents = "";
+        $i=1;
+        $count_data=count($data);
         foreach ($data as $index => $value) {
-            $value = array_values($value);
-            foreach ($value as $index2 => $value2) {
-                $value2 = stripslashes($value2);
-                $value2 = str_replace("|", "&#124;", $value2);
-                $value2 = str_replace("\r\n", "__NEWL__", $value2);
-                $filecontents .= $value2 . ($index2 < count($value) - 1 ? "|" : "");
+                $value = str_replace("|", "&#124;", $value);
+                $value = str_replace("\r\n", "__NEWL__", $value);
+                $index2 = str_replace("|", "&#124;", $index);
+                $index2 = str_replace("\r\n", "__NEWL__",$index2);
+                $filecontents .= $index2.'|'.$value;
+                if ($i<$count_data) $filecontents.="||";
+                $i++;
             }
-            $filecontents .= ($index < count($data) - 1 ? "\r\n" : "");
-        }
         return $filecontents;
     }
 
