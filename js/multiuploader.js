@@ -25,15 +25,16 @@ sendFile = (function(toString, maxSize){
                 handler.onerror();
             return;
         };
-        var xhr = new XMLHttpRequest,
-        upload = xhr.upload;
-        for(i = 0; i < length; i++)
-            upload[split[i]] = (function(event){
-                return  function(rpe){
-                    if(isFunction(handler[event]))
-                        handler[event].call(handler,rpe,xhr);
-                };
-            })(split[i]);
+        var xhr = new XMLHttpRequest();
+    upload = xhr.upload;
+    for(i = 0; i < length; i++)
+        xhr.upload[split[i]] = (function(event){
+            return  function(rpe){
+                if(isFunction(handler[event]))
+                    handler[event].call(handler,rpe,xhr);
+            };
+        })(split[i]);
+
         xhr.onreadystatechange = function(rpe) {
             if ((this.readyState == 4) ) {
                 if(isFunction(handler.onload))

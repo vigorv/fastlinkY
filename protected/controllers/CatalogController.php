@@ -25,7 +25,7 @@ class CatalogController extends Controller
 //                    $res = CFLCatalog::model()->SearchByTitle($str2, $pages, 0);
                 break;
             case 'bygroup':
-//                $res = CFLCatalog::model()->SearchByGroup($str2, $sgroup, $gtype);
+                $res = CFLCatalog::model()->SearchByGroup($str2, $sgroup, $gtype);
                 break;
         }
 
@@ -215,9 +215,32 @@ class CatalogController extends Controller
         } else{
             echo Yii::t('common',"You are not registred");
         }
-
     }
 
+    public function actionFileGroup($id=0){
+        if (in_array($this->userRole,array('admin','moderator'))) {
+
+            $per_page = 20;
+
+            $criteria = new CDbCriteria();
+            //   $criteria->select = 's.id,s.name';
+            $criteria->condition = ' (s.group = '.$id .') AND (s.sgroup=1)';
+            $criteria->order = 's.name ASC';
+            $criteria->alias = 's';
+
+            $count = CFLCatalog::model()->count($criteria);
+
+            $pages = new CPagination($count);
+            $pages->pageSize = $per_page;
+            $pages->applyLimit($criteria);
+
+            $files = CFLCatalog::model()->getCommandBuilder()
+                ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
+                ->queryAll();
+            $this->render('user',array('list' => $files,'pages' => $pages));
+        }
+         else $this->redirect('/users/login');
+    }
 
     public function actionDeleteFiles(){
         if (Yii::app()->user->id){
@@ -227,7 +250,10 @@ class CatalogController extends Controller
                 $ids = implode(",", $fid);
                 $ids = filter_var($ids,FILTER_SANITIZE_STRING);
                 if($ids){
-                    $files = CFLCatalog::model()->findAll('id in ('.$ids.') AND user_id = '.Yii::app()->user->id);
+                    if (in_array($this->userRole,array('admin','moderator'))) {
+                        $files = CFLCatalog::model()->findAll('id in ('.$ids.')');
+                    } else
+                        $files = CFLCatalog::model()->findAll('id in ('.$ids.') AND user_id = '.Yii::app()->user->id);
                     $dcount=0;
                     /** @var CFLCatalog $file */
                     foreach ($files as $file){

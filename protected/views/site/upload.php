@@ -2,19 +2,60 @@
 
 Yii::app()->clientScript->registerScriptFile('/js/multiuploader.js');
 $user_id = Yii::app()->user->id;
+
+$browser = Yii::app()->browser->getBrowser();
+if (in_array($browser,array('Opera','IE'))):
 ?>
+<form  id="Sender" method="POST" enctype="multipart/form-data"  action="http://<?= $uploadServer; ?>/files/uploads?uid=<?=Yii::app()->user->id;?>&key=<?=Yii::app()->user->getState('ukey');?>">
+    <input type="file" name="file"><br>
+    <input type="submit" value="Press" style="display:none;">
+</form>
+<button class="btn" onClick="UploadFiles();" ><?= Yii::t('common', 'Upload'); ?> </button>
+<div id="Result" style="margin:20px">
+
+</div>
+    <script >
+        var options = {
+                url: "http://<?= $uploadServer; ?>/files/uploads?uid=<?=Yii::app()->user->id;?>&key=<?=Yii::app()->user->getState('ukey');?>",
+                success: function(data) {
+
+                    answer = $.parseJSON(data);
+                    //console.log(xhr.responseText);
+                    if (answer != null){
+                        if (answer.success){
+                            var fid = answer.success;
+                            $('#Result').html("<p><?=Yii::app()->createAbsoluteUrl('catalog/file');?>/"+fid+"</p>");
+                        } else{
+                            $('#Result').html('<p>'+answer.error+'</p>');
+                        }
+                    }else{
+                        $('#Result').html("<p>bad answer</p>");
+                    }
+                }
+        };
+
+        function UploadFiles(){
+            $('#Sender').ajaxSubmit(options);
+            $("#Result").html('Loading... <br/><img src="/img/progressbar.gif" style="width:200px;height:10px;"/> ')
+        }
+    </script>
+
+<? else:?>
+
 <div id="upload_container" class="container-fluid closed">
     <div class="row-fluid">
         <div class="span9">
-            <input  id="FileUpload" type="file" rel="fileInput" onChange="return UploadFilelistChange(this);" multiple />
-            <div class="clearfix"></div>
+            <input  id="FileUpload" type="file" rel="fileInput" onChange="return UploadFilelistChange(this);" multiple/>
+              <div class="clearfix"></div>
             <ul id="tmp_ufs"></ul>
             <ul id="UploadFileList">
 
             </ul>
             <div class="clearfix"></div>
-            <button class="btn" onClick="return UploadFiles('FileUpload')" ><?= Yii::t('common', 'Upload'); ?></button>
+            <input type="submit" class="btn" onClick="UploadFiles('FileUpload');" value="<?= Yii::t('common', 'Upload'); ?>" />
+
             <button class="btn" onClick="clearFinished(); return false;" ><?= Yii::t('common', 'Clear finished'); ?></button>
+
           <?/*  <div  id="progresstotal" class="progress striped active animated">
                 <div class="bar" style="width: 0%"></div>
             </div>
@@ -117,7 +158,7 @@ $user_id = Yii::app()->user->id;
                         $(pr).width("100%");
                         $(pr).html('<p>Success</p>');
                         $(prB).parent().append('<a href="#" onClick="return clearU(this);"><i class="icon-ok-sign"></i></a>');
-                        $('#uploadResults').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p>");
+                        $('#uploadResults').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/file');?>/"+fid+"</p>");
                     } else{
                         str='#progressBar_'+uqueue_id+'_'+(this.current-1);
                         prB = ufs.find(str);						
@@ -175,6 +216,7 @@ $user_id = Yii::app()->user->id;
     }
 															 
     function UploadFiles(ifiles) {
+
         tmp_ufs.html('');
         uqueue_id = upload_queue_id;	
         upload_queue_id++;	
@@ -217,3 +259,4 @@ $user_id = Yii::app()->user->id;
 </script>
 
 
+<?endif;?>
