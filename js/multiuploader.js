@@ -62,7 +62,7 @@ sendFile = (function(toString, maxSize){
         xhr.send(handler.file);
         return  handler;
     };
-})(Object.prototype.toString, sendFile);
+})(Object.prototype.toString, maxSize);
 
 // function to upload multiple files via handler
 function sendMultipleFiles(handler){
