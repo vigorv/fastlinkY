@@ -8,15 +8,20 @@ if (in_array($browser,array('Opera','IE'))):
 ?>
 <form  id="Sender" method="POST" enctype="multipart/form-data"  action="http://<?= $uploadServer; ?>/files/uploads?uid=<?=Yii::app()->user->id;?>&key=<?=Yii::app()->user->getState('ukey');?>">
     <input type="file" name="file"><br>
-    <input type="submit" value="Press" style="display:none;">
+    <input type="submit" value="Upload" >
 </form>
-<button class="btn" onClick="UploadFiles();" ><?= Yii::t('common', 'Upload'); ?> </button>
+
+
 <div id="Result" style="margin:20px">
 
 </div>
+    <?php
+    Yii::app()->clientScript->registerScriptFile('/js/jquery.form.js');
+    ?>
     <script >
         var options = {
                 url: "http://<?= $uploadServer; ?>/files/uploads?uid=<?=Yii::app()->user->id;?>&key=<?=Yii::app()->user->getState('ukey');?>",
+                type: 'POST',
                 success: function(data) {
 
                     answer = $.parseJSON(data);
