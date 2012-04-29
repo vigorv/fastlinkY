@@ -4,7 +4,7 @@
  * @license Mit Style License
  */
 
-var sendFile = 2 * 1024*1024*1024; // maximum allowed file size
+var maxSize = 3 * 1024*1024*1024; // maximum allowed file size
 // should be smaller or equal to the size accepted in the server for each file
 
 // function to upload a single file via handler
