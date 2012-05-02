@@ -29,7 +29,7 @@ if (in_array($browser,array('Opera','IE'))):
                     if (answer != null){
                         if (answer.success){
                             var fid = answer.success;
-                            $('#Result').html("<p><?=Yii::app()->createAbsoluteUrl('catalog/file');?>/"+fid+"</p>");
+                            $('#Result').html("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p>");
                         } else{
                             $('#Result').html('<p>'+answer.error+'</p>');
                         }
@@ -163,7 +163,7 @@ if (in_array($browser,array('Opera','IE'))):
                         $(pr).width("100%");
                         $(pr).html('<p>Success</p>');
                         $(prB).parent().append('<a href="#" onClick="return clearU(this);"><i class="icon-ok-sign"></i></a>');
-                        $('#uploadResults').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/file');?>/"+fid+"</p>");
+                        $('#uploadResults').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p>");
                     } else{
                         str='#progressBar_'+uqueue_id+'_'+(this.current-1);
                         prB = ufs.find(str);						
