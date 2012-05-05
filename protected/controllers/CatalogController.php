@@ -224,7 +224,7 @@ class CatalogController extends Controller
 
             $criteria = new CDbCriteria();
             //   $criteria->select = 's.id,s.name';
-            $criteria->condition = ' (s.group = '.$id .') AND (s.sgroup=1)';
+            $criteria->condition = ' (s.group = '.$id .') AND (s.sgroup=2)';
             $criteria->order = 's.name ASC';
             $criteria->alias = 's';
 
