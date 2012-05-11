@@ -3,7 +3,7 @@
         <tr>
             <th>id</th>
             <th>title</th>
-            <th>delete</th>
+
         </tr>
     </thead>
 
@@ -12,7 +12,7 @@
 //echo count($data);
 
 foreach ($data as $item){
-    echo '<tr><td>'.$item['id'].'</td><td>'.$item['title'].'</td><td><a href="/catalog/delete/'.$item['id'].'">Delete</a></td>';
+    echo '<tr><td>'.$item['id'].'</td><td>'.$item['title'].'</td>';
 }
 ?></tbody>
     </table>
