@@ -36,8 +36,7 @@ class ServersController extends AdmController {
         if (!$id)
             $this->actionIndex();
         else {
-            $item = CFLServers::model()->with('zone')
-                    ->findByPk($id, array('select' => 'server_id, INET_NTOA(servers.server_ip) as server_ip,server_desc,server_ipv6,server_is_active,server_priority,server_letter,server_group,*'));
+            $item = CFLServers::model()->findByPk($id);
             $columns = CFLServers::model()->getFullColumnsList();
             $table = $this->renderPartial('/elements/view_edit', array('item' => $item, 'columns' => $columns), true);
             $this->render('index', array('table' => $table));

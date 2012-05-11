@@ -263,7 +263,7 @@ class CatalogController extends Controller
                             default: echo "not there ".$file->sgroup; Yii::app()->end();
                         }
                         $data=base64_encode($file->dir . '/' . $file->original_name);
-                        $skey=base64_encode(md5($data).Yii::app()->params['master_key']);
+                        $skey=md5($data.Yii::app()->params['master_key']);
                         $url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
                         $result = file_get_contents($url);
                         if ($result=="OK"){

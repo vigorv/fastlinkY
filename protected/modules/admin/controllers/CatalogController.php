@@ -3,23 +3,6 @@
 class CatalogController extends AdmController {
 
     public function actionIndex() {
-        /* $per_page = 20;
-
-          $criteria = new CDbCriteria();
-          $count = CFLCatalog::model()->count($criteria);
-
-          $pages = new CPagination($count);
-          $pages->pageSize = $per_page;
-          $pages->applyLimit($criteria);
-
-          $list = CFLCatalog::model()->getCommandBuilder()
-          ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
-          ->queryAll();
-
-          $table = $this->renderPartial('/elements/tableview', array('list' => $list, 'pages' => $pages), true);
-          $this->render('index', array('table' => $table));
-         */
-
         $model = new CFLCatalog('search');
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['CFLCatalog'])) {
@@ -46,9 +29,6 @@ class CatalogController extends AdmController {
         if ($_POST) {
             $data = new CFLCatalog();
         }
-
-
-        //var_dump($item);exit();
         $table = $this->renderPartial('/elements/add', array('item' => $item), true);
         $this->render('index', array('table' => $table));
     }
@@ -75,24 +55,29 @@ class CatalogController extends AdmController {
         $model = $this->loadModel($id);
         $url=false;
         if ($model){
-            $data = base64_encode($file->dir . '/' . $file->original_name);
+            $data = base64_encode($model->dir . '/' . $model->original_name);
+            //echo Yii::app()->params['master_key'];
             $sdata = md5($data.Yii::app()->params['master_key']);
          switch($model->sgroup){
              case 2:
-                $url = 'http://'. Yii::app()->params['uploadServer_sg2'].'/file/delete';
+                $url = 'http://'. Yii::app()->params['uploadServer_sg2'].'/files/delete';
                 break;
              case 4:
-                $url = 'http://'. Yii::app()->params['uploadServer'].'/file/delete';
+                $url = 'http://'. Yii::app()->params['uploadServer'].'/files/delete';
                 break;
              default:
          }
             if($url){
-                $res=file_get_contents($url.'?data='.$data.'&skey='.sdata);
-                if ($res){
-                    $model->delete;
+                $url.='?data='.$data.'&key='.$sdata;
+                $res=@file_get_contents($url);
+                if ($res=="OK"){
+                    $model->deleteByPk($id);
                 }
             }
+        } else {
+            echo "not found";
         }
+
     }
 
     /**

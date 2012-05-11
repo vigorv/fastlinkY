@@ -8,6 +8,11 @@
         </tr>
     </thead>
     <tbody>
+    <tr>
+        <td>1</td>
+        <td><strong>makeCache</strong></td>
+        <td><a href="<?php echo $this->createUrl('utils/makeCache'); ?>">makeCache</a></td>
+    </tr>
         <tr>
             <td>1</td>
             <td><strong>CheckNewsWithNoLinks</strong></td>

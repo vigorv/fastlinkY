@@ -43,17 +43,21 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
     'filter'=>$model,
     'columns'=>array(
         'server_id',
-        'server_addr',
+
         'server_ip',
         'server_port',
         'server_desc',
-        'server_ipv6',
-        /*
+        'server_letter',
+        'zone_id',
+        'server_group',
         'server_is_active',
         'server_priority',
-        'server_letter',
-        'server_group',
-        'zone_id',
+        'server_addr',
+        /*
+        'server_ipv6',
+
+
+
         */
         array(
             'class'=>'CButtonColumn',

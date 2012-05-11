@@ -44,14 +44,16 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'user_id',
-		'email',
+//		'email',
 //		'title',
 //		'original_name',
-        'sgroup',
+
 		'name',
+        'sgroup',
+        'group',
 		/*
 		'comment',
-		'group',
+
 		'dt',
 		'is_visible',
 		'is_confirm',

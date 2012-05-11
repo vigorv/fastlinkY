@@ -246,9 +246,9 @@ class RMData
     public function FindNewsWithoutLinks()
     {
         return Yii::app()->db->createCommand()
-            ->select('rc.id')
+            ->select('rc.id,rc.title')
             ->from('{{catalog}} c')
-            ->rightJoin('rum_i_cat rc', ' c.`group` = rc.id && c.sgroup = 2')
+            ->rightJoin('rum_c_cat rc', ' c.`group` = rc.id && c.sgroup = 2')
         //     ->group('c.group')
             ->where('c.id is NULL and  !(rc.category  in (' . Yii::app()->params['news_categories_sg2'] . '))')
             ->queryAll();
@@ -261,12 +261,33 @@ class RMData
     public function FindLinksWithoutNews()
     {
         return Yii::app()->db->createCommand()
-            ->select('c.id')
+            ->select('c.id,c.name')
             ->from('{{catalog}} c')
-            ->leftJoin('rum_i_cat rc', ' c.group = rc.id')
+            ->leftJoin('rum_c_cat rc', ' c.group = rc.id')
             ->where('rc.id is NULL && c.sgroup = 2')
             ->queryAll();
     }
+
+    public function MakeCache(){
+          $db = new CDbConnection('mysql:host=nemesis.anka.ws;dbname=wsmedia2', 'watcher', 'iamremotewatcher');
+          $db->charset = 'cp1251';
+          $db->active = true;
+          $count=500;
+          $offset = 0;
+          $totalCount = $db->createCommand('SELECT Count(`id`) FROM rm_post')->queryScalar();
+          $table = 'rum_c_cat';
+          Yii::app()->db->createCommand('TRUNCATE '.$table)->execute();
+          while($offset<$totalCount){
+            $command = $db->createCommand('SELECT id,title,category FROM rm_post LIMIT '.$offset.','.$count);
+            $ar=$command->queryAll();
+              foreach ($ar as $values)
+                    Yii::app()->db->createCommand()->insert($table,$values);
+            $offset+=$count;
+          }
+    }
+
+
+
 
     public function CheckImport($id)
     {
