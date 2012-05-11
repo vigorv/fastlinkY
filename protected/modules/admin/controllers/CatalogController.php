@@ -72,8 +72,11 @@ class CatalogController extends AdmController {
                 $res=@file_get_contents($url);
                 if ($res=="OK"){
                     $model->deleteByPk($id);
-                }
-            }
+                    echo 'Deleted';
+                } else
+                    echo "Can't delete";
+            } else
+                echo "It's hard to find it";
         } else {
             echo "not found";
         }
