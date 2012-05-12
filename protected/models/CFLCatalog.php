@@ -112,7 +112,7 @@ class CFLCatalog extends CActiveRecord {
         $criteria->compare('original_name', $this->original_name, true);
         $criteria->compare('name', $this->name, true);
         $criteria->compare('comment', $this->comment, true);
-        $criteria->compare('group', $this->group, true);
+        $criteria->compare('`group`', $this->group, true);
         $criteria->compare('dt', $this->dt, true);
         $criteria->compare('is_visible', $this->is_visible);
         $criteria->compare('is_confirm', $this->is_confirm);
