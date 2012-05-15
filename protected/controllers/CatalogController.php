@@ -110,6 +110,9 @@ class CatalogController extends Controller
 
                 $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
                 if (count($servers)) {
+                    if (!CFLCatalogClicks::model()->CheckTime($file,$this->ip)){
+                        $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
+                    }
                     if ($this->userRole == "admin") {
                         $url_list = array();
                         foreach ($servers as $a_server) {
@@ -123,7 +126,7 @@ class CatalogController extends Controller
                         exit();
                     }
                     $server = $servers[array_rand($servers)];
-                    $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip);
+
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
                     $this->render('view', array('url' => $url));
                 } else {

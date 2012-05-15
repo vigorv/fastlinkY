@@ -28,8 +28,24 @@ class CFLCatalogClicks extends CFLLogActiveRecord {
         return Yii::app()->dblog->cache(20)->createCommand('SHOW FULL COLUMNS FROM ' . $this->tableName())->queryAll();
     }
 
+
+/**
+ * @param mixed $file
+ * @param mixed $zone
+ * @param mixed $ip
+ * @return mixed
+ */
     public function InsertDelayed($file, $zone, $ip) {
         return Yii::app()->dblog->createCommand('INSERT DELAYED INTO {{catalog_clicks}} (catalog_id,catalog_group_id,catalog_sgroup_id,user_id,zone,ip) VALUES ("' . $file["id"] . '","' . $file['group'] . '","' . $file['sgroup'] . '","' . Yii::app()->user->id . '","' . $zone . '","' . $ip . '")')->execute();
+    }
+
+    /**
+     * @param mixed $file
+     * @param mixed $ip
+     * @return mixed
+     */
+    public function CheckTime($file,$ip){
+        return Yii::app()->dblog->createCommand('SELECT COUNT(*) FROM {{catalog_clicks}} WHERE (`created` > DATE_SUB(NOW(), INTERVAL 1 DAY)) AND (`catalog_id` ='.$file["id"].') AND (`ip` = "'.$ip.'") LIMIT 1')->queryScalar();
     }
 
 }
