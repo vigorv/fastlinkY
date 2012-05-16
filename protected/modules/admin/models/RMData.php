@@ -51,7 +51,7 @@ class RMData
         $db->createCommand('SET NAMES UTF8')->execute();
         $db->active = true;
 
-        $itable = 'rum_post';
+        $itable = 'rm_post';
 
         $command = $db->createCommand('SELECT id,title,title2,src_link, src_links,xfields,date FROM ' . $itable);
         $command->query();
@@ -124,7 +124,7 @@ class RMData
                 unset($links);
                 $xfields = RMData::xfieldsdatasave($xdata);
                 $xfields= filter_var($xfields,FILTER_SANITIZE_STRING);
-                $command = Yii::app()->db->createCommand('Update ' . $itable . ' SET xfields ="' . $xfields . '" WHERE id =' . $row['id']);
+                $command = $db->createCommand('Update ' . $itable . ' SET xfields ="' . $xfields . '" WHERE id =' . $row['id']);
                 $command->query();
                 $total_count = $total_count + $link_count;
             }
