@@ -117,7 +117,7 @@ class RMData
                 unset($xdata['games_direct_links']);
                 unset($xdata['soft_direct_links']);
                 unset($xdata['music_direct_links']);
-                if ($xdata['direct_links'])
+                if (isset($xdata['direct_links']))
                     $xdata['direct_links'].= implode(PHP_EOL, $links);
                 else
                     $xdata['direct_links'] = implode(PHP_EOL, $links);
