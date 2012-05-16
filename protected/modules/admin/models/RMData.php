@@ -11,7 +11,9 @@ class RMData
         $data = array();
         $xfieldsdata = explode("||", $id);
         foreach ($xfieldsdata as $xfielddata) {
-            list ($xfielddataname, $xfielddatavalue) = explode("|", $xfielddata);
+            $ar = explode("|", $xfielddata);
+            if (!(count($ar)>1)) continue;
+            list ($xfielddataname, $xfielddatavalue) = $ar;
             $xfielddataname = str_replace("&#124;", "|", $xfielddataname);
             $xfielddataname = str_replace("__NEWL__", "\r\n", $xfielddataname);
             $xfielddatavalue = str_replace("&#124;", "|", $xfielddatavalue);
@@ -44,9 +46,14 @@ class RMData
 
         set_time_limit(0);
 
-        $itable = 'rum_i_cat';
+        $db = new CDbConnection('mysql:host=nemesis.anka.ws;dbname=wsmedia2', 'watcher', 'iamremotewatcher');
+        $db->charset = 'cp1251';
+        $db->createCommand('SET NAMES UTF8')->execute();
+        $db->active = true;
 
-        $command = Yii::app()->db->createCommand('SELECT id,title,title2,src_link, src_links,xfields,date FROM ' . $itable);
+        $itable = 'rum_post';
+
+        $command = $db->createCommand('SELECT id,title,title2,src_link, src_links,xfields,date FROM ' . $itable);
         $command->query();
 
         $reader = $command->query();
@@ -68,7 +75,7 @@ class RMData
             foreach ($links as $key => $dir_links) {
                 $link_count = 0;
                 $links = array();
-                preg_match_all('/(Music|Movies|Games|Software)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
+                preg_match_all('/(Music|Movies|Games|Software|Magazines|Music_musxq)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
                 foreach ($matches[0] as $link) {
                     //var_dump($link);continue;
 //   $name = parse_url($link[0], PHP_URL_PATH);
@@ -271,6 +278,7 @@ class RMData
     public function MakeCache(){
           $db = new CDbConnection('mysql:host=nemesis.anka.ws;dbname=wsmedia2', 'watcher', 'iamremotewatcher');
           $db->charset = 'cp1251';
+          $db->createCommand('SET NAMES UTF8')->execute();
           $db->active = true;
           $count=500;
           $offset = 0;
@@ -278,7 +286,7 @@ class RMData
           $table = 'rum_c_cat';
           Yii::app()->db->createCommand('TRUNCATE '.$table)->execute();
           while($offset<$totalCount){
-            $command = $db->createCommand('SELECT id,title,category FROM rm_post LIMIT '.$offset.','.$count);
+            $command = $db->createCommand('SELECT id,title,title2,src_link,src_links, xfields,date,category FROM rm_post LIMIT '.$offset.','.$count);
             $ar=$command->queryAll();
               foreach ($ar as $values)
                     Yii::app()->db->createCommand()->insert($table,$values);
@@ -293,23 +301,29 @@ class RMData
     {
         set_time_limit(0);
 
-        $itable = 'rum_i_cat';
+        $itable = 'rum_c_cat';
 
 //  $db = new CDbConnection('mysql:host=localhost;dbname=rumedia', 'root', 'vig2orv115');
 //        $db->charset = 'cp1251';
 //        $db->active = true;
 //$command = $db->createCommand('SELECT id,title2,src_link, src_links,xfields,date FROM ' . $itable);
-        $command = Yii::app()->db->createCommand('SELECT id,title,title2,src_link, src_links,xfields,date FROM ' . $itable . ' WHERE id =' . $id);
+        if ($id)
+         $command = Yii::app()->db->createCommand('SELECT id,title,title2,src_link, src_links,xfields,date FROM ' . $itable . ' WHERE id =' . $id);
+        else
+         $command = Yii::app()->db->createCommand('SELECT id,title,title2,src_link, src_links,xfields,date FROM ' . $itable );
         $command->query();
 
         $reader = $command->query();
 
         $post_count = 0;
         $link_count = 0;
+        $old_links_count=0;
+        echo "<pre>";
         foreach ($reader as $row) {
-            echo "get row" . PHP_EOL;
+            //echo "get row" . PHP_EOL;
             $xdata = RMData::xfieldsdataload($row['xfields']);
-            var_dump($xdata);
+            if ($id)
+                var_dump($xdata);
             $links = array();
             if (isset($xdata['m_direct_links']))
                 $links['v'] = $xdata['m_direct_links'];
@@ -321,9 +335,10 @@ class RMData
                 $links['s'] = $xdata['soft_direct_links'];
 
             foreach ($links as $key => $dir_links) {
-                preg_match_all('/(Music|Movies|Games|Software)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
+                preg_match_all('/(Music|Movies|Games|Software|Magazines|Music_musxq)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
+                if (count($matches))
                 foreach ($matches[0] as $link) {
-                    var_dump($link);
+                    //var_dump($link);
                     $link_count++;
 //var_dump($link);continue;
 //   $name = parse_url($link[0], PHP_URL_PATH);
@@ -342,7 +357,7 @@ class RMData
                     $cat_item->title = filter_var($title);
                     $fname = pathinfo($name, PATHINFO_BASENAME);
                     $dir = pathinfo($name, PATHINFO_DIRNAME);
-
+                    if ($id)
                     echo"<h4> OK</h4>";
                     /* $cat_item->original_name = $fname;
                       $cat_item->dir = $dir;
@@ -352,12 +367,14 @@ class RMData
                       $cat_item->group = $row['id'];
                      */
                 }
+
+                /*
                 preg_match_all('/92.63.196.82\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
 
                 foreach ($matches[0] as $link) {
 
                     $link = str_replace('92.63.196.82/', '', $link);
-                    var_dump($link);
+                    //var_dump($link);
                     $link_count++;
 //var_dump($link);continue;
 //   $name = parse_url($link[0], PHP_URL_PATH);
@@ -385,12 +402,14 @@ class RMData
                       $cat_item->dt = $row['date'];
                       $cat_item->group = $row['id'];
                      */
-                }
+                //}*/
 // exit;
+                $old_links_count++;
             }
             $post_count++;
         }
-        echo "Processed " . $post_count . " posts.Should Create " . $link_count . " links";
+        echo "</pre>";
+        echo "Processed " . $post_count . " posts. OLD_style_links ".$old_links_count.". Should Create " . $link_count . " links";
     }
 
 }
