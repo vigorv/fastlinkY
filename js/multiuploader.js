@@ -4,7 +4,7 @@
  * @license Mit Style License
  */
 
-var maxSize = 16 * 1024*1024*1024; // maximum allowed file size
+var maxSize = 23 * 1024*1024*1024; // maximum allowed file size
 // should be smaller or equal to the size accepted in the server for each file
 
 // function to upload a single file via handler
