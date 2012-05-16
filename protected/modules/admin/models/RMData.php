@@ -76,6 +76,7 @@ class RMData
                 $link_count = 0;
                 $links = array();
                 preg_match_all('/(Music|Movies|Games|Software|Magazines|Music_musxq)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
+                if($matches)
                 foreach ($matches[0] as $link) {
                     //var_dump($link);continue;
 //   $name = parse_url($link[0], PHP_URL_PATH);
@@ -116,7 +117,10 @@ class RMData
                 unset($xdata['games_direct_links']);
                 unset($xdata['soft_direct_links']);
                 unset($xdata['music_direct_links']);
-                $xdata['direct_links'] = implode(PHP_EOL, $links);
+                if ($xdata['direct_links'])
+                    $xdata['direct_links'].= implode(PHP_EOL, $links);
+                else
+                    $xdata['direct_links'] = implode(PHP_EOL, $links);
                 unset($links);
                 $xfields = RMData::xfieldsdatasave($xdata);
                 $xfields= filter_var($xfields,FILTER_SANITIZE_STRING);
