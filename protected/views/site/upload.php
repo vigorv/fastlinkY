@@ -29,7 +29,9 @@ if (in_array($browser,array('Opera','IE'))):
                     if (answer != null){
                         if (answer.success){
                             var fid = answer.success;
-                            $('#Result').html("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p>");
+                            filename = this.file.fileName;
+                            if (filename == undefined) filename=this.file.name;
+                            $('#Result').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p> <p> BBCODE: <br/>[url=<?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"]"+filename+"[/url] </p>");
                         } else{
                             $('#Result').html('<p>'+answer.error+'</p>');
                         }
@@ -163,7 +165,9 @@ if (in_array($browser,array('Opera','IE'))):
                         $(pr).width("100%");
                         $(pr).html('<p>Success</p>');
                         $(prB).parent().append('<a href="#" onClick="return clearU(this);"><i class="icon-ok-sign"></i></a>');
-                        $('#uploadResults').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p>");
+                        filename = this.file.fileName;
+                        if (filename == undefined) filename=this.file.name;
+                        $('#uploadResults').append("<p><?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"</p> <p> BBCODE: <br/>[url=<?=Yii::app()->createAbsoluteUrl('catalog/viewv');?>/"+fid+"]"+filename+"[/url] </p>");
                     } else{
                         str='#progressBar_'+uqueue_id+'_'+(this.current-1);
                         prB = ufs.find(str);						
