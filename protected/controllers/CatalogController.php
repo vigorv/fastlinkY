@@ -282,5 +282,28 @@ class CatalogController extends Controller
             die('unknown');
     }
 
+    public function actionLink($id=0){
+        $id=(int)$id;
+        if ($id>0){
+            $file = CFLCatalog::model()->cache(1000)->findByPk($id);
+            $msg='<p>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.'</p> <p> BBCODE: <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] </p>';
+            $this->render('/elements/messages', array('msg' =>$msg));
+        }
+
+    }
+
+
+    public function actionLinks($ids=false){
+        if ($ids){
+            $id_list=@unserialize(@base64_encode($ids));
+            if (is_array($id_list)){
+                foreach($id_list as $id){
+                    $file = CFLCatalog::model()->cache(1000)->findByPk($id);
+                    echo '<p>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.'</p> <p> BBCODE: <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] </p>';
+                }
+            }
+
+        }
+    }
 
 }
