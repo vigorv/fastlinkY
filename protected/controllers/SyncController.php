@@ -72,12 +72,13 @@ class SyncController extends CController {
                 else
                     $file->group = 0;
                 if ($file->save()) {
-                    if (($file->group == 0) && ($file->sgroup == 4))
-                        $file->group = $file->id;
+                    //if (($file->group == 0) && ($file->sgroup == 4))
+                      //  $file->group = $file->id;
                     $file->save();
                     echo base64_encode(serialize(array('id' => $file->id)));
-                } else
-                    echo base64_encode(serialize(array('error_message' => 'save failed')));
+                } else{
+                    echo base64_encode(serialize(array('error_message' => 'save failed','error_data'=>$file->getErrors())));
+                }
             } else
                 echo base64_encode(serialize(array('error_message' => "unknown server")));
         } else
