@@ -49,7 +49,8 @@ class CFLCatalog extends CActiveRecord {
         return array(
             array('title, original_name, name, group, dt, dir', 'required'),
             array('is_visible, is_confirm', 'numerical', 'integerOnly' => true),
-            array('user_id, group, sgroup, tp, sz, vtp', 'length', 'max' => 10),
+            array('user_id, group, sgroup, tp, vtp', 'length', 'max' => 10),
+            array('sz','length','max'=>20),
             array('email', 'length', 'max' => 100),
             array('title, original_name, name, dir', 'length', 'max' => 255),
             array('chk_md5', 'length', 'max' => 32),
