@@ -298,10 +298,10 @@ class CatalogController extends Controller
        if ($id>0){
            $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$id,'sgroup'=>$group_id));
            $msg_links='';
-           $msg_bbcode='';
+           $msg_bbcode='BBCODE:';
            foreach ($files as $file){
-               $msg_links='</br>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id;
-               $msg_bbcode='</br> BBCODE: <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] ';
+               $msg_links.='</br>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id;
+               $msg_bbcode.='</br>  <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] ';
             }
            $this->render('/elements/messages', array('msg' =>$msg_links.$msg_bbcode));
        }
