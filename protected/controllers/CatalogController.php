@@ -319,7 +319,7 @@ class CatalogController extends Controller
             $msg_links='';
             $msg_bbcode='<p>BBCODE:</p>';
             foreach ($files as $file){
-                $msg_links.='<br/>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'];
+                $msg_links.=''.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].'<br/>';
                 $msg_bbcode.=' [url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].']'.$file['name'].'[/url]<br/> ';
             }
             $this->render('/elements/messages', array('msg' =>'<div style="word-wrap:break-word">'.$msg_links.$msg_bbcode.'</div>'));
