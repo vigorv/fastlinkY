@@ -296,7 +296,7 @@ class CatalogController extends Controller
    public function actionGroupLinks($id=0,$group_id=0){
        $id=(int)$id;
        if ($id>0){
-           $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$id,'sgroup'=>$group_id));
+           $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$id,'sgroup'=>$group_id),array('order'=>'id'));
            $msg_links='';
            $msg_bbcode='BBCODE:';
            foreach ($files as $file){
