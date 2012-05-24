@@ -285,12 +285,46 @@ class CatalogController extends Controller
     public function actionLink($id=0){
         $id=(int)$id;
         if ($id>0){
-            $file = CFLCatalog::model()->cache(1000)->findByPk($id);
+            $file = CFLCatalog::model()->cache(100)->findByPk($id);
             $msg='<p>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.'</p> <p> BBCODE: <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] </p>';
             $this->render('/elements/messages', array('msg' =>$msg));
         }
 
     }
+
+
+   public function actionGroupLinks($id=0,$group_id=0){
+       $id=(int)$id;
+       if ($id>0){
+           $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$id,'sgroup'=>$group_id));
+           $msg_links='';
+           $msg_bbcode='';
+           foreach ($files as $file){
+               $msg_links='</br>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id;
+               $msg_bbcode='</br> BBCODE: <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] ';
+            }
+           $this->render('/elements/messages', array('msg' =>$msg_links.$msg_bbcode));
+       }
+   }
+
+    public function actionGroupLinksByName($name='',$group_id=0){
+        if (strlen($name)){
+            $name = filter_var($name,FILTER_SANITIZE_STRING);
+            $criteria = new CDbCriteria();
+            $criteria->select='*';
+            $criteria->condition='(name LIKE "%'.$name.'%") AND (sgroup='.(int)$group_id.')';
+            $files = CFLCatalog::model()->cache(100)->findAll($criteria);
+            $msg_links='';
+            $msg_bbcode='<p>BBCODE:</p>';
+            foreach ($files as $file){
+                $msg_links.='<br/>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'];
+                $msg_bbcode.=' [url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].']'.$file['name'].'[/url]<br/> ';
+            }
+            $this->render('/elements/messages', array('msg' =>'<div style="word-wrap:break-word">'.$msg_links.$msg_bbcode.'</div>'));
+        }
+    }
+
+
 
 
     public function actionLinks($ids=false){
