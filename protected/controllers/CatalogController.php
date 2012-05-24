@@ -307,12 +307,14 @@ class CatalogController extends Controller
        }
    }
 
-    public function actionGroupLinksByName($name='',$group_id=0){
+    public function actionGroupLinksByName($name='',$group_id=0,$order='name'){
         if (strlen($name)){
             $name = filter_var($name,FILTER_SANITIZE_STRING);
+            $order = filter_var($order,FILTER_SANITIZE_STRING);
             $criteria = new CDbCriteria();
             $criteria->select='*';
             $criteria->condition='(name LIKE "%'.$name.'%") AND (sgroup='.(int)$group_id.')';
+            $criteria->order=$order;
             $files = CFLCatalog::model()->cache(100)->findAll($criteria);
             $msg_links='';
             $msg_bbcode='<p>BBCODE:</p>';
