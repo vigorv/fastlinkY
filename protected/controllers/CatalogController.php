@@ -301,7 +301,7 @@ class CatalogController extends Controller
            $msg_bbcode='BBCODE:';
            foreach ($files as $file){
                $msg_links.=''.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].'</br>';
-               $msg_bbcode.='</br>  <br/>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].']'.$file['name'].'[/url] ';
+               $msg_bbcode.='[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].']'.$file['name'].'[/url] <br/> ';
             }
            $this->render('/elements/messages', array('msg' =>$msg_links.$msg_bbcode));
        }
@@ -320,7 +320,7 @@ class CatalogController extends Controller
             $msg_bbcode='<p>BBCODE:</p>';
             foreach ($files as $file){
                 $msg_links.=''.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].'<br/>';
-                $msg_bbcode.=' [url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].']'.$file['name'].'[/url]<br/> ';
+                $msg_bbcode.=' [url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$file['id'].']'.$file['name'].'[/url]<br/>';
             }
             $this->render('/elements/messages', array('msg' =>'<div style="word-wrap:break-word">'.$msg_links.$msg_bbcode.'</div>'));
         }
