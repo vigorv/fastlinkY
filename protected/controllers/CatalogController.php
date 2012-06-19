@@ -130,6 +130,13 @@ class CatalogController extends Controller
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
                     $this->render('view', array('url' => $url));
                 } else {
+                    if ($this->userRole == "admin") {
+                       echo "Вы находитесь ".$this->zone;
+                       echo "<br/>Вы запросили файл ".$id;
+                       echo "<br/>Файл принадлежит группе ".$file->sgroup;
+                       echo "<br/>Имя файла ".$file->original_name;
+                       echo "<br/>Сервера не найдены";
+                    }
                     CFLLogFiles::FileNotAviable($id, $file->group, $file->sgroup, $this->zone, $this->ip);
                     $this->render('/elements/messages', array('msg' => Yii::t('common', 'File no longer available')));
                 }
