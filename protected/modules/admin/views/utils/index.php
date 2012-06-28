@@ -24,7 +24,13 @@
             <td><strong>CheckLinksWithNoNews</strong></td>
             <td><a href="<?php echo $this->createUrl('utils/CheckLinksWithNoNews'); ?>">CheckLinksWithNoNews</a></td>
         </tr>
-      
+
+      <tr>
+        <td>1</td>
+        <td><strong>ShowItemsWithNoFiles</strong></td>
+        <td><a href="<?php echo $this->createUrl('utils/ShowItemsWithNoFiles'); ?>">ShowItemsWithNoFiles</a></td>
+        </tr>
+
 
     </tbody>
 </table>
