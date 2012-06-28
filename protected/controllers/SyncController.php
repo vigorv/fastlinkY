@@ -86,6 +86,17 @@ class SyncController extends CController {
         exit();
     }
 
+    public function actionCheck(){
+        $data = unserialize(base64_decode($this->fdata));
+        if ($data) {
+            if (isset($data['dir'])  && isset($data['fname'])){
+                $item = CFLCatalog::model()->findByAttributes(array('dir'=>$data['dir'],'original_name'=>$data['fname']));
+                if ($item && $item->id){
+                    echo "OK";
+                }
+            }
+        }
+    }
 
     public function actionData() {
         $data = unserialize(base64_decode($this->fdata));
