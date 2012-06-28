@@ -73,7 +73,7 @@ class CatalogController extends AdmController {
             foreach($urls as $url){
                 $res[]=@file_get_contents($url.'?data='.$data.'&key='.$sdata);
             }
-                if ((count($res) && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
+                if ((count($res)==1 && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
                     $model->deleteByPk($id);
                     echo 'Deleted';
                 } else
