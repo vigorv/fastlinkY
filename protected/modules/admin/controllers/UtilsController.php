@@ -29,12 +29,12 @@ class UtilsController extends AdmController {
         $files = Yii::app()->db->createCommand("Select * from fl_catalog where sgroup = 2")->query();
         $items = array();
         while($file = $files->read()){
-            switch ($file->sgroup){
+            switch ($file['sgroup']){
                 case 2: $server = Yii::app()->params['uploadServer_sg2'];break;
                 case 4: $server = Yii::app()->params['uploadServer'];break;
-                default: echo "not there ".$file->sgroup; Yii::app()->end();
+                default: echo "not there ".$file['sgroup']; Yii::app()->end();
             }
-            $data=base64_encode($file->dir . '/' . $file->original_name);
+            $data=base64_encode($file['dir'] . '/' . $file['original_name']);
             $skey=md5($data.Yii::app()->params['master_key']);
             $url = 'http://' . $server. '/files/checkexists?data='.$data.'&key='.$skey;
             $data = file_get_contents($url);
