@@ -267,8 +267,10 @@ class CatalogController extends Controller
                     $dcount=0;
                     /** @var CFLCatalog $file */
                     foreach ($files as $file){
+                        $server2 = false;
                         switch ($file->sgroup){
-                            case 2: $server = Yii::app()->params['uploadServer_sg2'];break;
+                            case 2: $server = Yii::app()->params['uploadServer_sg2'];
+                                    $server2 = Yii::app()->params['uploadServerA_sg2']; break;
                             case 4: $server = Yii::app()->params['uploadServer'];break;
                             default: echo "not there ".$file->sgroup; Yii::app()->end();
                         }
@@ -276,6 +278,9 @@ class CatalogController extends Controller
                         $skey=md5($data.Yii::app()->params['master_key']);
                         $url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
                         $result = file_get_contents($url);
+                        if ($server2) {
+                            $url = 'http://' . $server2. '/files/delete?data='.$data.'&key='.$skey;
+                        }
                         if ($result=="OK"){
                             $file->delete();
                             $dcount++;
