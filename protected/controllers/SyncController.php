@@ -93,6 +93,7 @@ class SyncController extends CController {
                 $item = CFLCatalog::model()->findByAttributes(array('dir'=>$data['dir'],'original_name'=>$data['fname']));
                 if ($item && $item->id){
                     echo "OK";
+                    Yii::app()->end();
                 }
             }
         }
