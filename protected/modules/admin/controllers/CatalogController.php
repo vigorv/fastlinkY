@@ -71,8 +71,7 @@ class CatalogController extends AdmController {
          }
             $res=array();
             foreach($urls as $url){
-                $url.='?data='.$data.'&key='.$sdata;
-                $res[]=@file_get_contents($url);
+                $res[]=@file_get_contents($url.'?data='.$data.'&key='.$sdata);
             }
                 if ((count($res) && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
                     $model->deleteByPk($id);
