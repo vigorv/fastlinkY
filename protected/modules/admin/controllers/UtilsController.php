@@ -26,9 +26,9 @@ class UtilsController extends AdmController {
     }
 
     public function actionShowItemsWithNoFiles(){
-        $files = CFLCatalog::model()->findAll();
+        $files = Yii::app()->db->createCommand("Select * from fl_catalog where sgroup = 2")->query();
         $items = array();
-        foreach ($files as $file){
+        while($file = $files->read()){
             switch ($file->sgroup){
                 case 2: $server = Yii::app()->params['uploadServer_sg2'];break;
                 case 4: $server = Yii::app()->params['uploadServer'];break;
