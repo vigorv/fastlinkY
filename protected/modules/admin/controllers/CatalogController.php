@@ -58,25 +58,27 @@ class CatalogController extends AdmController {
             $data = base64_encode($model->dir . '/' . $model->original_name);
             //echo Yii::app()->params['master_key'];
             $sdata = md5($data.Yii::app()->params['master_key']);
+            $urls = array();
          switch($model->sgroup){
              case 2:
-                $url = 'http://'. Yii::app()->params['uploadServer_sg2'].'/files/delete';
+                $urls[] = 'http://'. Yii::app()->params['uploadServer_sg2'].'/files/delete';
+                $urls[] = 'http://'. Yii::app()->params['uploadServerA_sg2'].'/files/delete';
                 break;
              case 4:
-                $url = 'http://'. Yii::app()->params['uploadServer'].'/files/delete';
+                $urls[] = 'http://'. Yii::app()->params['uploadServer'].'/files/delete';
                 break;
              default:
          }
-            if($url){
+            $res=array();
+            foreach($urls as $url){
                 $url.='?data='.$data.'&key='.$sdata;
-                $res=@file_get_contents($url);
-                if ($res=="OK"){
+                $res[]=@file_get_contents($url);
+            }
+                if ((count($res) && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
                     $model->deleteByPk($id);
                     echo 'Deleted';
                 } else
                     echo "Can't delete";
-            } else
-                echo "It's hard to find it";
         } else {
             echo "not found";
         }
