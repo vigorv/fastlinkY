@@ -52,7 +52,7 @@ class SyncController extends CController {
             $file->title = $file->name = $fileInfo['name'];
             $file->original_name = $fileInfo['src'];
             $file->dir = $fileInfo['path'];
-            $file->dt = date("m/d/y g:i A");
+            $file->dt = date( 'Y-m-d H:i:s' );
             if (isset($fileInfo['user_id']) || (Yii::app()->params['guestUploads'] == true)) {
                 if (isset($fileInfo['user_id']))
                     $file->user_id = $fileInfo['user_id'];
