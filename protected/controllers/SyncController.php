@@ -96,6 +96,7 @@ class SyncController extends CController {
                 }
             }
         }
+        echo "BAD";
     }
 
     public function actionData() {
