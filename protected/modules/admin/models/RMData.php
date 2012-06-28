@@ -276,6 +276,7 @@ class RMData
             ->from('{{catalog}} c')
             ->leftJoin('rum_c_cat rc', ' c.group = rc.id')
             ->where('rc.id is NULL && c.sgroup = 2')
+            ->order('c.id')
             ->queryAll();
     }
 
