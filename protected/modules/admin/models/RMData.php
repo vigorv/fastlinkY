@@ -118,12 +118,12 @@ class RMData
                 unset($xdata['soft_direct_links']);
                 unset($xdata['music_direct_links']);
                 if (isset($xdata['direct_links']))
-                    $xdata['direct_links'].= implode(PHP_EOL, $links);
+                    $xdata['direct_links'].= implode('<br />', $links);
                 else
-                    $xdata['direct_links'] = implode(PHP_EOL, $links);
+                    $xdata['direct_links'] = implode('<br />', $links);
                 unset($links);
+                $xdata['direct_links'] =filter_var($xdata['direct_links'], FILTER_SANITIZE_STRING);
                 $xfields = RMData::xfieldsdatasave($xdata);
-                $xfields= filter_var($xfields,FILTER_SANITIZE_STRING);
                 $command = $db->createCommand('Update ' . $itable . ' SET xfields ="' . $xfields . '" WHERE id =' . $row['id']);
                 $command->query();
                 $total_count = $total_count + $link_count;
@@ -272,7 +272,7 @@ class RMData
     public function FindLinksWithoutNews()
     {
         return Yii::app()->db->createCommand()
-            ->select('c.id,c.name')
+            ->select('c.id,c.name, c.dir, c.original_name, c.group, c.tp')
             ->from('{{catalog}} c')
             ->leftJoin('rum_c_cat rc', ' c.group = rc.id')
             ->where('rc.id is NULL && c.sgroup = 2')
@@ -339,7 +339,7 @@ class RMData
                 $links['s'] = $xdata['soft_direct_links'];
 
             foreach ($links as $key => $dir_links) {
-                preg_match_all('/(Music|Movies|Games|Software|Magazines|Music_musxq)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
+                preg_match_all('/(Music|Movies|Games|Software|Magazines)\/[\w\.\(\)\-\/\&]+/', $dir_links, $matches);
                 if (count($matches))
                 foreach ($matches[0] as $link) {
                     //var_dump($link);

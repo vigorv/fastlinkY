@@ -22,7 +22,7 @@ class UtilsController extends AdmController {
     public function actionCheckLinksWithNoNews(){
         $rmdata = new RMData();
         $data=$rmdata->FindLinksWithoutNews();
-        $this->render('list',array('data'=>$data));        
+        $this->render('cataloglist',array('data'=>$data));
     }
     
     public function actionCheckI($id=0){
