@@ -80,8 +80,10 @@ class CatalogController extends AdmController {
                     echo 'Deleted';
                 } else{
                     echo "Can't delete";
-                    if (defined('YII_DEBUG'))
+                    if (defined('YII_DEBUG')){
                         var_dump($urls);
+                        echo '?data='.$data.'&key='.$sdata;
+                    }
                 }
         } else {
             echo "not found";
