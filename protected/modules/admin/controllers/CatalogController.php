@@ -55,7 +55,7 @@ class CatalogController extends AdmController {
         $model = $this->loadModel($id);
         $url=false;
         if ($model){
-            $data = base64_encode($model->dir . '/' . $model->original_name);
+            $data = urlencode($model->dir . '/' . $model->original_name);
             //echo Yii::app()->params['master_key'];
             if (defined('YII_DEBUG'))
             echo $model->dir.'/'.$model->original_name;

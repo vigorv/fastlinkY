@@ -276,7 +276,7 @@ class CatalogController extends Controller
                         }
                         if (defined('YII_DEBUG'))
                             echo $file->dir.'/'.$file->original_name.'<br/>';
-                        $data=base64_encode($file->dir . '/' . $file->original_name);
+                        $data=urlencode($file->dir . '/' . $file->original_name);
                         $skey=md5($data.Yii::app()->params['master_key']);
                         $url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
                         $result = file_get_contents($url);
