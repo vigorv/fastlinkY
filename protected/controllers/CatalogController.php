@@ -274,7 +274,7 @@ class CatalogController extends Controller
                             case 4: $server = Yii::app()->params['uploadServer'];break;
                             default: echo "not there ".$file->sgroup; Yii::app()->end();
                         }
-                        if (defined('YII_DEBUG'))
+                        if (defined('YII_DEBUG')&& YII_DEBUG)
                             echo $file->dir.'/'.$file->original_name.'<br/>';
                         $data=base64_encode($file->dir . '/' . $file->original_name);
                         $skey=md5($data.Yii::app()->params['master_key']);
@@ -289,7 +289,7 @@ class CatalogController extends Controller
                             $file->delete();
                             $dcount++;
                         } else {
-                            if (defined('YII_DEBUG'))
+                            if (defined('YII_DEBUG') && YII_DEBUG)
                               echo $result.' '.$result2.'<br/>';
                         }
                     }

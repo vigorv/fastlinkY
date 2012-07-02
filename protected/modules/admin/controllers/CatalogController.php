@@ -57,8 +57,8 @@ class CatalogController extends AdmController {
         if ($model){
             $data = base64_encode($model->dir . '/' . $model->original_name);
             //echo Yii::app()->params['master_key'];
-            if (defined('YII_DEBUG'))
-            echo $model->dir.'/'.$model->original_name;
+            if (defined('YII_DEBUG') && YII_DEBUG)
+                echo $model->dir.'/'.$model->original_name;
             $sdata = md5($data.Yii::app()->params['master_key']);
             $urls = array();
          switch($model->sgroup){
@@ -80,7 +80,7 @@ class CatalogController extends AdmController {
                     echo 'Deleted';
                 } else{
                     echo "Can't delete";
-                    if (defined('YII_DEBUG')){
+                    if (defined('YII_DEBUG') && YII_DEBUG){
                         var_dump($urls);
                         echo '?data='.$data.'&key='.$sdata;
                     }
