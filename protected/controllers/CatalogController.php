@@ -274,16 +274,23 @@ class CatalogController extends Controller
                             case 4: $server = Yii::app()->params['uploadServer'];break;
                             default: echo "not there ".$file->sgroup; Yii::app()->end();
                         }
+                        if (defined('YII_DEBUG'))
+                            echo $file->dir.'/'.$file->original_name.'<br/>';
                         $data=base64_encode($file->dir . '/' . $file->original_name);
                         $skey=md5($data.Yii::app()->params['master_key']);
                         $url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
                         $result = file_get_contents($url);
+                        $result2="OK";
                         if ($server2) {
                             $url = 'http://' . $server2. '/files/delete?data='.$data.'&key='.$skey;
+                            $result2 = file_get_contents($url);
                         }
-                        if ($result=="OK"){
+                        if ($result=="OK" && $result2=="OK"){
                             $file->delete();
                             $dcount++;
+                        } else {
+                            if (defined('YII_DEBUG'))
+                              echo $result.' '.$result2.'<br/>';
                         }
                     }
                     echo "Deleted $dcount";
