@@ -8,8 +8,7 @@
     <?php
     Yii::app()->getClientScript()->registerCoreScript('jquery');
     Yii::app()->getClientScript()->registerCoreScript('jquery.cookie');
-    Yii::app()->getClientScript()->registerCoreScript('jquery.form');
-
+    Yii::app()->getClientScript()->registerScriptFile('/js/jquery.form.js');
 
     Yii::app()->clientScript->registerScriptFile('/js/flowplayer-3.2.8.min.js');
     Yii::app()->clientScript->registerScriptFile('/js/jquery.tools.min.js');
