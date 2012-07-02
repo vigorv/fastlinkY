@@ -1,8 +1,8 @@
 <?php
 
 //date_default_timezone_set('Europe/Moscow');
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 // change the following paths if necessary
 $yii = dirname(__FILE__) . '/../../yii-lib/yii/framework/yii.php';
 
