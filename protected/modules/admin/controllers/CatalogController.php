@@ -78,8 +78,11 @@ class CatalogController extends AdmController {
                 if ((count($res)==1 && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
                     $model->deleteByPk($id);
                     echo 'Deleted';
-                } else
+                } else{
                     echo "Can't delete";
+                    if (defined('YII_DEBUG'))
+                        var_dump($urls);
+                }
         } else {
             echo "not found";
         }
