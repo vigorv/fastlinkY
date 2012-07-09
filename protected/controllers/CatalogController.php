@@ -96,9 +96,13 @@ class CatalogController extends Controller
     function autoload($id = 0)
     {
         if ($id > 0) {
+
             $file = CFLCatalog::model()->cache(1000)->findByPk($id);
             $letter = '';
             if ($file) {
+                if (!CFLCatalogClicks::model()->CheckTime2($id,$this->ip)){
+                    CFLCatalogClicks::model()->InsertDelayed2($file, $this->zone, $this->ip);
+                }
                 if ($file->sgroup == 1) {
                     $letter = strtolower($file->dir[0]);
                     if (($letter >= '0') && ($letter <= '9')) {
@@ -142,6 +146,10 @@ class CatalogController extends Controller
                     $this->render('/elements/messages', array('msg' => Yii::t('common', 'File no longer available')));
                 }
             } else {
+                if (!CFLCatalogClicks::model()->CheckTime2($id,$this->ip)){
+                    CFLCatalogClicks::model()->InsertDelayed2(array('id'=>$id,'group'=>0,'sgroup'=>0), $this->zone, $this->ip);
+                }
+
                 CFLLogFiles::FileNotExists($id, $this->zone, $this->ip);
                 $this->render('/elements/messages', array('msg' => Yii::t('common', 'File not found')));
             }
