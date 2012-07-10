@@ -10,10 +10,10 @@ class SyncController extends CController {
         //  redefine('YII_DEBUG',false);
         $suri = Yii::app()->getBaseUrl(true) . '/';
         $this->ip = $ip = Yii::app()->request->getUserHostAddress();
-        if (isset($_GET['key']) && isset($_GET['fdata'])) {
+        if (isset($_REQUEST['key']) && isset($_REQUEST['fdata'])) {
             $skey = Yii::app()->params[$ip . '_skey'];
-            $this->fdata = $fdata = $_GET['fdata'];
-            $rhash = $_GET['key'];
+            $this->fdata = $fdata = $_REQUEST['fdata'];
+            $rhash = $_REQUEST['key'];
             //echo $skey.PHP_EOL;
             //echo $fdata.PHP_EOL;
             //echo $suri.PHP_EOL;
