@@ -26,7 +26,7 @@ class SyncController extends CController {
                 return true;
             } else{
                 echo base64_encode(serialize(array('error_message' => "bad hash ")));
-                Yii::log(unserialize(base64_decode($this->fdata)),CLOGGER::LEVEL_WARNING);
+                Yii::log(base64_decode($this->fdata),CLOGGER::LEVEL_WARNING);
             }
         } else
             echo base64_encode(serialize(array('error_message' => "nodata")));
