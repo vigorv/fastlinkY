@@ -281,12 +281,29 @@ class CatalogController extends Controller
                             echo $file->dir.'/'.$file->original_name.'<br/>';
                         $data=base64_encode($file->dir . '/' . $file->original_name);
                         $skey=md5($data.Yii::app()->params['master_key']);
-                        $url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
-                        $result = file_get_contents($url);
+
+
+                        $query = http_build_query(array('data'=>$data,'key'=>$skey));
+                        $context = stream_context_create(array(
+                            'http' => array(
+                                'method' => 'POST',
+                                'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL,
+                                'content' => $query,
+                            ),
+                        ));
+
+                        $url = 'http://' . $server. '/files/delete';
+                        // echo $url;
+                        // flush();
+
+                        $result = file_get_contents($url, $use_include_path=false, $context);
+
+                        //$url = 'http://' . $server. '/files/delete?data='.$data.'&key='.$skey;
+                        //$result = file_get_contents($url);
                         $result2="OK";
                         if ($server2) {
-                            $url = 'http://' . $server2. '/files/delete?data='.$data.'&key='.$skey;
-                            $result2 = file_get_contents($url);
+                            $url = 'http://' . $server2. '/files/delete';
+                            $result2 = file_get_contents($url, $use_include_path=false, $context);
                         }
                         if ($result=="OK" && $result2=="OK"){
                             $file->delete();
