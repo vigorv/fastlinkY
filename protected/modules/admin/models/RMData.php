@@ -259,7 +259,7 @@ class RMData
         return Yii::app()->db->createCommand()
             ->select('rc.id,rc.title')
             ->from('{{catalog}} c')
-            ->rightJoin('rum_c_cat rc', ' c.`group` = rc.id && c.sgroup = 2')
+            ->rightJoin('rum_c_cat rc', ' c.`group` = rc.id && (c.sgroup = 2 || c.sgroup = 5)')
         //     ->group('c.group')
             ->where('c.id is NULL and  !(rc.category  in (' . Yii::app()->params['news_categories_sg2'] . '))')
             ->queryAll();
@@ -275,7 +275,7 @@ class RMData
             ->select('c.id,c.name, c.dir, c.original_name, c.group, c.tp, c.dt, c.sz')
             ->from('{{catalog}} c')
             ->leftJoin('rum_c_cat rc', ' c.group = rc.id')
-            ->where('rc.id is NULL && c.sgroup = 2')
+            ->where('rc.id is NULL && (c.sgroup = 2 || c.sgroup = 5)')
             ->order('c.id')
             ->queryAll();
     }
