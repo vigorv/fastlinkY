@@ -272,7 +272,7 @@ class RMData
     public function FindLinksWithoutNews()
     {
         return Yii::app()->db->createCommand()
-            ->select('c.id,c.name, c.dir, c.original_name, c.group, c.tp, c.dt, c.sz')
+            ->select('c.id,c.name, c.dir, c.original_name, c.group, c.tp, c.dt, c.sz, c.sgroup')
             ->from('{{catalog}} c')
             ->leftJoin('rum_c_cat rc', ' c.group = rc.id')
             ->where('rc.id is NULL && (c.sgroup = 2 || c.sgroup = 5)')
