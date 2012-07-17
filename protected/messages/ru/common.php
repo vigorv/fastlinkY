@@ -13,6 +13,7 @@ return array(
     'Search for file' => 'Поиск по имени',
     'File no longer available' => 'Файл более недоступен',
     'File not found' => 'Файл не найден',
-    'What you want?' => 'Чего изволите?'
+    'What you want?' => 'Чего изволите?',
+    'Please disable Opera Turbo to continue' => 'Для продолжения отключите Opera Turbo'
 );
 ?>

@@ -109,6 +109,10 @@ class CatalogController extends Controller
                     } else
                         $file->dir = $letter . '/' . $file->dir;
                 }
+                if ($this->zone == '13'){
+                    $this->render('/elements/messages', array('msg' => Yii::t('common', 'Please disable Opera Turbo to continue')));
+                    Yii::app()->end();
+                }
 
                 $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
                 if (count($servers)) {
