@@ -109,7 +109,7 @@ class CatalogController extends Controller
                     } else
                         $file->dir = $letter . '/' . $file->dir;
                 }
-                if (in_array(13,implode($this->zone,','))){
+                if (in_array(13,explode(',',$this->zone))){
                     $this->render('/elements/messages', array('msg' => Yii::t('common', 'Please disable Opera Turbo to continue')));
                     Yii::app()->end();
                 }
