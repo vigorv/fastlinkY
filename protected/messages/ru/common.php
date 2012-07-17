@@ -14,6 +14,6 @@ return array(
     'File no longer available' => 'Файл более недоступен',
     'File not found' => 'Файл не найден',
     'What you want?' => 'Чего изволите?',
-    'Please disable Opera Turbo to continue' => 'Для продолжения отключите Opera Turbo'
+    'Please disable Opera Turbo and refresh page to continue' => 'Для продолжения отключите Opera Turbo и обновите страницу'
 );
 ?>
