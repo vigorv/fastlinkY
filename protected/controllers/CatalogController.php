@@ -369,9 +369,6 @@ class CatalogController extends Controller
         }
     }
 
-
-
-
     public function actionLinks($ids=false){
         if ($ids){
             $id_list=@unserialize(@base64_encode($ids));
@@ -382,6 +379,13 @@ class CatalogController extends Controller
                 }
             }
 
+        }
+    }
+
+    public function actionItemData($id=false){
+        if ($id){
+            $file = CFLCatalog::model()->cache(1000)->findByPk($id);
+            echo serialize($file['name']);
         }
     }
 
