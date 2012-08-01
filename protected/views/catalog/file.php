@@ -10,6 +10,9 @@
 </center>
 
 <?php
+
+$cloud_service_uri = Yii::app()->params['cloud_service_uri'];
+
 mb_internal_encoding("UTF-8");
 if (!function_exists('substr_replace_mb')) {
 
@@ -61,7 +64,11 @@ if (!empty($files[0])):
     $url = '/catalog/load/' . $file['id'];
     $aurl = Yii::app()->createAbsoluteUrl($url);
     $name = $file['name'];
-
+    switch ($files[0]['sgroup']){
+        case 1: $cloud_partner_id = Yii::app()->params['cloud_service_partner_id_sg1'];break;
+        case 2: $cloud_partner_id = Yii::app()->params['cloud_service_partner_id_sg2'];break;
+        default: $cloud_partner_id = 0;
+    }
     $ext = pathinfo(strtolower($name), PATHINFO_EXTENSION);
 // Умещаем имя в 43 символа
     $str_len = strlen($name);
@@ -79,7 +86,10 @@ if (!empty($files[0])):
                 <div id="playlist" style="display:none;">
                     <a href="<?= $aurl; ?>">
                         <?= $file['name']; ?>
-                    </a>      
+                    </a>
+                    <?php if ($cloud_partner_id && isset($_GET['cloud'])):?>
+                    <a href="http://<?=$cloud_service_uri;?>/api/cloudButton?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"><img width="32px" height="22px" src="http://<?=$cloud_service_uri;?>/api/statusimage?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"></a>
+                    <?endif;?>
                 </div>
             </button> 
 
@@ -90,6 +100,9 @@ if (!empty($files[0])):
             ?>
             <a href="<?= $url; ?>">
                 <?= $file['name']; ?>
+                <?php if ($cloud_partner_id && isset($_GET['cloud'])):?>
+                <a href="http://<?=$cloud_service_uri;?>/api/cloudButton?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"> <img width="32px" height="22px" src="http://<?=$cloud_service_uri;?>/api/statusimage?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"></a>
+                <?endif;?>
             </a> 
             <div class="overlay" id="mies2">
                 <object classid="clsid:67DABFBF-D0AB-41fa-9C46-CC0F21721616" width="560" height="450" codebase="http://go.divx.com/plugin/DivXBrowserPlugin.cab">
@@ -109,6 +122,8 @@ if (!empty($files[0])):
             break;
         default:
             echo '<a href="' . $url . '">' . $name . '</a>';
+              /*<a href="http://<?=$cloud_service_uri;?>/api/cloudButton?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"> <img width="32px" height="22px"  src="http://<?=$cloud_service_uri;?>/api/statusimage?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"></a>*/
+
             break;
     }
     ?>
