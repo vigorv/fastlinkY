@@ -265,7 +265,7 @@ class CatalogController extends Controller
             $files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group'=>$file->group,'sgroup'=>$file->sgroup));
             /** @var CFLCatalog $file */
             if ($file && !empty($files)){
-                $data=array('group'=>$file->group);
+                $data=array('group'=>$file->group,'count'=>count($files));
                 foreach ($files as $f)
                     $data['files'][]=$f['id'];
                 echo serialize($data);
