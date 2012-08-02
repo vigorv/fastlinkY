@@ -261,10 +261,14 @@ class CatalogController extends Controller
 
     public function actionGroupOfFile($id=0){
         if ($id > 0) {
-            $file = CFLCatalog::model()->cache(1000)->findByPk($id);
+            $file = CFLCatalog::model()->cache(100)->findByPk($id);
+            $files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group'=>$file->group,'sgroup'=>$file->sgroup));
             /** @var CFLCatalog $file */
-            if ($file){
-                echo serialize($file->group);
+            if ($file && !empty($files)){
+                $data=array('group'=>$file->group);
+                foreach ($files as $f)
+                    $data['files'][]=$f['id'];
+                echo serialize($data);
             }
         }
     }
