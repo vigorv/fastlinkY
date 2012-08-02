@@ -259,6 +259,16 @@ class CatalogController extends Controller
          else $this->redirect('/users/login');
     }
 
+    public function actionGroupOfFile($id=0){
+        if ($id > 0) {
+            $file = CFLCatalog::model()->cache(1000)->findByPk($id);
+            /** @var CFLCatalog $file */
+            if ($file){
+                echo serialize($file->group);
+            }
+        }
+    }
+
     public function actionFilePath($item_id=0){
         if ($item_id > 0) {
             $file = CFLCatalog::model()->cache(1000)->findByPk($item_id);
