@@ -8,6 +8,18 @@ class ApiController extends Controller
         return true;
     }
 
+    public function actionFileGroup($id=0,$sg=2){
+        if ($id > 0) {
+            $files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group'=>$id,'sgroup'=>$sg));
+            if (!empty($files)){
+                $data=array('group'=>$id,'count'=>count($files));
+                foreach ($files as $f)
+                    $data['files'][]=$f['id'];
+                echo serialize($data);
+            }
+        }
+    }
+
     public function actionGroupOfFile($id=0){
         if ($id > 0) {
             $file = CFLCatalog::model()->cache(100)->findByPk($id);
