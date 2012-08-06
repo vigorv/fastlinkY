@@ -72,11 +72,17 @@ class ApiController extends Controller
         }
     }
 
-    public function actionCloudNotReady($sg=2){
+    public function actionCloudNotReady($sg=2,$ftype='video'){
+        switch($ftype){
+            case 'video': $likes = '((original_name LIKE "%.avi") OR (original_name LIKE "%.mkv") OR (original_name LIKE "%.mp4"))';
+                break;
+            default: $likes =' 1=1';
+        }
+
         $id_list = Yii::app()->db->createCommand()
-                    ->select('GROUP_CONCAT(id) as ids')
+                    ->select('GROUP_CONCAT(id) as ids,GROUP_CONCAT(original_name)as name')
                     ->from('{{catalog}}')
-                    ->where('cloud_ready=0 AND sgroup = :sg',array(':sg'=>$sg))
+                    ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>$sg))
                     ->order('id')
                     ->limit(100)
                     ->queryRow();
