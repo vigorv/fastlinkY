@@ -80,7 +80,7 @@ class ApiController extends Controller
         }
 
         $id_list = Yii::app()->db->createCommand()
-                    ->select('GROUP_CONCAT(id) as ids,GROUP_CONCAT(original_name)as name')
+                    ->select('GROUP_CONCAT(id) as ids')
                     ->from('{{catalog}}')
                     ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>$sg))
                     ->order('id')
