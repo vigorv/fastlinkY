@@ -110,7 +110,7 @@ class SyncController extends CController {
             if (isset($data['gid']) && ($data['gid'] > 0) && isset($data['ids']) && count($data['ids'])) {
                 $gid = (int) $data['gid'];
                 $ids_list = implode('","', $data['ids']);
-                if (CFLCatalog::model()->FreeGidNotInListGid($gid, $ids_list))
+                if (CFLCatalog::model()->FreeGidNotInListGid($gid, $ids_list)>=0)
                 if (CFLCatalog::model()->setGid($gid, $ids_list))
                     echo "OK";
                 else
