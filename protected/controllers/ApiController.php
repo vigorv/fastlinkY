@@ -84,4 +84,11 @@ class ApiController extends Controller
             echo serialize($id_list);
         }
     }
+
+    public function actionCloudReady($id=0,$sg=2){
+        // TO DO: hash key
+        $file = CFLCatalog::model()->findAllByAttributes(array('id'=>$id,'sgroup'=>$sg));
+        $file -> cloud_ready = 1;
+        $file->save();
+    }
 }
