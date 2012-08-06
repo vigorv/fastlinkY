@@ -64,6 +64,7 @@ class UtilsController extends AdmController {
                 $catalog = CFLCatalog::model()->findByAttributes(array('group'=>0,'sgroup'=>2,'id'=>$id));
                 if ($catalog){
                     $catalog->group = $item['id'];
+                    $catalog->save();
                     echo "<p>Set $catalog->group for $id </p>";
                 }
             }
