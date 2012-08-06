@@ -61,7 +61,7 @@ class UtilsController extends AdmController {
                     $ids[] = substr($str,14);
             array_unique($ids,SORT_NUMERIC);
             foreach ($ids as $id){
-                $catalog = CFLCatalog::model()->findAllByAttributes(array('group'=>0,'sgroup'=>2,'id'=>$id));
+                $catalog = CFLCatalog::model()->findByAttributes(array('group'=>0,'sgroup'=>2,'id'=>$id));
                 if ($catalog){
                     $catalog->group = $item['id'];
                     echo "<p>Set $catalog->group for $id </p>";
