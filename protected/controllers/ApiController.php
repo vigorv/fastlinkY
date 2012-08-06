@@ -89,6 +89,6 @@ class ApiController extends Controller
         // TO DO: hash key
         $file = CFLCatalog::model()->findByAttributes(array('id'=>$id,'sgroup'=>$sg));
         $file -> cloud_ready = 1;
-        $file->save();
+        if($file->save()) echo 1;
     }
 }
