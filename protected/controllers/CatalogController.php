@@ -338,6 +338,7 @@ class CatalogController extends Controller
             $msg ='';
             $msg2 = '';
             foreach ($id_list as $id){
+                $file = CFLCatalog::model()->cache(100)->findByPk($id);
                 $msg.='<p>'.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.'</p>';
                 $msg2.='<p>[url='.Yii::app()->createAbsoluteUrl('catalog/viewv').'/'.$id.']'.$file['name'].'[/url] </p>';
             }
