@@ -44,6 +44,33 @@ class UtilsController extends AdmController {
         }
         $this->render('list',array('data'=>$items));
     }
+
+    public function actionLinkEmpties(){
+        $rmdata = new RMData();
+        $rdata=$rmdata->FindNewsWithoutLinks();
+        foreach ($rdata as $item){
+            $xfields = RMData::xfieldsdataload($item['xfields']);
+            if (isset($xfields['direct_links'])){
+            $dlinks_data = $xfields['direct_links'];
+            $dlinks_data  = str_replace('<br />',PHP_EOL,$dlinks_data );
+            $dlinks_data  = str_replace('<br>',PHP_EOL,$dlinks_data );
+            preg_match_all("/catalog\/viewv\/[0-9]+/", $dlinks_data,$data);
+            $ids =array();
+            foreach ($data as &$matches)
+                foreach($matches as &$str)
+                    $ids[] = substr($str,14);
+            array_unique($ids,SORT_NUMERIC);
+            foreach ($ids as $id){
+                $catalog = CFLCatalog::model()->findAllByAttributes(array('group'=>0,'sgroup'=>2,'id'=>$id));
+                if ($catalog){
+                    $catalog->group = $item['id'];
+                    echo "<p>Set $catalog->group for $id </p>";
+                }
+            }
+           }
+        }
+
+    }
     
     public function actionCheckI($id=0){
         $rmdata =new RMData();
