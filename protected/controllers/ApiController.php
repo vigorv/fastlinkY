@@ -84,7 +84,7 @@ class ApiController extends Controller
                     ->from('{{catalog}}')
                     ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>$sg))
                     ->order('id')
-                    ->limit(100)
+                    ->limit(50)
                     ->queryRow();
         if ($id_list){
             echo serialize($id_list);
