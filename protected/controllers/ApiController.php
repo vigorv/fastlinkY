@@ -80,14 +80,19 @@ class ApiController extends Controller
         }
 
         $id_list = Yii::app()->db->createCommand()
-                    ->select('GROUP_CONCAT(id) as ids')
+                    ->select('id')
                     ->from('{{catalog}}')
                     ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>$sg))
-                    ->order('id')
+                    ->order('id DESC')
                     ->limit(50)
-                    ->queryRow();
-        if ($id_list){
-            echo serialize($id_list);
+                    ->queryAll();
+        if (!empty($id_list)){
+            foreach($id_list as $item_id){
+                $ids[]=$item_id['id'];
+            }
+            $result =array();
+            $result['ids']=implode(',',$ids);
+            print serialize($result);
         }
     }
 
