@@ -177,8 +177,10 @@ class CFLServers extends CActiveRecord {
         } else {
             foreach ($servers as $server) {
                 if ($server['zone_prio'] > $prio) {
-                    $actual_servers = array();
-                    $prio = $server['zone_prio'];
+                    if (($letter >= $server['server_letter'][0]) && ($letter <= $server['server_letter'][2])){
+                        $actual_servers = array();
+                        $prio = $server['zone_prio'];
+                    }
                 }
                 if ($server['zone_prio'] == $prio) {
                     if (($letter >= $server['server_letter'][0]) && ($letter <= $server['server_letter'][2]))
