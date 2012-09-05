@@ -246,7 +246,10 @@ class CFLCatalog extends CActiveRecord {
         return Yii::app()->db->createCommand($sql)->execute();
     }
     public function FreeGidNotInListGid($gid, $lst_id, $sg=2){
-        $sql='UPDATE {{catalog}} set `group` = 0 WHERE (`id` NOT in ("' . $lst_id . '")) AND (`group` ='.(int)$gid.') AND (`sgroup` = '.$sg.')';
+        if ($sg==2){
+            $sql='UPDATE {{catalog}} set `group` = 0 WHERE (`id` NOT in ("' . $lst_id . '")) AND (`group` ='.(int)$gid.') AND (`sgroup` in (2,6))';
+        } else
+            $sql='UPDATE {{catalog}} set `group` = 0 WHERE (`id` NOT in ("' . $lst_id . '")) AND (`group` ='.(int)$gid.') AND (`sgroup` = '.$sg.')';
         //$sql;
         return Yii::app()->db->createCommand($sql)->execute();
     }

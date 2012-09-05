@@ -241,7 +241,7 @@ class CatalogController extends Controller
 
             $criteria = new CDbCriteria();
             //   $criteria->select = 's.id,s.name';
-            $criteria->condition = ' (s.group = '.$id .') AND (s.sgroup=2)';
+            $criteria->condition = ' ((s.group = '.$id .') AND (s.sgroup=2)) OR ((s.group = '.$id .') AND (s.sgroup=6))';
             $criteria->order = 's.name ASC';
             $criteria->alias = 's';
 
@@ -278,7 +278,9 @@ class CatalogController extends Controller
                     foreach ($files as $file){
                         $server2 = false;
                         switch ($file->sgroup){
-                            case 2: $server = Yii::app()->params['uploadServer_sg2'];
+                            case 2:
+                            case 6:
+                                    $server = Yii::app()->params['uploadServer_sg2'];
                                     $server2 = Yii::app()->params['uploadServerA_sg2']; break;
                             case 4: $server = Yii::app()->params['uploadServer'];break;
                             default: echo "not there ".$file->sgroup; Yii::app()->end();

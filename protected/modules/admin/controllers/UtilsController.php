@@ -30,7 +30,9 @@ class UtilsController extends AdmController {
         $items = array();
         while($file = $files->read()){
             switch ($file['sgroup']){
-                case 2: $server = Yii::app()->params['uploadServer_sg2'];break;
+                case 6:
+                case 2:
+                        $server = Yii::app()->params['uploadServer_sg2'];break;
                 case 4: $server = Yii::app()->params['uploadServer'];break;
                 default: echo "not there ".$file['sgroup']; Yii::app()->end();
             }
