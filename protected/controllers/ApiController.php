@@ -109,6 +109,40 @@ class ApiController extends Controller
         }
     }
 
+    public function actionCloudNotReadyFull($sg=2,$ftype='video'){
+        switch($ftype){
+            case 'video': $likes = '((original_name LIKE "%.avi") OR (original_name LIKE "%.mkv") OR (original_name LIKE "%.mp4"))';
+                break;
+            default: $likes =' 1=1';
+        }
+
+        $id_list = Yii::app()->db->createCommand()
+            ->select('id')
+            ->from('{{catalog}}')
+            ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>$sg))
+            ->order('id DESC')
+            //->limit(100)
+            ->queryAll();
+        if (empty($id_list) && $sg==2)
+            $id_list = Yii::app()->db->createCommand()
+                ->select('id')
+                ->from('{{catalog}}')
+                ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>6))
+                ->order('id DESC')
+                //->limit(100)
+                ->queryAll();
+
+        if (!empty($id_list)){
+            foreach($id_list as $item_id){
+                $ids[]=$item_id['id'];
+            }
+            $result =array();
+            $result['ids']=implode(',',$ids);
+            print serialize($result);
+        }
+    }
+
+
     public function actionCloudReady($id=0,$sg=2){
         // TO DO: hash key
         $file = CFLCatalog::model()->findByAttributes(array('id'=>$id,'sgroup'=>$sg));
