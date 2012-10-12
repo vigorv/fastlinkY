@@ -96,11 +96,11 @@ class UtilsController extends AdmController
 
         foreach ($lines as $fpath) {
             $directory = pathinfo($fpath, PATHINFO_DIRNAME);
-            $directory = filter_var(substr($directory, 2, strlen($directory) - 2),FILTER_SANITIZE_STRING);
-            $fname = filter_var(pathinfo($fpath, PATHINFO_BASENAME),FILTER_SANITIZE_STRING);
+            $directory = substr($directory, 2, strlen($directory) - 2);
+            $fname = pathinfo($fpath, PATHINFO_BASENAME);
             echo $directory ;
             echo $fname . "<br/>";
-            $catalog = CFLCatalog::model()->find("dir = '$directory' and name = '$fname'");
+            $catalog = CFLCatalog::model()->findByAttributes(array('dir'=> $directory,'name' => $fname));
             /* @var CFLCatalog $catalog */
             if ($catalog) {
                 echo "Found<br/>";
