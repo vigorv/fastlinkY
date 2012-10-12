@@ -25,8 +25,8 @@ class UtilsController extends AdmController {
         $this->render('cataloglist',array('data'=>$data));
     }
 
-    public function actionShowItemsWithNoFiles(){
-        $files = Yii::app()->db->createCommand("Select * from fl_catalog where sgroup = 2")->query();
+    public function actionShowItemsWithNoFiles($sgroup=2){
+        $files = Yii::app()->db->createCommand("Select * from fl_catalog where sgroup = ".(int)$sgroup)->query();
         $items = array();
         while($file = $files->read()){
             switch ($file['sgroup']){
@@ -72,9 +72,29 @@ class UtilsController extends AdmController {
             }
            }
         }
-
     }
-    
+
+    public function actionSetFileListToGroup($filename='',$group_id=0){
+        if (!$group_id) return;
+        $filename = FILTER_VAR($filename);
+        $lines = file('/var/data/'.$filename);
+     //   var_dump($lines);
+        set_time_limit(0);
+
+        foreach ($lines as $fpath){
+            $directory = pathinfo($fpath,PATHINFO_DIRNAME);
+            $directory = substr($directory,2,strlen($directory)-2);
+            $fname = pathinfo($fpath,PATHINFO_BASENAME);
+          //  echo $directory."\n";
+            //echo $fname."\n";
+            $catalog = CFLCatalog::model()->find('dir = :dir AND name = :fname',array(':dir'=>$directory,':fname'=>$fname));
+            /* @var CFLCatalog $catalog */
+            $catalog->sgroup = $group_id;
+            $catalog->save();
+        }
+    }
+
+
     public function actionCheckI($id=0){
         $rmdata =new RMData();
         $rmdata->CheckImport($id);
