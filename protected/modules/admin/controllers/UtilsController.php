@@ -97,8 +97,8 @@ class UtilsController extends AdmController
         foreach ($lines as $fpath) {
             $directory = pathinfo($fpath, PATHINFO_DIRNAME);
             $directory = filter_var(substr($directory, 2, strlen($directory) - 2),FILTER_SANITIZE_STRING);
-            $fname = filter_var(pathinfo($fpath, PATHINFO_BASENAME),FILTER_SANITIZE_STRING);
-            $data =array('dir'=> $directory,'name' => $fname);
+            $fname = trim(filter_var(pathinfo($fpath, PATHINFO_BASENAME),FILTER_SANITIZE_STRING));
+
             //var_dump($data);
             $query= "SELECT id FROM fl_catalog WHERE `dir` = '$directory' and `name`='$fname'";
             echo $query.'<br/>';
