@@ -100,7 +100,7 @@ class UtilsController extends AdmController
             $fname = filter_var(pathinfo($fpath, PATHINFO_BASENAME),FILTER_SANITIZE_STRING);
             echo $directory ;
             echo $fname . "<br/>";
-            $catalog = CFLCatalog::model()->find('dir = :dir AND name = :fname', array(':dir' => $directory, ':fname' => $fname));
+            $catalog = CFLCatalog::model()->find("dir = '$directory' and name = '$fname'");
             /* @var CFLCatalog $catalog */
             if ($catalog) {
                 echo "Found<br/>";
