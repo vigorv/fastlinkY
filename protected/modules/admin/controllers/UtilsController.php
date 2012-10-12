@@ -102,7 +102,7 @@ class UtilsController extends AdmController
             echo $fname . "<br/>";
             $catalog = CFLCatalog::model()->find('dir = :dir AND name = :fname', array(':dir' => $directory, ':fname' => $fname));
             /* @var CFLCatalog $catalog */
-            if ($catalog) {
+            if ($catalog->id) {
                 echo "Found<br/>";
                 $catalog->sgroup = $group_id;
                 $catalog->save();
