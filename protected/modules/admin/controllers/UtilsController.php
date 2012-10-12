@@ -98,14 +98,14 @@ class UtilsController extends AdmController
             $directory = pathinfo($fpath, PATHINFO_DIRNAME);
             $directory = substr($directory, 2, strlen($directory) - 2);
             $fname = pathinfo($fpath, PATHINFO_BASENAME);
-            echo $directory ;
-            echo $fname . "<br/>";
-            $catalog = CFLCatalog::model()->findByAttributes(array('dir'=> $directory,'name' => $fname));
+            $data =array('dir'=> $directory,'name' => $fname);
+            var_dump($data);
+            $catalog_id = Yii::app()->db->
+                createCommand("SELECT id FROM {{catalog}} WHERE `dir` = '$directory' and `name`='$fname'")->queryScalar();
             /* @var CFLCatalog $catalog */
-            if ($catalog) {
+            if ($catalog_id) {
                 echo "Found<br/>";
-                $catalog->sgroup = $group_id;
-                $catalog->save();
+                Yii::app()->db->createCommand("UPDATE {{catalog}} set sgroup= $group_id WHERE id = $catalog_id")->execute();
             }
             flush();
         }
