@@ -96,16 +96,19 @@ class UtilsController extends AdmController
 
         foreach ($lines as $fpath) {
             $directory = pathinfo($fpath, PATHINFO_DIRNAME);
-            $directory = substr($directory, 2, strlen($directory) - 2);
-            $fname = pathinfo($fpath, PATHINFO_BASENAME);
+            $directory = filter_var(substr($directory, 2, strlen($directory) - 2),FILTER_SANITIZE_STRING);
+            $fname = filter_var(pathinfo($fpath, PATHINFO_BASENAME),FILTER_SANITIZE_STRING);
             $data =array('dir'=> $directory,'name' => $fname);
-            var_dump($data);
+            //var_dump($data);
+            $query= "SELECT id FROM {{catalog}} WHERE `dir` = '$directory' and `name`='$fname'";
+            echo $query.'<br/>';
             $catalog_id = Yii::app()->db->
-                createCommand("SELECT id FROM {{catalog}} WHERE `dir` = '$directory' and `name`='$fname'")->queryScalar();
+                createCommand($query)->queryScalar();
             /* @var CFLCatalog $catalog */
             if ($catalog_id) {
-                echo "Found<br/>";
-                Yii::app()->db->createCommand("UPDATE {{catalog}} set sgroup= $group_id WHERE id = $catalog_id")->execute();
+                $query = "UPDATE {{catalog}} set sgroup= $group_id WHERE id = $catalog_id";
+                echo $query.'<br/>';
+                Yii::app()->db->createCommand($query)->execute();
             }
             flush();
         }
