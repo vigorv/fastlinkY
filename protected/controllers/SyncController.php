@@ -11,6 +11,10 @@ class SyncController extends CController {
         $suri = Yii::app()->getBaseUrl(true) . '/';
         $this->ip = $ip = Yii::app()->request->getUserHostAddress();
         if (isset($_REQUEST['key']) && isset($_REQUEST['fdata'])) {
+            if(!isset(Yii::app()->params[$ip . '_skey'])){
+                echo base64_encode(serialize(array('error_message' => "unknown server key")));
+                return false;
+            }
             $skey = Yii::app()->params[$ip . '_skey'];
             $this->fdata = $fdata = $_REQUEST['fdata'];
             $rhash = $_REQUEST['key'];
