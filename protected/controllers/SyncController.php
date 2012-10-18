@@ -39,6 +39,10 @@ class SyncController extends CController {
 
         if ($fileInfo) {
             $file = new CFLCatalog();
+            if (!$file) {
+                echo base64_encode(serialize(array('error_message' => "server error")));
+                exit;
+            }
             if (isset($fileInfo['uid'])){
                 $record = CFLUsers::model()->findByPk($fileInfo['uid']);
                 if($record){
@@ -77,7 +81,7 @@ class SyncController extends CController {
                 if ($file->save()) {
                     //if (($file->group == 0) && ($file->sgroup == 4))
                       //  $file->group = $file->id;
-                    $file->save();
+                   // $file->save();
                     echo base64_encode(serialize(array('id' => $file->id)));
                 } else{
                     echo base64_encode(serialize(array('error_message' => 'save failed','error_data'=>$file->getErrors())));
