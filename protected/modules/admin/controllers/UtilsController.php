@@ -32,6 +32,7 @@ class UtilsController extends AdmController
 
     public function actionShowItemsWithNoFiles($sgroup = 2)
     {
+        set_time_limit(0);
         $files = Yii::app()->db->createCommand("Select * from fl_catalog where sgroup = " . (int)$sgroup)->query();
         $items = array();
         while ($file = $files->read()) {
@@ -52,10 +53,10 @@ class UtilsController extends AdmController
             $url = 'http://' . $server . '/files/checkexists?data=' . $data . '&key=' . $skey;
             $data = file_get_contents($url);
             if ($data == "BAD") {
-                $items[] = $file->id;
+                echo  $file->id. ' : '.$file['dir'] . '/' . $file['original_name'].'<br/>';
+                flush();
             }
         }
-        $this->render('list', array('data' => $items));
     }
 
     public function actionLinkEmpties()
