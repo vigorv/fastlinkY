@@ -43,7 +43,7 @@ class CFLCatalogClicks extends CFLLogActiveRecord {
             array('	ip', 'length', 'max' => 25),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('catalog_id, catalog_group_id,zone,created,catalog_sgroup_id,ip,user_id,server_id', 'safe', 'on' => 'search'),
+            array('id,catalog_id, catalog_group_id,zone,created,catalog_sgroup_id,ip,user_id,server_id', 'safe', 'on' => 'search'),
         );
     }
 
