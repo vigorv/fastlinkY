@@ -21,6 +21,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
         <?php
+        $userRole = Yii::app()->user->getState('role');
         if (empty($metaExpires)) {
             //определяем последнюю пятницу
             $dayOfWeek = date('w');
@@ -94,10 +95,15 @@
                         <input type="submit" style="visibility: hidden;"/>
                     </form>
                 <?php else: ?>
-                    <h4><i class="icon-user"></i> <?= Yii::app()->user->name; ?> <a href="/catalog/user"?><i class="icon-file"></i> <?=Yii::t('common','My files');?></a><br/>
+                    <h4><i class="icon-user"></i> <?= Yii::app()->user->name; ?> <a href="/catalog/user"?><i class="icon-file"></i> <?=Yii::t('common','My files');?></a>
+                    <?php if($userRole=="admin"):?>
+                        <a href="/admin"?>Admin</a>
+                    <?php endif;?>
+                        <br/>
                         IP: <?= $this->ip; ?>
                     </h4><button  class="btn" name="logout" onClick="$.post('/users/exit',{exit:1},function(){window.location.reload();});"><?= Yii::t('common', 'Logout'); ?>
                     </button>
+
                 <?php endif; ?>
 
             </div>
