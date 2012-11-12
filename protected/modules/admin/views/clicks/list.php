@@ -1,31 +1,60 @@
 <?php
 $this->breadcrumbs=array(
     'Cflcatalog Clicks'=>array('index'),
-    $model->id,
+    'Manage',
 );
 
 $this->menu=array(
     array('label'=>'List CFLCatalogClicks', 'url'=>array('index')),
     array('label'=>'Create CFLCatalogClicks', 'url'=>array('create')),
-    array('label'=>'Update CFLCatalogClicks', 'url'=>array('update', 'id'=>$model->id)),
-    array('label'=>'Delete CFLCatalogClicks', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-    array('label'=>'Manage CFLCatalogClicks', 'url'=>array('admin')),
 );
+
+Yii::app()->clientScript->registerScript('search', "
+$('.search-button').click(function(){
+    $('.search-form').toggle();
+    return false;
+});
+$('.search-form form').submit(function(){
+    $.fn.yiiGridView.update('cflcatalog-clicks-grid', {
+        data: $(this).serialize()
+    });
+    return false;
+});
+");
 ?>
 
-<h1>View CFLCatalogClicks #<?php echo $model->id; ?></h1>
+<h1>Manage Cflcatalog Clicks</h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-    'data'=>$model,
-    'attributes'=>array(
+<p>
+    You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
+    or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+</p>
+
+<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<div class="search-form" style="display:none">
+    <?php $this->renderPartial('_search',array(
+    'model'=>$model,
+)); ?>
+</div><!-- search-form -->
+
+<?php $this->widget('zii.widgets.grid.CGridView', array(
+    'id'=>'cflcatalog-clicks-grid',
+    'dataProvider'=>$model->search(),
+    'filter'=>$model,
+    'columns'=>array(
         'id',
         'catalog_id',
         'catalog_group_id',
         'created',
         'user_id',
         'zone',
+        /*
         'ip',
         'catalog_sgroup_id',
         'server_id',
+        */
+        array(
+            'class'=>'CButtonColumn',
+        ),
     ),
 )); ?>
