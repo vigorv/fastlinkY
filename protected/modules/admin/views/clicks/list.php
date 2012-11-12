@@ -48,11 +48,11 @@ $('.search-form form').submit(function(){
         'created',
         'user_id',
         'zone',
-        /*
+
         'ip',
         'catalog_sgroup_id',
         'server_id',
-        */
+
         array(
             'class'=>'CButtonColumn',
         ),
