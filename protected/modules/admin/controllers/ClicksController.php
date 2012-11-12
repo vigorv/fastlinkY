@@ -1,6 +1,6 @@
 <?php
 
-class CatalogController extends AdmController {
+class ClicksController extends AdmController {
 
     public function actionIndex() {
         $model = new CFLCatalogClicks('search');
