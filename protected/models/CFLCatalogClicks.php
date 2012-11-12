@@ -35,8 +35,8 @@ class CFLCatalogClicks extends CFLLogActiveRecord {
  * @param mixed $ip
  * @return mixed
  */
-    public function InsertDelayed($file, $zone, $ip) {
-        return Yii::app()->dblog->createCommand('INSERT DELAYED INTO {{catalog_clicks}} (catalog_id,catalog_group_id,catalog_sgroup_id,user_id,zone,ip) VALUES ("' . $file["id"] . '","' . $file['group'] . '","' . $file['sgroup'] . '","' . Yii::app()->user->id . '","' . $zone . '","' . $ip . '")')->execute();
+    public function InsertDelayed($file, $zone, $ip, $sid=0) {
+        return Yii::app()->dblog->createCommand('INSERT DELAYED INTO {{catalog_clicks}} (catalog_id,catalog_group_id,catalog_sgroup_id,user_id,zone,ip,server_id) VALUES ("' . $file["id"] . '","' . $file['group'] . '","' . $file['sgroup'] . '","' . Yii::app()->user->id . '","' . $zone . '","' . $ip . '","'.$sid.'")')->execute();
     }
 
     /**
@@ -54,7 +54,7 @@ class CFLCatalogClicks extends CFLLogActiveRecord {
      * @param mixed $ip
      * @return mixed
      */
-    public function InsertDelayed2($file, $zone, $ip) {
+    public function InsertDelayed2($file, $zone, $ip, $sid=0) {
         return Yii::app()->dblog->createCommand('INSERT DELAYED INTO {{catalog_clicks_all}} (catalog_id,catalog_group_id,catalog_sgroup_id,user_id,zone,ip) VALUES ("' . $file["id"] . '","' . $file['group'] . '","' . $file['sgroup'] . '","' . Yii::app()->user->id . '","' . $zone . '","' . $ip . '")')->execute();
     }
 
