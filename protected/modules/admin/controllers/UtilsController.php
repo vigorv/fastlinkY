@@ -39,7 +39,6 @@ class UtilsController extends AdmController
         $items = array();
         while ($file = $files->read()) {
             switch ($file['sgroup']) {
-                case 6:
                 case 2:
                     $server = Yii::app()->params['uploadServer_sg2'];
                     break;
