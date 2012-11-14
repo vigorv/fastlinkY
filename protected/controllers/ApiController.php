@@ -13,6 +13,8 @@ class ApiController extends Controller
             $files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group'=>$id,'sgroup'=>$sg));
             if (empty($files) && $sg == 2)
                 $files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group'=>$id,'sgroup'=>6));
+            if (empty($files) && $sg == 2)
+                $files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group'=>$id,'sgroup'=>5));
             if (!empty($files)){
                 $data=array('group'=>$id,'count'=>count($files));
                 foreach ($files as $f)
@@ -58,6 +60,8 @@ class ApiController extends Controller
     public function actionFileGroupPath($item_id=0, $sg=2 ){
         if ($item_id > 0) {
             $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$item_id,'sgroup'=>$sg),array('order'=>'id'));
+            if (empty($files) && $sg == 2)
+                $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$item_id,'sgroup'=>5),array('order'=>'id'));;
             if (empty($files) && $sg == 2)
                 $files = CFLCatalog::model()->cache(100)->findAllByAttributes(array('group'=>$item_id,'sgroup'=>6),array('order'=>'id'));;
             $res = array();
@@ -121,7 +125,7 @@ class ApiController extends Controller
             ->from('{{catalog}}')
             ->where('(cloud_ready=0 AND sgroup = :sg) AND '.$likes,array(':sg'=>$sg))
             ->order('id DESC')
-            //->limit(100)
+            //  ->limit(100)
             ->queryAll();
         if (empty($id_list) && $sg==2)
             $id_list = Yii::app()->db->createCommand()
@@ -146,6 +150,8 @@ class ApiController extends Controller
     public function actionCloudReady($id=0,$sg=2){
         // TO DO: hash key
         $file = CFLCatalog::model()->findByAttributes(array('id'=>$id,'sgroup'=>$sg));
+        if (!$file && $sg==2)
+            $file = CFLCatalog::model()->findByAttributes(array('id'=>$id,'sgroup'=>5));
         if (!$file && $sg==2)
             $file = CFLCatalog::model()->findByAttributes(array('id'=>$id,'sgroup'=>6));
         $file -> cloud_ready = 1;
