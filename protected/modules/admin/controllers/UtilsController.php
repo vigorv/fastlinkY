@@ -32,6 +32,8 @@ class UtilsController extends AdmController
 
     public function actionShowItemsWithNoFiles($sgroup = 2)
     {
+        echo 'removed';
+        exit();
         set_time_limit(0);
         $files = Yii::app()->db->createCommand("Select * from fl_catalog where sgroup = " . (int)$sgroup)->query();
         $items = array();
