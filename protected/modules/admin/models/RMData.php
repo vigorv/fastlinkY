@@ -46,7 +46,7 @@ class RMData
 
         set_time_limit(0);
 
-        $db = new CDbConnection('mysql:host=nemesis.anka.ws;dbname=wsmedia2', 'watcher', 'iamremotewatcher');
+        $db = new CDbConnection('mysql:host=nemesis.anka.ws;dbname=wsmedia_96', 'watcher', 'iamremotewatcher');
         $db->charset = 'cp1251';
         $db->createCommand('SET NAMES UTF8')->execute();
         $db->active = true;
@@ -281,7 +281,7 @@ class RMData
     }
 
     public function MakeCache(){
-          $db = new CDbConnection('mysql:host=nemesis.hz.anka.ws;dbname=wsmedia2', 'watcher', 'iamremotewatcher');
+          $db = new CDbConnection('mysql:host=nemesis.hz.anka.ws;dbname=wsmedia_96', 'watcher', 'iamremotewatcher');
           $db->charset = 'cp1251';
           $db->createCommand('SET NAMES UTF8')->execute();
           $db->active = true;
