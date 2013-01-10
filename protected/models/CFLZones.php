@@ -146,4 +146,15 @@ class CFLZones extends CActiveRecord
         return $lst_active_zones;
     }
 
+    public  static function getIpInZone($zone_id = 0){
+        $result = Yii::app()->db->createCommand()->select('INET_NTOA(zr.range_ip) as ip')
+            ->from('{{zones_ranges}} zr')
+            ->where('zr.zone_id = :zone_id',array(':zone_id'=>$zone_id))
+            ->limit(1)
+            ->queryRow();
+        if ($result && count($result))
+            return $result['ip'];
+        else
+            return '';
+    }
 }

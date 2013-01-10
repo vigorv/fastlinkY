@@ -1,4 +1,4 @@
-<?
+<?php
 //echo $html->link('Тестирование', 'http://' . $_SERVER['HTTP_HOST'] . '/sitest.php') . '<br>';
 //echo '<br>';
 //echo $html->link('Оплата VIP', array('action'=>'index', 'controller' => 'pays', Configure::read('Routing.admin') => true)) . '<br>';
@@ -34,3 +34,13 @@ echo '<p>' . (isset($_SERVER["HTTP_X_REAL_IP"]) ? $_SERVER["HTTP_X_REAL_IP"] . '
 <form method="post">
     <input name="view_ip" type="text"/>
 </form>
+
+    <div>
+<?php
+if ($zone_list)
+    foreach($zone_list as $zone){
+        echo '<a href="/admin?zone='.$zone['zone_id'].'">'.$zone['zone_title'].'</a> ';
+    }
+
+?>
+    </div>
