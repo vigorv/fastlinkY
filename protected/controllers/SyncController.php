@@ -73,7 +73,7 @@ class SyncController extends CController {
             }
             $server = CFLServers::model()->find('server_ip = "' . $this->ip . '"');
             if ($server) {
-                $file->sgroup = $server->server_group;
+                $file->sgroup = 2;//$server->server_group;
                 if ($file->sgroup > 0) {
                     if (isset($fileInfo['group']))
                         $file->group = $fileInfo['group'];
