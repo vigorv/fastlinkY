@@ -63,13 +63,13 @@ class CatalogController extends AdmController {
             $urls = array();
          switch($model->sgroup){
              case 2:
-             case 6:
                 $urls[] = 'http://'. Yii::app()->params['uploadServer_sg2'].'/files/delete';
                 $urls[] = 'http://'. Yii::app()->params['uploadServerA_sg2'].'/files/delete';
                 break;
              case 4:
                 $urls[] = 'http://'. Yii::app()->params['uploadServer'].'/files/delete';
                 break;
+             case 6:
              case 5:
                  // TODO: delete from group5
                 //$urls[] = 'http://'. Yii::app()->params['group5_server  '].'/files/delete';
