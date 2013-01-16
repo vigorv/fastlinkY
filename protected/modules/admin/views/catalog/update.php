@@ -9,7 +9,7 @@ $this->menu=array(
 	array('label'=>'List CFLCatalog', 'url'=>array('index')),
 	array('label'=>'Create CFLCatalog', 'url'=>array('create')),
 	array('label'=>'View CFLCatalog', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage CFLCatalog', 'url'=>array('admin')),
+//	array('label'=>'Manage CFLCatalog', 'url'=>array('admin')),
 );
 ?>
 

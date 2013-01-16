@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
     array('label'=>'List CFLCatalog', 'url'=>array('index')),
-    array('label'=>'Manage CFLCatalog', 'url'=>array('admin')),
+   // array('label'=>'Manage CFLCatalog', 'url'=>array('admin')),
 );
 ?>
 

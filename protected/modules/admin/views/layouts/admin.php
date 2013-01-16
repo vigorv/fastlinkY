@@ -20,9 +20,6 @@
         <div id="container">
             <div class="Panel_H">
                 <?php
-                /* $this->widget('zii.widgets.CBreadcrumbs', array(
-                  'links' => $this->breadcrumbs,
-                  )); */
                 $this->pageTitle = Yii::app()->name;
                 ?>
                 <div class="P_section_1">
@@ -68,6 +65,15 @@
                         <?php echo Yii::app()->user->getFlash('error') ?>
                     </div>
                 <?php endif ?>
+                <?php
+                $this->widget('zii.widgets.CBreadcrumbs', array(
+                    'links' => $this->breadcrumbs,
+                ));
+                $this->widget('zii.widgets.CMenu', array(
+                    'items'=>$this->menu,
+                    'htmlOptions'=>array('class'=>'operations'),
+                ));
+                ?>
 
                 <?php echo $content; ?>
             </div>
