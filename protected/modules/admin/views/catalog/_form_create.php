@@ -32,11 +32,6 @@
         <?php echo $form->error($model,'name'); ?>
     </div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'comment'); ?>
-        <?php echo $form->textArea($model,'comment',array('rows'=>6, 'cols'=>50)); ?>
-        <?php echo $form->error($model,'comment'); ?>
-    </div>
 
     <div class="row">
         <?php echo $form->labelEx($model,'group'); ?>
@@ -55,6 +50,12 @@
         <?php echo $form->labelEx($model,'sgroup'); ?>
         <?php echo $form->textField($model,'sgroup',array('size'=>10,'maxlength'=>10)); ?>
         <?php echo $form->error($model,'sgroup'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'sz'); ?>
+        <?php echo $form->textField($model,'sz',array('size'=>10,'maxlength'=>10)); ?>
+        <?php echo $form->error($model,'sz'); ?>
     </div>
 
     <div class="row buttons">
