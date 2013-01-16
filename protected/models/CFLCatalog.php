@@ -47,7 +47,7 @@ class CFLCatalog extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('title, original_name, name, group, dt, dir', 'required'),
+            array('title, original_name, name, group,  dir', 'required'),
             array('is_visible, is_confirm', 'numerical', 'integerOnly' => true),
             array('user_id, group, sgroup, tp, vtp', 'length', 'max' => 10),
             array('sz','length','max'=>20),
