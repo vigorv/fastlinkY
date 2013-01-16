@@ -33,6 +33,28 @@ class CatalogController extends AdmController {
         $this->render('index', array('table' => $table));
     }
 
+    /**
+     * Creates a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionCreate() {
+        $model = new CFLCatalog();
+
+// Uncomment the following line if AJAX validation is needed
+// $this->performAjaxValidation($model);
+
+        if (isset($_POST['CFLCatalog'])) {
+            $model->attributes = $_POST['CFLCatalog'];
+            if ($model->save())
+                $this->redirect(array('view', 'id' => $model->page_id));
+        }
+
+        $this->render('create', array(
+            'model' => $model,
+        ));
+    }
+
+
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
 
