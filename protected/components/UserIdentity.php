@@ -163,7 +163,7 @@ class UserIdentity extends CUserIdentity
         Yii::app()->request->cookies->add('FLUserId', $FLUserID);
         Yii::app()->request->cookies->add('FLUserHash', $FLUserHash);
 
-        $userSession->user_hash = $FLUserHash;
+        $userSession->user_hash = $hash;
         $userSession->user_ip = $ip;
 
         $userSession->save();
