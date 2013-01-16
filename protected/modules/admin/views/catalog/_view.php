@@ -1,3 +1,7 @@
+
+<div>
+    <? Yii::app()->createUrl('/catalog/viewv/'.$data->id);?>
+</div>
 <div class="view">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>

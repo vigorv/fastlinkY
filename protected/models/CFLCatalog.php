@@ -55,6 +55,9 @@ class CFLCatalog extends CActiveRecord {
             array('title, original_name, name, dir', 'length', 'max' => 255),
             array('chk_md5', 'length', 'max' => 32),
             array('comment', 'safe'),
+            array('dt','default',
+                'value'=>new CDbExpression('NOW()'),
+                'setOnEmpty'=>false,'on'=>'insert'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, user_id, email, title, original_name, name, comment, group, dt, is_visible, is_confirm, dir, sgroup, tp, sz, vtp, chk_md5', 'safe', 'on' => 'search'),
