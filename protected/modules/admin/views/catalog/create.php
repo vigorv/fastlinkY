@@ -12,4 +12,4 @@ $this->menu=array(
 
 <h1>Create CFLCatalog</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form_create', array('model'=>$model)); ?>
