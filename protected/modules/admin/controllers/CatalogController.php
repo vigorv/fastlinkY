@@ -91,6 +91,11 @@ class CatalogController extends AdmController {
              case 4:
                 $urls[] = 'http://'. Yii::app()->params['uploadServer'].'/files/delete';
                 break;
+             case 0:
+                 $model->deleteByPk($id);
+                 echo 'Deleted';
+                 return;
+                 break;
              case 6:
              case 5:
                  // TODO: delete from group5
