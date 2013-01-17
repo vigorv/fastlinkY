@@ -147,7 +147,7 @@ class UsersController extends Controller {
         }
         if (isset($_POST['exit'])) {
             Yii::app()->user->setState('role','');
-            Yii::app()->identity->dropAuthInfo();
+            $this->identity->dropAuthInfo();
             Yii::app()->user->logout();
             Yii::app()->session->regenerateID(true);
         }
