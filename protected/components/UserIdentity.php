@@ -22,6 +22,7 @@ class UserIdentity extends CUserIdentity
      */
     public function authenticate()
     {
+        $this->errorCode = self::ERROR_USERNAME_INVALID;
         if (!$this->checkAuthInfo()) {
             /** @var CFLUsers $record  */
             $record = CFLUsers::model()->findByAttributes(array('username' => $this->username));
@@ -91,7 +92,6 @@ class UserIdentity extends CUserIdentity
             $cmd = Yii::app()->db->createCommand()
                 ->select('*')
                 ->from('{{users}} u')
-
                 ->join('{{users_sessions}} us', 'u.user_id = us.user_id')
                 ->where('u.user_id = :id', array(':id' => $FLUserID))
                 ->limit(1);
