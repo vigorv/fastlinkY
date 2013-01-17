@@ -19,7 +19,9 @@ class Controller extends CController {
         $app = Yii::app();
 
         $this->identity = new UserIdentity('', '');
-        $this->identity->authenticate();
+
+        if($this->identity->authenticate())
+            Yii::app()->user->login($this->identity);
 
         if (isset($_GET['_lang'])) {
             $app->language = $_GET['_lang'];
