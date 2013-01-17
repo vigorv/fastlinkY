@@ -1,6 +1,9 @@
 <?php if ($item): ?>
     <form id="Item_edit" method="post" >
         <a href="#" onClick="return toggleEdit(this);">Режим редактирования</a>
+        <?//TODO: Костыль, надо использовать правильную переменную?>
+        <a href="/admin/catalog/delete/<?=$item['id']?>" onclick="return confirm('Удалить?') ? true : false;">Удалить</a>
+
         <table  class="table table-striped table-bordered table-condensed">
             <thead>
             <th width="10">key</th>

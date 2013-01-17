@@ -47,7 +47,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //		'email',
 //		'title',
 //		'original_name',
-
+		'dir',
 		'name',
         'sgroup',
         'group',
@@ -57,7 +57,6 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'dt',
 		'is_visible',
 		'is_confirm',
-		'dir',
 		'sgroup',
 		'tp',
 		'sz',
