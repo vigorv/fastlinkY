@@ -103,7 +103,7 @@ class CFLZones extends CActiveRecord
         if ($conv)
             $ip = sprintf('%u', ip2long($ip));
         return Yii::app()->db->cache(10)->createCommand()
-                        ->select('z.*,INET_NTOA(zr.range_ip),zr.range_mask')
+                        ->select('zr.range_id,z.*,INET_NTOA(zr.range_ip),zr.range_mask')
                         ->from('{{zones}} z')
                         ->join('{{zones_ranges}} zr', ' ((z.zone_id = zr.zone_id) AND (zr.range_ip = (' . $ip . ' & ~(  (1<< (32 - zr.range_mask)) -1) )))')
                         ->order('z.zone_prio DESC')
