@@ -37,8 +37,10 @@ class ApiController extends Controller
                     foreach ($files as $f)
                         $data['files'][] = $f['id'];
                     echo serialize($data);
-                }
-            }
+                } else
+                echo serialize(array('error'=>1));
+            } else
+                echo serialize(array('error'=>1));
         }
     }
 
