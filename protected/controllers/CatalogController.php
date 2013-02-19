@@ -100,6 +100,8 @@ class CatalogController extends Controller
             $file = CFLCatalog::model()->cache(1000)->findByPk($id);
             $letter = '';
             if ($file) {
+                $file->preset =='unknown'? $preset_str='': $preset_str =$file->preset;
+
                 CFLCatalogClicks::model()->InsertDelayed2($file, $this->zone, $this->ip);
                 if ($file->sgroup == 1) {
                     $letter = strtolower($file->dir[0]);
@@ -123,7 +125,8 @@ class CatalogController extends Controller
                     if ($this->userRole == "admin") {
                         $url_list = array();
                         foreach ($servers as $a_server) {
-                            $url_list[] = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
+
+                            $url_list[] = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/'.$preset_str.'/' . $file->original_name;
                         }
                         $eco_data = '<pre>';
                         $eco_data .= print_r($url_list, true);
@@ -134,7 +137,7 @@ class CatalogController extends Controller
                     }
 
 
-                    $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' . $file->original_name;
+                    $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' .$preset_str.'/'. $file->original_name;
                     $this->render('view', array('url' => $url));
                 } else {
                     if ($this->userRole == "admin") {
@@ -142,7 +145,7 @@ class CatalogController extends Controller
                        echo "<br/>Вы запросили файл ".$id;
                        echo "<br/>Файл принадлежит группе ".$file->sgroup;
                        echo "<br/>Имя файла ".$file->original_name;
-                       echo "<br/>Каталог ". $file->dir;
+                       echo "<br/>Каталог ". $file->dir.'/'.$preset_str;
                        echo "<br/>Сервера не найдены";
                     }
                     CFLLogFiles::FileNotAviable($id, $file->group, $file->sgroup, $this->zone, $this->ip);
@@ -178,6 +181,7 @@ class CatalogController extends Controller
         //else
         //  $this->redirect('/catalog');
         foreach ($files as &$file) {
+            $file['preset'] =='unknown'? $preset_str='': $preset_str =$file['preset'];
             $letter = '';
             if ($file['sgroup'] == 1) {
                 $letter = strtolower($file['dir'][0]);
@@ -187,7 +191,7 @@ class CatalogController extends Controller
             $file['link'] = array();
             foreach ($servers as $server) {
                 $link = array();
-                $link['url'] = 'http://' . $server['server_ip'] . '/' . $file['dir'] . '/' . $file['original_name'];
+                $link['url'] = 'http://' . $server['server_ip'] . '/' . $file['dir'] . '/'.$preset_str.'/'. $file['original_name'];
                 $link['type'] = 'http';
                 $link['location'] = 'ru';
                 $link['prio'] = 100;
@@ -286,9 +290,10 @@ class CatalogController extends Controller
                             case 4: $server = Yii::app()->params['uploadServer'];break;
                             default: echo "not there ".$file->sgroup; Yii::app()->end();
                         }
+                        $file->preset =='unknown' ? $preset_str='': $preset_str =$file->preset;
                         if (defined('YII_DEBUG')&& YII_DEBUG)
-                            echo $file->dir.'/'.$file->original_name.'<br/>';
-                        $data=base64_encode($file->dir . '/' . $file->original_name);
+                            echo $file->dir.'/'.preset_str.'/'.$file->original_name.'<br/>';
+                        $data=base64_encode($file->dir . '/' .preset_str.'/'. $file->original_name);
                         $skey=md5($data.Yii::app()->params['master_key']);
 
 
