@@ -49,12 +49,13 @@ class UtilsController extends AdmController
                     echo "not there " . $file['sgroup'];
                     Yii::app()->end();
             }
-            $data = base64_encode($file['dir'] . '/' . $file['original_name']);
+            $file['preset'] =='unknown'? $preset_str='': $preset_str =$file['preset'];
+            $data = base64_encode($file['dir'] . '/' .$preset_str.'/' . $file['original_name']);
             $skey = md5($data . Yii::app()->params['master_key']);
             $url = 'http://' . $server . '/files/checkexists?data=' . $data . '&key=' . $skey;
             $data = file_get_contents($url);
             if ($data == "BAD") {
-                echo  $file->id. ' : '.$file['dir'] . '/' . $file['original_name'].'<br/>';
+                echo  $file->id. ' : '.$file['dir'] . '/' .$preset_str.'/'. $file['original_name'].'<br/>';
                 flush();
             }
         }

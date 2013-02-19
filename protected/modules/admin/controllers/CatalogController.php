@@ -77,10 +77,11 @@ class CatalogController extends AdmController {
         $model = $this->loadModel($id);
         $url=false;
         if ($model){
-            $data = base64_encode($model->dir . '/' . $model->original_name);
+            $model->preset =='unknown'? $preset_str='': $preset_str =$model->preset;
+            $data = base64_encode($model->dir . '/' .$preset_str.'/'. $model->original_name);
             //echo Yii::app()->params['master_key'];
             if (defined('YII_DEBUG') && YII_DEBUG)
-                echo $model->dir.'/'.$model->original_name;
+                echo $model->dir.'/'.$preset_str.'/'.$model->original_name;
             $sdata = md5($data.Yii::app()->params['master_key']);
             $urls = array();
          switch($model->sgroup){
