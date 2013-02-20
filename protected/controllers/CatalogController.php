@@ -284,13 +284,13 @@ class CatalogController extends Controller
                         $server2 = false;
                         switch ($file->sgroup){
                             case 2:
-                            case 6:
                                     $server = Yii::app()->params['uploadServer_sg2'];
                                     $server2 = Yii::app()->params['uploadServerA_sg2']; break;
                             case 4: $server = Yii::app()->params['uploadServer'];break;
+                            case 6:
                             default: echo "not there ".$file->sgroup; Yii::app()->end();
                         }
-                        $file->preset =='unknown' ? $preset_str='': $preset_str =$file->preset;
+                        ($file->preset =='unknown') ? $preset_str='': $preset_str =$file->preset;
                         if (defined('YII_DEBUG')&& YII_DEBUG)
                             echo $file->dir.'/'.preset_str.'/'.$file->original_name.'<br/>';
                         $data=base64_encode($file->dir . '/' .preset_str.'/'. $file->original_name);
