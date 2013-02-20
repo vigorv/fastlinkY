@@ -163,7 +163,7 @@ class ApiController extends Controller
     }
 
 
-    public function actionCloudReady($id = 0, $sg = 2)
+    public function actionCloudReady($id = 0)
     {
         // TO DO: hash key
         $file = CFLCatalog::model()->findByAttributes(array('id' => $id));
