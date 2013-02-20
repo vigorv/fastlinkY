@@ -292,8 +292,8 @@ class CatalogController extends Controller
                         }
                         ($file->preset =='unknown') ? $preset_str='': $preset_str =$file->preset;
                         if (defined('YII_DEBUG')&& YII_DEBUG)
-                            echo $file->dir.'/'.preset_str.'/'.$file->original_name.'<br/>';
-                        $data=base64_encode($file->dir . '/' .preset_str.'/'. $file->original_name);
+                            echo $file->dir.'/'.$preset_str.'/'.$file->original_name.'<br/>';
+                        $data=base64_encode($file->dir . '/' .$preset_str.'/'. $file->original_name);
                         $skey=md5($data.Yii::app()->params['master_key']);
 
 
