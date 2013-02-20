@@ -166,11 +166,7 @@ class ApiController extends Controller
     public function actionCloudReady($id = 0, $sg = 2)
     {
         // TO DO: hash key
-        $file = CFLCatalog::model()->findByAttributes(array('id' => $id, 'sgroup' => $sg));
-        if (!$file && $sg == 2)
-            $file = CFLCatalog::model()->findByAttributes(array('id' => $id, 'sgroup' => 5));
-        if (!$file && $sg == 2)
-            $file = CFLCatalog::model()->findByAttributes(array('id' => $id, 'sgroup' => 6));
+        $file = CFLCatalog::model()->findByAttributes(array('id' => $id));
         $file->cloud_ready = 1;
         if ($file->save()) echo 1;
     }
