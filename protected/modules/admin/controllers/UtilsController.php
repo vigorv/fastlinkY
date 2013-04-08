@@ -74,8 +74,52 @@ class UtilsController extends AdmController
                Yii::app()->db->createCommand('UPDATE fl_catalog set group=:group WHERE id =:item_id',array(':group'=>$news_id,':item_id'=>$item['id']));
            } else {
                echo "DELETE link ".$item['id']." cause no link<br/>";
-               $catalog = Yii::app()->createController('admin/CatalogController');
-               $catalog->actionDelete($item['id']);
+               $model = $this->loadModel($item['id']);
+               $url=false;
+               if ($model){
+                   $model->preset =='unknown'? $preset_str='': $preset_str =$model->preset;
+                   $data = base64_encode($model->dir . '/' .$preset_str.'/'. $model->original_name);
+                   //echo Yii::app()->params['master_key'];
+                   if (defined('YII_DEBUG') && YII_DEBUG)
+                       echo $model->dir.'/'.$preset_str.'/'.$model->original_name;
+                   $sdata = md5($data.Yii::app()->params['master_key']);
+                   $urls = array();
+                   switch($model->sgroup){
+                       case 2:
+                           $urls[] = 'http://'. Yii::app()->params['uploadServer_sg2'].'/files/delete';
+                           $urls[] = 'http://'. Yii::app()->params['uploadServerA_sg2'].'/files/delete';
+                           break;
+                       case 4:
+                           $urls[] = 'http://'. Yii::app()->params['uploadServer'].'/files/delete';
+                           break;
+                       case 0:
+                           $model->deleteByPk($item['id']);
+                           echo 'Deleted';
+                           return;
+                           break;
+                       case 6:
+                       case 5:
+                           // TODO: delete from group5
+                           //$urls[] = 'http://'. Yii::app()->params['group5_server  '].'/files/delete';
+                       default:
+                   }
+                   $res=array();
+                   foreach($urls as $url){
+                       $res[]=@file_get_contents($url.'?data='.$data.'&key='.$sdata);
+                   }
+                   if ((count($res)==1 && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
+                       $model->deleteByPk($item['id']);
+                       echo 'Deleted';
+                   } else{
+                       echo "Can't delete";
+                       if (defined('YII_DEBUG') && YII_DEBUG){
+                           var_dump($urls);
+                           echo '?data='.$data.'&key='.$sdata;
+                       }
+                   }
+               } else {
+                   echo "not found";
+               }
                //Yii::app()->db->createCommand('DELETE FROM fl_catalog  WHERE id =:item_id',array(':item_id'=>$item['id']));
            }
         }
