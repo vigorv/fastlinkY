@@ -62,6 +62,7 @@ class UtilsController extends AdmController
     }
 
     public function actionLinkData(){
+        set_time_limit(0);
         $rmdata = new RMData();
         $rmdata->makeCache();
         $date = $today = date("Y-m-d H:i:s",strtotime('-1 week'));
