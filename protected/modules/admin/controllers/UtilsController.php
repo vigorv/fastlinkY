@@ -62,7 +62,7 @@ class UtilsController extends AdmController
     }
 
     public function actionLinkData(){
-        set_time_limit(0);
+        set_time_limit(3000);
         $rmdata = new RMData();
         $rmdata->makeCache();
         $date = date("Y-m-d H:i:s",strtotime('-1 week'));
@@ -71,7 +71,7 @@ class UtilsController extends AdmController
            $news_id = Yii::app()->db->createCommand("SELECT id FROM `rum_c_cat` WHERE `xfields` LIKE '%/catalog/viewv/".$item['id']."%'")->queryScalar();
            if($news_id){
                echo "SET group ".$news_id." for link ".$item['id']."<br/>";
-               Yii::app()->db->createCommand('UPDATE fl_catalog set group=:group WHERE id =:item_id',array(':group'=>$news_id,':item_id'=>$item['id']));
+               Yii::app()->db->createCommand('UPDATE fl_catalog set group=:group WHERE id =:item_id',array(':group'=>$news_id,':item_id'=>$item['id']))->execute();
            } else {
                echo "DELETE link ".$item['id']." cause no link<br/>";
                $model = CFLCatalog::model()->findByPk($item['id']);
