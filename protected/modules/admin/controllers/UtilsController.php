@@ -74,7 +74,7 @@ class UtilsController extends AdmController
                Yii::app()->db->createCommand('UPDATE fl_catalog set group=:group WHERE id =:item_id',array(':group'=>$news_id,':item_id'=>$item['id']));
            } else {
                echo "DELETE link ".$item['id']." cause no link<br/>";
-               $model = $this->loadModel($item['id']);
+               $model = CFLCatalog::model()->findByPk($item['id']);
                $url=false;
                if ($model){
                    $model->preset =='unknown'? $preset_str='': $preset_str =$model->preset;
