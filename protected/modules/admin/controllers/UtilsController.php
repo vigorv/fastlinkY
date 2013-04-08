@@ -61,6 +61,30 @@ class UtilsController extends AdmController
         }
     }
 
+    public function actionLinkData(){
+        $rmdata = new RMData();
+        $rmdata->makeCache();
+        $date = $today = date("Y-m-d H:i:s",strtotime('-1 week'));
+        $catalog = CFLCatalog::model()->findAll('group = 0 and sgroup = 2 and date<=:date');
+        foreach ($catalog as $item){
+           $news_id = Yii::app()->db->createCommand('SELECT id FROM  `rm_post` WHERE  `xfields` LIKE  "%/catalog/viewv/:item_id%" LIMIT 1',array($item['id']))->queryScalar();
+           if($news_id){
+               echo "SET group ".$news_id." for link ".$item['id']."<br/>";
+               Yii::app()->db->createCommand('UPDATE fl_catalog set group=:group WHERE id =:item_id',array(':group'=>$news_id,':item_id'=>$item['id']));
+           } else {
+
+
+
+               echo "DELETE link ".$item['id']." cause no link<br/>";
+               $catalog = new CatalogController();
+               $catalog->actionDelete($item['id']);
+               //Yii::app()->db->createCommand('DELETE FROM fl_catalog  WHERE id =:item_id',array(':item_id'=>$item['id']));
+           }
+        }
+        if (!count($catalog)) echo "No items found";
+    }
+
+
     public function actionLinkEmpties()
     {
         $rmdata = new RMData();
