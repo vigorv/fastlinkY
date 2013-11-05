@@ -57,6 +57,11 @@
         <?php echo $form->textField($model,'sz',array('size'=>10,'maxlength'=>10)); ?>
         <?php echo $form->error($model,'sz'); ?>
     </div>
+    <div class="row">
+        <?php echo $form->labelEx($model,'tth'); ?>
+        <?php echo $form->textField($model,'tth',array('size'=>100,'maxlength'=>100)); ?>
+        <?php echo $form->error($model,'tth'); ?>
+    </div>
 
     <div class="row buttons">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

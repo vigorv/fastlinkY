@@ -45,6 +45,7 @@
         <meta name="keywords" content="<?php //echo $siteName; //if (isset($metaKeywords)) echo $metaKeywords;          ?>" />
         <meta name="description" content="<?php //echo $siteName; //if (isset($metaDescription)) echo $metaDescription;          ?>" />
         <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+
     </head>    
     <body>
     <center>
@@ -74,9 +75,24 @@
                 <?php
 //if (isset($authUserGroups) && in_array(Configure::read('VIPgroupId'), $authUserGroups)) {
 //else {
+
                 //echo $BlockBanner->getBanner('header');                
                 echo CFLBanners::model()->getBanner('header');
                 ?>
+<!-- MarketGidComposite Start -->
+ <div id="MarketGidScriptRootC42771">
+  <div id="MarketGidPreloadC42771">
+   <a id="mg_add42771" href="http://usr.marketgid.com/demo/goods/" target="_blank">Добавить свое объявление</a><br> <a href="http://marketgid.com/" target="_blank">Загрузка...</a> 
+    </div>
+     <script> 
+      (function(){
+       var D=new Date(),d=document,b='body',ce='createElement',ac='appendChild',st='style',ds='display',n='none',gi='getElementById';
+        var i=d[ce]('iframe');i[st][ds]=n;d[gi]("MarketGidScriptRootC42771")[ac](i);try{var iw=i.contentWindow.document;iw.open();iw.writeln("<ht"+"ml><body></body></ht"+"ml>");iw.close();var c=iw[b];}
+         catch(e){var iw=d;var c=d[gi]("MarketGidScriptRootC42771");}var dv=iw[ce]('div');dv.id="MG_ID";dv[st][ds]=n;dv.innerHTML=42771;c[ac](dv);
+          var s=iw[ce]('script');s.async='async';s.defer='defer';s.charset='utf-8';s.src="http://jsc.dt00.net/f/a/fastlink.ws.42771.js?t="+D.getYear()+D.getMonth()+D.getDate()+D.getHours();c[ac](s);})();
+           </script>
+            </div>
+             <!-- MarketGidComposite End -->
             </center></div>
         <div id="head">
             <div class="authorisation">
@@ -127,8 +143,10 @@
                   else
                   { */
                 echo CFLBanners::model()->getBanner('left');
+
                 /* } */
                 ?>
+
             </div>
             <div class="center_block">
                 <? echo $content; ?>
@@ -143,9 +161,9 @@
             </div>
             <div class="bottom_ad1">
                 <? echo CFLBanners::model()->getBanner('bottom2'); ?>
+                
             </div>
         </div>
-
         <div id="bottom_copy">
             <div>
                 &copy;&nbsp;<?php echo date('Y'); ?>&nbsp;&mdash; <a href="<?= Yii::app()->request->getBaseUrl(true); ?>"><?= Yii::app()->request->getBaseUrl(true); ?></a>
@@ -187,11 +205,10 @@
                 window.location='/catalog/search?search_opt=bytitle&text='+search_text;
             //$('.center_block').load('/catalog/search/bytitle/'+search_text);
         }
-    
+
         $(function(){
             $('input[placeholder], textarea[placeholder]').placeholder();
         });
-
 
         function submitenter(myfield,e)
         {
@@ -213,5 +230,6 @@
         
     
     </script>
+    <script type="text/javascript">document.write("<scr" + "ipt type='text/javascr"+"ipt' src='http://js.rmbn.net/ads.js?sid=9495&p="+Math.random()+"'></scr"+"ipt>");</script>
 </body>
 </html>

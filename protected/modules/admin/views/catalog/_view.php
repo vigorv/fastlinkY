@@ -73,6 +73,10 @@
 	<?php echo CHtml::encode($data->chk_md5); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tth')); ?>:</b>
+	<?php echo CHtml::encode($data->tth); ?>
+	<br />
+
 	*/ ?>
 
 </div>

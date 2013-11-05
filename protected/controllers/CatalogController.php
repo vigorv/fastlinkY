@@ -56,7 +56,9 @@ class CatalogController extends Controller
 
     public function actionViewv($id)
     {
-        $this->autoload($id);
+        //$this->autoload($id);
+        $this->actionFile($id);
+        
     }
 
     public function actionFile($id = 0, $int1 = 0)
@@ -71,7 +73,12 @@ class CatalogController extends Controller
                 } else {
                     $files[0] = $file;
                 }
-                $this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
+	        if($file['sgroup']==1)
+	        {
+        		return $this->render('filesg1', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
+        		
+        	}
+        	$this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
             }
             else
                 $this->render('/elements/messages', array('msg' => Yii::t('common', 'Unknown file')));

@@ -89,6 +89,10 @@
 		<?php echo $form->label($model,'chk_md5'); ?>
 		<?php echo $form->textField($model,'chk_md5',array('size'=>32,'maxlength'=>32)); ?>
 	</div>
+	<div class="row">
+		<?php echo $form->label($model,'tth'); ?>
+		<?php echo $form->textField($model,'tth',array('size'=>100,'maxlength'=>100)); ?>
+	</div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>

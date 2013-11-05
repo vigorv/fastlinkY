@@ -93,7 +93,7 @@ $this->redirect('site/upload');
         if ($this->zone <> '9')
             $uploadServer = Yii::app()->params['uploadServer_sg2'];
 
-        $this->render('upload', array('uploadServer' => $uploadServer));
+        $this->render('upload', array('uploadServer' => $uploadServer,'zone'=>$this->zone));
     }
 
 }

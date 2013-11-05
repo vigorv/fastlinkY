@@ -21,6 +21,8 @@
  * @property string $sz
  * @property string $vtp
  * @property string $chk_md5
+ * @property string $tth
+ 
  */
 class CFLCatalog extends CActiveRecord {
 
@@ -60,7 +62,7 @@ class CFLCatalog extends CActiveRecord {
                 'setOnEmpty'=>false,'on'=>'insert'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, user_id, email, title, original_name, name, comment, group, dt, is_visible, is_confirm, dir, sgroup, tp, sz, vtp, chk_md5', 'safe', 'on' => 'search'),
+            array('id, user_id, email, title, original_name, name, comment, group, dt, is_visible, is_confirm, dir, sgroup, tp, sz, vtp, chk_md5, tth ', 'safe', 'on' => 'search'),
         );
     }
 
@@ -96,6 +98,8 @@ class CFLCatalog extends CActiveRecord {
             'sz' => 'Sz',
             'vtp' => 'Vtp',
             'chk_md5' => 'Chk Md5',
+            'tth' => 'tth',
+            
         );
     }
 
@@ -117,6 +121,7 @@ class CFLCatalog extends CActiveRecord {
         $criteria->compare('name', $this->name, true);
         $criteria->compare('comment', $this->comment, true);
         $criteria->compare('`group`', $this->group, true);
+        $criteria->compare('tth', $this->tth, true);
         $criteria->compare('dt', $this->dt, true);
         $criteria->compare('is_visible', $this->is_visible);
         $criteria->compare('is_confirm', $this->is_confirm);

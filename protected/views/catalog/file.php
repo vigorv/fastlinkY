@@ -59,10 +59,9 @@ if (!empty($files[0])):
     ?>
     <h3> <?= $files[0]['title']; ?></h3>
     <p><?= $files[0]['comment']; ?></p>
-
     <?
     $url = '/catalog/load/' . $file['id'];
-    $aurl = Yii::app()->createAbsoluteUrl($url);
+    $aurl = Yii::app()->createAbsoluteUrl($url);//,array('target'=>'_blank'	));
     $name = $file['name'];
     switch ($files[0]['sgroup']){
         case 1: $cloud_partner_id = Yii::app()->params['cloud_service_partner_id_sg1'];break;
@@ -139,6 +138,7 @@ if (!empty($files[0])):
         <h3><?= Yii::t('common', 'Typically, this file also loaded with'); ?></h3>
 
         <a target="_blank" href="/catalog/meta/gid/<?= $file['group']; ?>/sid/<?= $file['sgroup']; ?>"> <?= Yii::t('common', 'All Files'); ?></a>
+        
         <? if ($ext == 'mp4'): ?>
             &nbsp;<button class="play" rel="#mies"><i class="icon-play"></i>
                 <div id="playlist" style="display:none;">
@@ -146,6 +146,7 @@ if (!empty($files[0])):
                         <a href="<?= '/catalog/load/' . $f['id']; ?>">
                             <?= $f['name']; ?>
                         </a>      
+
                     <? endforeach; ?>
                 </div>
             </button> 
