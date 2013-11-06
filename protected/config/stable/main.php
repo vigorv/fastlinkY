@@ -111,7 +111,7 @@ return array(
                 ),
                 array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-                    'ipFilters' => array('127.0.0.1','178.49.9.12'),
+                    'ipFilters' => array('127.0.0.1','178.49.9.12','192.168.200.191'),
                 ),
             // uncomment the following to show log messages on web pages
             /*
