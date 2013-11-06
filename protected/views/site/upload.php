@@ -2,10 +2,20 @@
 
 Yii::app()->clientScript->registerScriptFile('/js/multiuploader.js');
 $user_id = Yii::app()->user->id;
-
+$userRole = Yii::app()->user->getState('role');
 $browser = Yii::app()->browser->getBrowser();
+if($userRole=="admin")
+{
+echo " user role:".$userRole."<br>";
+echo "UploadServer:".$uploadServer."<br>";
+echo "zone is:".$zone."<br>";
+
+}
+
+
 if (in_array($browser,array('Opera','IE'))):
 ?>
+user role: <?=$userRole;?><br>
 <form  id="Sender" method="POST" enctype="multipart/form-data"  action="http://<?= $uploadServer; ?>/files/uploads?uid=<?=Yii::app()->user->id;?>&key=<?=Yii::app()->user->getState('ukey');?>">
     <input type="file" name="file"><br>
     <input type="submit" value="Upload" >
