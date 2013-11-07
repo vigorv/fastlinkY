@@ -33,7 +33,7 @@ a:visited:hover {
 
 /*Голова*/
 #head {
-    width: 960px;
+    width: 1280px;
     height: 100px;
     padding: 50px 0px 25px 0px;
 }
@@ -86,7 +86,7 @@ div.logo a {
 }
 
 #head div.search {
-    float: left;
+    float: right;
     width: 220px;
     height: 100px;
     padding: 0px 10px 0px 10px;
@@ -114,7 +114,7 @@ div.logo a {
 
 /*Середина*/
 #middle {
-    width: 1000px;
+    width: 1280px;
     height: 400px;
 }
 #middle div.left_ad {
@@ -128,7 +128,7 @@ div.logo a {
 }
 #middle div.center_block {
     float: left;
-    width: 460px;
+    width: 760px;
     <!--
     height: 400px;
     -->
@@ -136,7 +136,7 @@ div.logo a {
     text-align:left;
 }
 #middle div.right_ad {
-    float: left;
+    float: right;
     width: 240px;
     height: 400px;
     margin: 0px 10px 0px 10px;
@@ -256,7 +256,7 @@ div.logo a {
 /*Нижние баннеры*/
 #bottom_ad {
     margin: 25px 0px 0px 0px;
-    width: 940px;
+    width: 1260px;
     height: 60px;
 }
 #bottom_ad .bottom_ad1 {
@@ -266,8 +266,19 @@ div.logo a {
     height: 60px;
     background: #d3d3d3;
 }
-#bottom_ad .bottom_ad2 {
+
+#bottom_ad .bottom_ad3 {
     float: left;
+    width: 320px;
+    height: 60px;
+    background: #d3d3d3;
+    padding: 0px 0px 0px 0px;
+    text-align:left;
+
+}
+
+#bottom_ad .bottom_ad2 {
+    float: right;
     margin: 0px 0px 0px 10px;
     width: 460px;
     height: 60px;

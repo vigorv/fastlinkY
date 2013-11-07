@@ -4,7 +4,7 @@
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
 // change the following paths if necessary
-$yii = dirname(__FILE__) . '/../../yii-lib/yii/framework/yii.php';
+$yii = dirname(__FILE__) . '/../yii-lib/yii/framework/yii.php';
 
 define('DEVELOP_LOCATION', (file_exists(dirname(__FILE__) . '/protected/config/develop') ? 'dev' : 'stable'));
 

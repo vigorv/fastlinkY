@@ -79,6 +79,8 @@
                 //echo $BlockBanner->getBanner('header');                
                 echo CFLBanners::model()->getBanner('header');
                 ?>
+<?php if($userRole!="admin"):?>
+              
 <!-- MarketGidComposite Start -->
  <div id="MarketGidScriptRootC42771">
   <div id="MarketGidPreloadC42771">
@@ -93,16 +95,11 @@
            </script>
             </div>
              <!-- MarketGidComposite End -->
+<?php endif;?>
             </center></div>
+        
         <div id="head">
             <div class="authorisation">
-                <?php
-//if (!empty($authUser['userid']))
-//{
-//echo __("Hi", true) . ', ' . $authUser['username'] . '! <a href="/users/logout">' . __("Log out", true) . '</a>';
-//}
-//else {
-                ?>
                 <?php if (Yii::app()->user->isGuest): ?>
                     <?= Yii::t('common', 'Auth'); ?> | <a href="/users/register"><?= Yii::t('common', 'Register'); ?></a>
                     <form id="top_auth" name="auth" method="post" action="/users/login" onSubmit="userLogin();return false;">
@@ -113,10 +110,19 @@
                 <?php else: ?>
                     <h4><i class="icon-user"></i> <?= Yii::app()->user->name; ?> <a href="/catalog/user"?><i class="icon-file"></i> <?=Yii::t('common','My files');?></a>
                     <?php if($userRole=="admin"):?>
-                        <a href="/admin"?>Admin</a>
+                        <a href="/admin">Admin</a>
+                        
                     <?php endif;?>
                         <br/>
-                        IP: <?= $this->ip; ?>
+                        IP: <?= $this->ip;?><br> 
+                        <?php
+                        if($userRole=="admin"){
+                        if ($this->zone_list)
+                            foreach($this->zone_list as $zone){
+                                echo '<a href="?zone='.$zone['zone_id'].'">'.$zone['zone_title'].'</a> ';
+                            }
+                        }
+                        ?>
                     </h4><button  class="btn" name="logout" onClick="$.post('/users/exit',{exit:1},function(){window.location.reload();});"><?= Yii::t('common', 'Logout'); ?>
                     </button>
 
@@ -159,7 +165,12 @@
             <div class="bottom_ad1">
                 <? echo CFLBanners::model()->getBanner('bottom1'); ?>
             </div>
-            <div class="bottom_ad1">
+            <div class="bottom_ad3">
+                <? echo CFLBanners::model()->getBanner('bottom2'); ?>
+
+            </div>
+
+            <div class="bottom_ad2">
                 <? echo CFLBanners::model()->getBanner('bottom2'); ?>
                 
             </div>
@@ -190,7 +201,6 @@
         </div>
     </center>
     <script language="javascript">
-        <!--
         function userLogin(){
             $(this).ajaxSubmit(function(){
             
@@ -225,11 +235,13 @@
             else
                 return true;
         }
-        //-->
         
         
     
     </script>
+<?php if($userRole!="admin"):?>
     <script type="text/javascript">document.write("<scr" + "ipt type='text/javascr"+"ipt' src='http://js.rmbn.net/ads.js?sid=9495&p="+Math.random()+"'></scr"+"ipt>");</script>
+<?php endif;?>
+    
 </body>
 </html>

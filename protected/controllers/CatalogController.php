@@ -124,37 +124,35 @@ class CatalogController extends Controller
                 }
 
                 $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
+                    if ($this->userRole == "admin") {
+                       $eco_data = '';
+                       $eco_data .= "Вы находитесь ".$this->zone;
+                       $eco_data .= "<br/>Вы запросили файл ".$id;
+                       $eco_data .= "<br/>Файл принадлежит группе ".$file->sgroup;
+                       $eco_data .= "<br/>Имя файла ".$file->original_name;
+                       $eco_data .= "<br/>Каталог ". $file->dir.'/'.$preset_str;
+                        if (count($servers)) {
+                            $url_list = array();
+                            $eco_data .= "<br /><br />Ссылки:<br />";
+                            foreach ($servers as $a_server) {
+
+                            $url_list = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/'.$preset_str.'/' . $file->original_name;
+                            $eco_data .= "<i>".$url_list."<br>";
+                          }
+                        }else $eco_data .= "<br/><b>Сервера не найдены</b>";
+                        
+                       $eco_data .= '</pre>';
+                       $this->render('load', array('data'=>$eco_data));
+                        exit();
+                     }
                 if (count($servers)) {
                     $server = $servers[array_rand($servers)];
                     if (!CFLCatalogClicks::model()->CheckTime($file,$this->ip)){
                         $catalog_clicks = CFLCatalogClicks::model()->InsertDelayed($file, $this->zone, $this->ip,$server['server_id']);
                     }
-                    if ($this->userRole == "admin") {
-                        $url_list = array();
-                        foreach ($servers as $a_server) {
-
-                            $url_list[] = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/'.$preset_str.'/' . $file->original_name;
-                        }
-                        $eco_data = '<pre>';
-                        $eco_data .= print_r($url_list, true);
-                        $eco_data .= '</pre>';
-                        echo $eco_data;
-                        $this->render('/elements/messages', array('msg' => "Processed"));
-                        exit();
-                    }
-
-
                     $url = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/' . $file->dir . '/' .$preset_str.'/'. $file->original_name;
                     $this->render('view', array('url' => $url));
                 } else {
-                    if ($this->userRole == "admin") {
-                       echo "Вы находитесь ".$this->zone;
-                       echo "<br/>Вы запросили файл ".$id;
-                       echo "<br/>Файл принадлежит группе ".$file->sgroup;
-                       echo "<br/>Имя файла ".$file->original_name;
-                       echo "<br/>Каталог ". $file->dir.'/'.$preset_str;
-                       echo "<br/>Сервера не найдены";
-                    }
                     CFLLogFiles::FileNotAviable($id, $file->group, $file->sgroup, $this->zone, $this->ip);
                     $this->render('/elements/messages', array('msg' => Yii::t('common', 'File no longer available')));
                 }

@@ -24,22 +24,13 @@ class SiteController extends AdmController {
                 Yii::app()->user->setstate('ip',null);
            } else
                 Yii::app()->user->setstate('ip',$ip);
-         //   echo $ip;
             $this->redirect('/admin');
         }
 
         
         $zones = CFLZones::model()->getActiveZones($this->ip);
         $zones_view = $this->renderPartial('/elements/tableprint',array('list'=>$zones),true);
-
-        $criteria = new CDbCriteria();
-        $criteria->order = 'zone_id';
-        $zone_list = CFLZones::model()->getCommandBuilder()
-            ->createFindCommand(CFLZones::model()->tableSchema, $criteria)
-            ->queryAll();
-
-
-        $this->render('index',array('zones_view'=>$zones_view,'zone_list'=>$zone_list));
+        $this->render('index',array('zones_view'=>$zones_view,'zone_list'=>$this->zone_list));
     }
 
     /**

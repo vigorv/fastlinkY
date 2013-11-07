@@ -9,7 +9,6 @@ if($userRole=="admin")
 echo " user role:".$userRole."<br>";
 echo "UploadServer:".$uploadServer."<br>";
 echo "zone is:".$zone."<br>";
-
 }
 
 

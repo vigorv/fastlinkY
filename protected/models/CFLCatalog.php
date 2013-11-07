@@ -261,5 +261,10 @@ class CFLCatalog extends CActiveRecord {
         //$sql;
         return Yii::app()->db->createCommand($sql)->execute();
     }
+    public function GetOnesOfZone()
+    {
+        $sql='SELECT * FROM `fl_catalog` group by `sgroup` order by `sgroup`';
+        return Yii::app()->db->cache(10000)->createCommand($sql)->execute();
 
+    }
 }

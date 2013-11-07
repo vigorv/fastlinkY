@@ -74,25 +74,30 @@ class UsersController extends Controller {
     }
 
     public function actionLogin() {
+
+
         if (!Yii::app()->user->isGuest) {
-            $this->redirect('/');
+            $this->redirect(Yii::app()->user->returnUrl);
         }
+        
+        //авторизация
         $model = new FLFormLogin();
+        
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
-
         if (isset($_POST['FLFormLogin'])) {
             $model->attributes = $_POST['FLFormLogin'];
 
             if ($model->validate() && $model->login()) {
-                $this->redirect(Yii::app()->user->returnUrl);
+               $this->redirect(Yii::app()->user->returnUrl);
             }
         }
         if (!Yii::app()->user->isGuest) {
-            $this->redirect('/');
+            $this->redirect(Yii::app()->user->returnUrl);
         }
+
         $this->render('login', array('model' => $model));
     }
 

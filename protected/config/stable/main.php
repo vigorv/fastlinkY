@@ -26,6 +26,12 @@ return array(
     ),
     // application components
     'components' => array(
+        'cache'=>array(
+            'class'=>'system.caching.CMemCache',
+            'servers'=>array(
+                array('host'=>'127.0.0.1', 'port'=>11211, 'weight'=>60),
+            ),
+        ),
         'clienscript' => array(
             'scriptMap' => array(
                 'jquery' => '/js/jquery-1.7.2.js',
@@ -54,6 +60,8 @@ return array(
         'user' => array(
 // enable cookie-based authentication
             'allowAutoLogin' => true,
+            'returnUrl'=> '/users/login',
+            'loginUrl'=> array('/users/login'),
         ),
         // uncomment the following to enable URLs in path-format
 
@@ -86,6 +94,8 @@ return array(
             'tablePrefix' => 'fl_',
             'password' => 'akl,gfhjkm',
             'charset' => 'utf8',
+            'enableProfiling'=>true,
+            'enableParamLogging'=>true,
         ),
         
         'dblog'=>array(
@@ -103,6 +113,7 @@ return array(
         ),
         'log' => array(
             'class' => 'CLogRouter',
+            'enabled'=>YII_DEBUG,
             'routes' => array(
                 array(
                     'class' => 'CFileLogRoute',
@@ -111,7 +122,8 @@ return array(
                 ),
                 array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-                    'ipFilters' => array('127.0.0.1','178.49.9.12','192.168.200.191'),
+                    //'ipFilters' => array('127.0.0.1','178.49.9.12','192.168.200.190'),
+                    'ipFilters' => array('0.0.0.0/0','192.168.200.190'),
                 ),
             // uncomment the following to show log messages on web pages
             /*
@@ -153,6 +165,6 @@ return array(
         'adminEmail' => 'support@fastlink.ws',
         'supportEmail' => 'support@fastlink.ws',
         'filePerPage' => 20,
-//        'siteUrl' => 'http://fastlink.ws/',
+//        'siteUrl' => 'http://fastlink.dep/',
     ),
 );

@@ -13,11 +13,17 @@ class Controller extends CController {
     public $zone;
     public $ip;
     public $userRole;
+    public $zone_list;
+    public $newLinks;
+    
 
     public function init() {
         parent::init();
         $app = Yii::app();
-
+        
+       //этот хук позволяет вернуться на предыдущий URL при авторизации
+       if($app->createUrl($app->user->loginUrl[0])!=$app->request->getUrl())
+           $app->user->setReturnUrl($app->request->getUrl());
         $this->identity = new UserIdentity('', '');
 
         if($this->identity->authenticate())
@@ -39,6 +45,14 @@ class Controller extends CController {
         if (!empty($this->userInfo)) {
             $this->userInfo = unserialize($this->userInfo);
         }
+        if (isset($_GET['zone'])){
+            $zone= (int)$_GET['zone'];
+            $ip = CFLZones::getIpInZone($zone);
+            if ($ip=='' || $zone == 0){
+                Yii::app()->user->setstate('ip',null);
+           } else
+                Yii::app()->user->setstate('ip',$ip);
+        }
 
         $ip = Yii::app()->user->getState('ip');
         if (!empty($ip)) {
@@ -47,8 +61,14 @@ class Controller extends CController {
         else
             $this->ip = Yii::app()->request->getUserHostAddress();
         $this->zone = CFLZones::model()->getActiveZoneslst($this->ip);
-
-
+        $criteria = new CDbCriteria();
+        $criteria->order = 'zone_id';
+        if($this->userRole==='admin'){
+        $this->zone_list = CFLZones::model()->getCommandBuilder()
+            ->createFindCommand(CFLZones::model()->tableSchema, $criteria)
+            ->queryAll();
+        $this->newLinks=CFLCatalog::model()->GetOnesOfZone();
+        }
 
         if (Yii::app()->detectMobileBrowser->showMobile) {
             $this->layout = 'mobile';
@@ -76,5 +96,4 @@ class Controller extends CController {
         }
         return true;
     }
-
 }
