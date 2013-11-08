@@ -24,6 +24,7 @@ class Controller extends CController {
        //этот хук позволяет вернуться на предыдущий URL при авторизации
        if($app->createUrl($app->user->loginUrl[0])!=$app->request->getUrl())
            $app->user->setReturnUrl($app->request->getUrl());
+       
         $this->identity = new UserIdentity('', '');
 
         if($this->identity->authenticate())
@@ -64,10 +65,10 @@ class Controller extends CController {
         $criteria = new CDbCriteria();
         $criteria->order = 'zone_id';
         if($this->userRole==='admin'){
-        $this->zone_list = CFLZones::model()->getCommandBuilder()
+        $this->zone_list = CFLZones::model()->cache(100)->getCommandBuilder()
             ->createFindCommand(CFLZones::model()->tableSchema, $criteria)
             ->queryAll();
-        $this->newLinks=CFLCatalog::model()->GetOnesOfZone();
+        //$this->newLinks=CFLCatalog::model()->GetOnesOfZone();
         }
 
         if (Yii::app()->detectMobileBrowser->showMobile) {

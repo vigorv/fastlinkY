@@ -1,13 +1,14 @@
-<?
+<?php
 
 /**
+ * @property $id
  * @property $user_id
  * @property $user_ip
  * @property $user_hash
  * @property $last_active
  *
  */
-class CFLUsersSessions extends CActiveRecord {
+ class CFLUsersSessions extends CActiveRecord {
 
     /**
      *

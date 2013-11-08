@@ -113,7 +113,7 @@ return array(
         ),
         'log' => array(
             'class' => 'CLogRouter',
-            'enabled'=>YII_DEBUG,
+//            'enabled'=>YII_DEBUG,
             'routes' => array(
                 array(
                     'class' => 'CFileLogRoute',

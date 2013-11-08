@@ -1,4 +1,5 @@
 pma
 assets
 protected/config/*
+protected/config
 protected/runtime/*
