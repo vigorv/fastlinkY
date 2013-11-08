@@ -1,5 +1,6 @@
 pma
-assets
-protected/config/*
+pma/*
+assets/*
 protected/config
+protected/config/*
 protected/runtime/*
