@@ -119,7 +119,7 @@ class CFLZones extends CActiveRecord
     public function getActiveZones($ip, $conv = true) {
         if ($conv)
             $ip = sprintf('%u', ip2long($ip));
-        return Yii::app()->db->cache(10)->createCommand()
+        return Yii::app()->db->cache(100)->createCommand()
                         ->select('z.*')
                         ->from('{{zones}} z')
                         ->join('{{zones_ranges}} zr', ' ((z.zone_id = zr.zone_id) AND (zr.range_ip = (' . $ip . ' & ~(  (1<< (32 - zr.range_mask)) -1) )))')

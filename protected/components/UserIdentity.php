@@ -165,7 +165,7 @@ class UserIdentity extends CUserIdentity
 
         $userSession->user_hash = $hash;
         $userSession->user_ip = $ip;
-
+        $userSession->last_active = date('Y-m-d H:i:s');
         $userSession->save();
     }
 }

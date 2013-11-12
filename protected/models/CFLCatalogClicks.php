@@ -113,9 +113,29 @@ class CFLCatalogClicks extends CFLLogActiveRecord {
      */
     public function CheckTime2($id,$ip){
         return Yii::app()->dblog->createCommand('SELECT COUNT(*) FROM {{catalog_clicks_all}} WHERE (`created` > DATE_SUB(NOW(), INTERVAL 1 DAY)) AND (`catalog_id` ='.$id.') AND (`ip` = "'.$ip.'") LIMIT 1')->queryScalar();
+
+        }
+    public function GetLastID(){
+        $sql="SHOW TABLE STATUS LIKE  '{{catalog_clicks}}'";
+        //echo $sql;
+        $return=Yii::app()->dblog->createCommand($sql)->queryRow(false);
+        if($return)return $return[10];
+        return false;
     }
 
-
+   public function GetTOP20($sgroup=2){
+        $lastid=$this->cache(5*60)->GetLastID();
+        $minid=$lastid-30000;
+       //$sql="SELECT catalog_id,count(*)as count FROM `fl_catalog_clicks` WHERE catalog_sgroup_id=2  and id > ".$minid." group by catalog_id order by count(*) desc limit 30;";
+       return Yii::app()->dblog->createCommand()
+                ->select('catalog_id,catalog_sgroup_id,count(*)as count')
+               ->from('{{catalog_clicks}}')
+               ->where("catalog_sgroup_id=".$sgroup."  and id > ".$minid)
+               ->group('catalog_id')
+               ->order('count(*) desc')
+               ->limit(20)
+               ->queryAll();
+   }
 
 }
 

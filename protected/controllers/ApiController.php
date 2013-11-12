@@ -170,4 +170,41 @@ class ApiController extends Controller
         $file->cloud_ready = 1;
         if ($file->save()) echo 1;
     }
+    
+    //определяет самый популярный контент для категории контента входящий в опредленный обьем данных
+    public function actionGetSpeed($sgroup,$sizelimit=4,$debug=0)
+    {   
+        $LIMIT=$sizelimit*1000*1024*1024;
+        $top30=CFLCatalogClicks::model()->cache(5*60)->GetTOP20($sgroup);
+        $links=array();
+        $sz=0;
+        foreach ($top30 as $row) {
+            $id=$row['catalog_id'];
+            $result2 = Yii::app()->db->createCommand()
+                ->select('id,dir,original_name,sz')
+                ->from('{{catalog}}')
+                ->where('id=:id AND sz < :sz', array(':id'=>$id,':sz' => $LIMIT))
+                ->limit (1)
+                ->queryAll();
+            foreach($result2 as $row2)
+            {
+               if(($sz+$row2['sz'])>$LIMIT){continue;}
+                $sz+=$row2['sz'];
+                $links[$row2['id']]['dir']=$row2['dir'];
+                $links[$row2['id']]['size']=$row2['sz'];
+                $links[$row2['id']]['name']=$row2['original_name'];
+                $links[$row2['id']]['count']=$row['count'];
+            }
+    }
+    if($debug==1)
+    {
+        $this->render('getspeed', array('links' => $links,'sz'=>$sz,'limit'=>$LIMIT));
+    }
+    else {
+        $this->layout="ajax";
+        $this->render('getspeedajax', array('links' => $links));
+    }
+
+    //Yii::app()->exit();
+   }
 }

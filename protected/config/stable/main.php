@@ -75,6 +75,8 @@ return array(
                 '<controller:catalog>/<action:search|searchajax>/<search_opt>/<text>' => '<controller>/<action>',
                 '<controller:catalog>/<action:meta>/<gid:\d+>/<sid:\d>' => '<controller>/<action>',
                 '<controller:catalog>/<action:meta>/<gid>/<sid>/<gtype:\d+>' => '<controller>/<action>',
+                '<controller:api>/<action:getspeed>/<sgroup>/' => '<controller>/<action>',
+                '<controller:api>/<action:getspeed>/<sgroup>/<sizelimit>' => '<controller>/<action>',
                 'admin/<controller:\w+>/<action:\w+>/<id:\d+>' => 'admin/<controller>/<action>',
                 'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
                 'admin/<controller:\w+>'=>'admin/<controller>/index',
@@ -113,12 +115,11 @@ return array(
         ),
         'log' => array(
             'class' => 'CLogRouter',
-            'enabled'=>YII_DEBUG,
             'routes' => array(
                 array(
                     'class' => 'CFileLogRoute',
                     'levels' => 'error, warning',
-                    'categories'=>'*',
+                        'categories'=>'*',
                 ),
                 array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
