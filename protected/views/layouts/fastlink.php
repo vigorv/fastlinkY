@@ -185,6 +185,7 @@
         
     
     </script>
-</body>
                 <? echo CFLBanners::model()->getBannerWithACL('float'); ?>
+
+</body>
 </html>
