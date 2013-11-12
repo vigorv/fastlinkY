@@ -150,7 +150,6 @@ $config=array(
 //        'siteUrl' => 'http://fastlink.dep/',
     ),
 );
-//print_r($config);
 if(isset($localconfig)&&is_array($localconfig))
 $config=CMap::mergeArray($config,$localconfig);
 //$config=array_merge($config,$localconfig);
