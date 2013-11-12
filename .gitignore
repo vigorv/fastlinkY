@@ -2,7 +2,4 @@ pma
 pma/*
 assets
 assets/*
-protected/config
-protected/config/*
-protected/config/
 protected/runtime/*

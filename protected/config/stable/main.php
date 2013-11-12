@@ -4,7 +4,9 @@
 // Yii::setPathOfAlias('local','path/to/local-folder');
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-return array(
+$local=php_uname('n').".php5";
+@include(dirname(__FILE__).DIRECTORY_SEPARATOR .$local);
+$config=array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'.DIRECTORY_SEPARATOR .'..',
     'name' => 'FastLink',
     // preloading 'log' component
@@ -113,27 +115,6 @@ return array(
 // use 'site/error' action to display errors
             'errorAction' => 'site/error',
         ),
-        'log' => array(
-            'class' => 'CLogRouter',
-            'routes' => array(
-                array(
-                    'class' => 'CFileLogRoute',
-                    'levels' => 'error, warning',
-                        'categories'=>'*',
-                ),
-                array(
-                    'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-                    //'ipFilters' => array('127.0.0.1','178.49.9.12','192.168.200.190'),
-                    'ipFilters' => array('0.0.0.0/0','192.168.200.190'),
-                ),
-            // uncomment the following to show log messages on web pages
-            /*
-              array(
-              'class'=>'CWebLogRoute',
-              ),
-             */
-            ),
-        ),
     ),
     // application-level parameters that can be accessed
 // using Yii::app()->params['paramName']
@@ -169,3 +150,11 @@ return array(
 //        'siteUrl' => 'http://fastlink.dep/',
     ),
 );
+//print_r($config);
+if(isset($localconfig)&&is_array($localconfig))
+$config=CMap::mergeArray($config,$localconfig);
+//$config=array_merge($config,$localconfig);
+
+//echo "<pre>";print_r($config);
+return $config;
+?>

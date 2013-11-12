@@ -34,6 +34,7 @@
                         array('label' => 'General', 'url' => array('site/index')),
                         array('label' => 'Catalog', 'url' => array('catalog/index')),
                         array('label' => 'Clicks', 'url' => array('clicks/index')),
+                        array('label' => 'Banners', 'url' => array('banners/index')),
                         array('label' => 'Pages', 'url' => array('pages/index')),
                         array('label' => 'Imports', 'url' => array('imports/index')),
                         array('label' => 'Users', 'url' => array('users/index')),

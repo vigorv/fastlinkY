@@ -19,7 +19,6 @@
         ?>
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
         <?php
         $userRole = Yii::app()->user->getState('role');
         if (empty($metaExpires)) {
@@ -49,53 +48,8 @@
     </head>    
     <body>
     <center>
-        <?php
-        /*
-          if (isset($authUserGroups) && in_array(Configure::read('VIPgroupId'), $authUserGroups))
-          {
-          //ДЛЯ ВИПОВ БЛОК С БАННЕРАМИ ВЫРЕЗАЕМ
-          foreach ($blockContent as $bi => $b)
-          {
-          if (is_array($b) && count($b) > 0)
-          {
-          foreach($b as $key => $value)
-          {
-          if (strpos($value['title'], 'banner') !== false)
-          {
-          unset($blockContent[$bi][$key]);
-          }
-          }
-          }
-          }
-          }
-         * 
-         */
-        ?>
         <div id="topline"><center>
-                <?php
-//if (isset($authUserGroups) && in_array(Configure::read('VIPgroupId'), $authUserGroups)) {
-//else {
-
-                //echo $BlockBanner->getBanner('header');                
-                echo CFLBanners::model()->getBanner('header');
-                ?>
-<?php if($userRole!="admin"):?>
-              
-<!-- MarketGidComposite Start -->
- <div id="MarketGidScriptRootC42771">
-  <div id="MarketGidPreloadC42771">
-   <a id="mg_add42771" href="http://usr.marketgid.com/demo/goods/" target="_blank">Добавить свое объявление</a><br> <a href="http://marketgid.com/" target="_blank">Загрузка...</a> 
-    </div>
-     <script> 
-      (function(){
-       var D=new Date(),d=document,b='body',ce='createElement',ac='appendChild',st='style',ds='display',n='none',gi='getElementById';
-        var i=d[ce]('iframe');i[st][ds]=n;d[gi]("MarketGidScriptRootC42771")[ac](i);try{var iw=i.contentWindow.document;iw.open();iw.writeln("<ht"+"ml><body></body></ht"+"ml>");iw.close();var c=iw[b];}
-         catch(e){var iw=d;var c=d[gi]("MarketGidScriptRootC42771");}var dv=iw[ce]('div');dv.id="MG_ID";dv[st][ds]=n;dv.innerHTML=42771;c[ac](dv);
-          var s=iw[ce]('script');s.async='async';s.defer='defer';s.charset='utf-8';s.src="http://jsc.dt00.net/f/a/fastlink.ws.42771.js?t="+D.getYear()+D.getMonth()+D.getDate()+D.getHours();c[ac](s);})();
-           </script>
-            </div>
-             <!-- MarketGidComposite End -->
-<?php endif;?>
+                <?php echo CFLBanners::model()->getBannerWithACL('top');?>
             </center></div>
         
         <div id="head">
@@ -142,15 +96,7 @@
         <div id="middle">
             <div class="left_ad">
                 <?php
-                /*
-                  if (isset($authUserGroups) && in_array(Configure::read('VIPgroupId'), $authUserGroups))
-                  {
-                  }
-                  else
-                  { */
-                echo CFLBanners::model()->getBanner('left');
-
-                /* } */
+                echo CFLBanners::model()->getBannerWithACL('left');
                 ?>
 
             </div>
@@ -158,20 +104,20 @@
                 <? echo $content; ?>
             </div>
             <div class="right_ad">
-                <? echo CFLBanners::model()->getBanner('right'); ?>
+                <? echo CFLBanners::model()->getBannerWithACL('right'); ?>
             </div>
         </div>
         <div id="bottom_ad">
             <div class="bottom_ad1">
-                <? echo CFLBanners::model()->getBanner('bottom1'); ?>
+                <? echo CFLBanners::model()->getBannerWithACL('bottom1'); ?>
             </div>
             <div class="bottom_ad3">
-                <? echo CFLBanners::model()->getBanner('bottom2'); ?>
+                <? echo CFLBanners::model()->getBannerWithACL('bottom3'); ?>
 
             </div>
 
             <div class="bottom_ad2">
-                <? echo CFLBanners::model()->getBanner('bottom2'); ?>
+                <? echo CFLBanners::model()->getBannerWithACL('bottom2'); ?>
                 
             </div>
         </div>
@@ -239,9 +185,6 @@
         
     
     </script>
-<?php if($userRole!="admin"):?>
-    <script type="text/javascript">document.write("<scr" + "ipt type='text/javascr"+"ipt' src='http://js.rmbn.net/ads.js?sid=9495&p="+Math.random()+"'></scr"+"ipt>");</script>
-<?php endif;?>
-    
 </body>
+                <? echo CFLBanners::model()->getBannerWithACL('float'); ?>
 </html>
