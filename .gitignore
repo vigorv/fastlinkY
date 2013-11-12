@@ -2,4 +2,6 @@ pma
 pma/*
 assets
 assets/*
+/protected/config/*
+!protected/config/stable/main.php
 protected/runtime/*
