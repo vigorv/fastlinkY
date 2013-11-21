@@ -59,6 +59,7 @@ class SyncController extends CController {
 
 
             $file->chk_md5 = $fileInfo['md5'];
+            $file->tth = $fileInfo['tth'];
             $file->sz = $fileInfo['size'];
             $file->title = $file->name = $fileInfo['name'];
             $file->original_name = $fileInfo['src'];
