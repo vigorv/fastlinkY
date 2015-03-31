@@ -4,7 +4,7 @@
 // Yii::setPathOfAlias('local','path/to/local-folder');
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-$local=php_uname('n').".php5";
+$local=php_uname('n').".php";
 @include(dirname(__FILE__).DIRECTORY_SEPARATOR .$local);
 $config=array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'.DIRECTORY_SEPARATOR .'..',
@@ -111,6 +111,16 @@ $config=array(
             'charset'=>'utf8',
             'class'            => 'CDbConnection'            
         ),
+        'dbcloud'=>array(
+            'connectionString' => 'mysql:host=dhz1.anka.ws;dbname=mycloud',
+            'emulatePrepare'=>true,
+            'username'=>'mycloud',
+            'tablePrefix'=>'dm_',
+            'password'=>'mycloudbase',
+            'charset'=>'utf8',
+            'class'            => 'CDbConnection'            
+        ),
+        
         'errorHandler' => array(
 // use 'site/error' action to display errors
             'errorAction' => 'site/error',
@@ -125,18 +135,20 @@ $config=array(
         'cloud_service_uri' => 'safelib.com',
         'cloud_service_partner_id_sg1' => 4,
         'cloud_service_partner_id_sg2' => 5,
+        'UppodServer' => 'http://95.191.130.184:89/streaming/',
         'uploadServer' => '212.20.62.34:83',
-        'uploadServer_sg2' => '92.63.192.7:82',
- 	'uploadServerA_sg2' => '92.63.196.3:82',
+        'uploadServer_sg2' => '92.63.192.18:82',
+ 	    'uploadServerA_sg2' => '92.63.192.7:82',
+        'group5_server' => '92.63.192.23:82',
+        'group7_server' => '92.63.192.6:82',
         '212.20.62.34_skey' => 'bananaphone',
         //'92.63.196.253_skey' => 'bananaphone',
-        '178.49.9.12_skey'=>'bananaphone',
-        '92.63.196.74_skey' => 'bananaphone',
         '92.63.192.7_skey'=>'bananaphone',
-	'178.63.75.137_skey'=>'bananaphone',
-	'92.63.196.2_skey'=>'bananaphone',
-	'37.192.249.3_skey'=>'bananaphone',
-	'92.63.196.3_skey'=>'bananaphone',
+        '92.63.192.23_skey'=>'bananaphone',
+        '92.63.192.18_skey'=>'bananaphone',
+	    '37.192.249.3_skey'=>'bananaphone',
+        '178.63.75.137_skey'=>'bananaphone',
+        '5.128.106.6_skey'=>'bananaphone',
         'master_key'=>'lookingforgroup',
         'admin_items_per_page'=>30,
         'news_categories_sg2'=>'51,50,59,76,70,88,90,1,0',

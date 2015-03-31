@@ -9,7 +9,7 @@
 
     <tbody>
 <?php
-//echo count($data);
+echo count($data);
 
 foreach ($data as $item){
     echo '<tr><td>'.$item['id'].'</td><td>'.$item['title'].'</td>';

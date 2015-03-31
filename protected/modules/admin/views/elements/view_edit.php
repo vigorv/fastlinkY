@@ -1,8 +1,10 @@
-<?php if ($item): ?>
+<?php if ($item): 
+$primaryKey=$item->tableSchema->primaryKey;
+?>
     <form id="Item_edit" method="post" >
         <a href="#" onClick="return toggleEdit(this);">Режим редактирования</a>
         <?//TODO: Костыль, надо использовать правильную переменную?>
-        <a href="/admin/catalog/delete/<?=$item['id']?>" onclick="return confirm('Удалить?') ? true : false;">Удалить</a>
+        <a href="/admin/catalog/delete/<?=$item[$primaryKey]?>" onclick="return confirm('Удалить?') ? true : false;">Удалить</a>
 
         <table  class="table table-striped table-bordered table-condensed">
             <thead>

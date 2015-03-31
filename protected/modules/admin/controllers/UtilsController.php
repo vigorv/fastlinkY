@@ -23,12 +23,23 @@ class UtilsController extends AdmController
         $this->render('list2', array('data' => $data));
     }
 
-    public function actionCheckLinksWithNoNews()
+    public function actionCheckLinksWithNoNews($sgroup=NULL)
     {
         $rmdata = new RMData();
-        $data = $rmdata->FindLinksWithoutNews();
+        echo "sgroup=".$sgroup."<br />";
+        $data = $rmdata->FindLinksWithoutNews($sgroup);
         $this->render('cataloglist', array('data' => $data));
     }
+
+    public function actionCheckLinksWithoutNewsAll()
+    {
+        $rmdata = new RMData();
+        $rmdata->makeCache();
+        $data = $rmdata->FindLinksWithoutNewsAll();
+        //$this->render('cataloglist', array('data' => $data));
+    }
+
+
 
     public function actionShowItemsWithNoFiles($sgroup = 2)
     {
@@ -65,15 +76,56 @@ class UtilsController extends AdmController
         set_time_limit(3000);
         $rmdata = new RMData();
         $rmdata->makeCache();
-        $date = date("Y-m-d H:i:s",strtotime('-1 week'));
+        $date = date("Y-m-d H:i:s",strtotime('-1 hour'));
         $catalog = CFLCatalog::model()->findAll('`group` = 0 AND sgroup = 2 AND dt<=:date',array(':date'=>$date));
         foreach ($catalog as $item){
            $news_id = Yii::app()->db->createCommand("SELECT id FROM `rum_c_cat` WHERE `xfields` LIKE '%/catalog/viewv/".$item['id']."%'")->queryScalar();
            if($news_id){
                echo "SET group ".$news_id." for link ".$item['id']."<br/>";
                Yii::app()->db->createCommand('UPDATE fl_catalog set `group`=:group WHERE id =:item_id')->bindValues(array(':group'=>$news_id,':item_id'=>$item['id']))->execute();
+               } else {
+                   echo "not found for link ".$item['id']."<br>";
+               }
+           }
+        }
+    public function actionUnLinkData(){
+        set_time_limit(3000);
+        $rmdata = new RMData();
+        $rmdata->makeCache();
+        $date = date("Y-m-d H:i:s",strtotime('-1 day'));
+        $i=0;
+        $catalog = CFLCatalog::model()->findAll('`group` <> 0 AND `sgroup` in (2,5,6) AND dt<=:date order by id desc ',array(':date'=>$date));
+        file_put_contents("/1.txt","start:"."\n");
+        foreach ($catalog as $item){
+            $i++;
+            if($i%500)file_put_contents("/1.txt","..".$i."\n",FILE_APPEND);
+            $news_id = Yii::app()->db->createCommand("SELECT id FROM `rum_c_cat` WHERE `xfields` LIKE '%/catalog/viewv/".$item['id']."%'")->queryScalar();
+            if($news_id){
+                echo "+ found news for link ".$item['id']."<br>\n";
+                //echo "SET group ".$news_id." for link ".$item['id']."<br/>";
+            } else {
+                echo "-not found news for link ".$item['id']."<br>\n";
+                file_put_contents("/1.txt",$item['id']."\n",FILE_APPEND);
+                Yii::app()->db->createCommand('UPDATE `fl_catalog` set `group`=0 WHERE id =:item_id')->bindValues(array(':item_id'=>$item['id']))->execute();
+            }
+        }
+        echo "\n done<br>";
+        file_put_contents("/1.txt","..done\n",FILE_APPEND);
+    }
+
+    public function actionLinkDataOrKill(){
+        set_time_limit(3000);
+        $rmdata = new RMData();
+        $rmdata->makeCache();
+        $date = date("Y-m-d H:i:s",strtotime('-1 week'));
+        $catalog = CFLCatalog::model()->findAll('`group` = 0 AND sgroup in (2,5,6,7) AND dt<=:date',array(':date'=>$date));
+        foreach ($catalog as $item){
+           $news_id = Yii::app()->db->createCommand("SELECT id FROM `rum_c_cat` WHERE `xfields` LIKE '%/catalog/viewv/".$item['id']."%'")->queryScalar();
+           if($news_id){
+               echo "SET group ".$news_id." for link ".$item['id']."<br/>\n";
+               Yii::app()->db->createCommand('UPDATE fl_catalog set `group`=:group WHERE id =:item_id')->bindValues(array(':group'=>$news_id,':item_id'=>$item['id']))->execute();
            } else {
-               echo "DELETE link ".$item['id']." cause no link<br/>";
+               echo "DELETE link ".$item['id']." cause no link<br/>\n";
                $model = CFLCatalog::model()->findByPk($item['id']);
                $url=false;
                if ($model){
@@ -94,13 +146,16 @@ class UtilsController extends AdmController
                            break;
                        case 0:
                            $model->deleteByPk($item['id']);
-                           echo 'Deleted';
+                           echo 'Deleted<br>';
                            return;
                            break;
                        case 6:
                        case 5:
                            // TODO: delete from group5
-                           //$urls[] = 'http://'. Yii::app()->params['group5_server  '].'/files/delete';
+                           $urls[] = 'http://'. Yii::app()->params['group5_server'].'/files/delete';
+                       case 7:
+                           // TODO: delete from group5
+                           $urls[] = 'http://'. Yii::app()->params['group7_server'].'/files/delete';
                        default:
                    }
                    $res=array();
@@ -109,21 +164,21 @@ class UtilsController extends AdmController
                    }
                    if ((count($res)==1 && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
                        $model->deleteByPk($item['id']);
-                       echo 'Deleted';
+                       echo 'Deleted<br>/n';
                    } else{
-                       echo "Can't delete";
+                       echo "Can't delete\n";
                        if (defined('YII_DEBUG') && YII_DEBUG){
                            var_dump($urls);
                            echo '?data='.$data.'&key='.$sdata;
                        }
                    }
                } else {
-                   echo "not found";
+                   echo "not found\n";
                }
                //Yii::app()->db->createCommand('DELETE FROM fl_catalog  WHERE id =:item_id',array(':item_id'=>$item['id']));
            }
         }
-        if (!count($catalog)) echo "No items found";
+        if (!count($catalog)) echo "No items found\n";
     }
 
 

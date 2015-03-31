@@ -9,24 +9,24 @@
     </thead>
     <tbody>
     <tr>
-        <td>1</td>
-        <td><strong>makeCache</strong></td>
+        <td><strong>Создать Кеш ссылок</strong></td>
         <td><a href="<?php echo $this->createUrl('utils/makeCache'); ?>">makeCache</a></td>
     </tr>
         <tr>
-            <td>1</td>
-            <td><strong>CheckNewsWithNoLinks</strong></td>
+            <td><strong>Найти новости без ссылок</strong></td>
             <td><a href="<?php echo $this->createUrl('utils/CheckNewsWithNoLinks'); ?>">CheckNewsWithNoLinks</a></td>
         </tr>
         
          <tr>
-            <td>1</td>
-            <td><strong>CheckLinksWithNoNews</strong></td>
+            <td><strong>Найти ссылки без новостей</strong></td>
             <td><a href="<?php echo $this->createUrl('utils/CheckLinksWithNoNews'); ?>">CheckLinksWithNoNews</a></td>
         </tr>
 
       <tr>
-        <td>1</td>
+        <td><strong>Привязать ссылки к новостям</strong></td>
+        <td><a href="<?php echo $this->createUrl('utils/LinkData'); ?>">LinkData</a></td>
+        </tr>
+
         <td><strong>ShowItemsWithNoFiles</strong></td>
         <td><a href="<?php echo $this->createUrl('utils/ShowItemsWithNoFiles'); ?>">ShowItemsWithNoFiles</a></td>
         </tr>

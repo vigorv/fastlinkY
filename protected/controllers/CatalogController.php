@@ -54,41 +54,63 @@ class CatalogController extends Controller
         $this->actionSearch($search_opt, $text, $sgroup, $gtype, 1);
     }
 
-    public function actionViewv($id)
+    public function actionViewv($id, $int1 = 0)
     {
         //$this->autoload($id);
-        $this->actionFile($id);
+        $this->actionFile($id, $int1);
         
     }
-
+    //$int1 = 1 выключить autoplay
+    //      = 2 вернуть картинку для ссылки для плеера
     public function actionFile($id = 0, $int1 = 0)
     {
         $files = array();
         $file = array();
+        $sgroup=NULL;
+        $cloud=NULL;
         if ($id > 0) {
             $file = CFLCatalog::model()->cache(1000)->findByPk($id);
             if ($file){
                 if (!empty($file['group'])) {
-                    $files = CFLCatalog::model()->cache(1000)->findAllByAttributes(array('group' => $file['group'], 'sgroup' => $file['sgroup']), array('order' => 'name ASC')); //order Catalog.orginal_name ASC	                               
+                    $sgroup=$file['sgroup'];
+                    if(in_array($file['sgroup'],array(2,5,6,7)))$sgroup=array(2,5,6,7);
+                    $files = CFLCatalog::model()->cache(1000)->findAllByAttributes(array('group' => $file['group'], 'sgroup' => $sgroup), array('order' => 'name ASC')); //order Catalog.orginal_name ASC
                 } else {
                     $files[0] = $file;
-                }
+               }
+            if($int1==2)
+            {
+                    $this->render('pict', array('file' => $file));
+            }
 	        if($file['sgroup']==1)
 	        {
         		return $this->render('filesg1', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
         		
         	}
-        	$this->render('file', array('files' => $files, 'file' => $file, 'autoplay' => $int1));
+        	if($file["cloud_ready"]==1 &&$file["cloud_state"]==0)
+        	{
+        	//echo "!!";
+        	$cloud = CFLCatalog::model()->cache(3600)->getCloudReadyFiles($id);
+    		//print_r($cloud);
+        	}
+            $userrole=$this->userRole;
+            //file_put_contents("/1.txt","userRole1: ".$userrole);
+        	$this->render('file', array('files' => $files, 'file' => $file,'cloud' => $cloud,'userrole'=>$userrole, 'autoplay' => $int1));
             }
             else
+            {
+                if($int1==2)$this->render('pict');
+
+
                 $this->render('/elements/messages', array('msg' => Yii::t('common', 'Unknown file')));
+            }
         } else
             $this->render('/elements/messages', array('msg' => Yii::t('common', 'What u want?')));
 
 
     }
 
-    public function actionLoad($id = 0)
+    public function actionLoad($id = 0,$key="")
     {
 //$aliases = Configure::read('App.aliasUrls');
         $aliases = array('46.4.83.84', 'fastlink.ws', 'fastlink2.anka.ws');
@@ -97,10 +119,13 @@ class CatalogController extends Controller
             $this->redirect('/catalog/file/' . $id);
         }
         else
-            $this->autoload($id);
+            $this->autoload($id,$key);
+    }
+    function ActionAdminload($id=0)
+    {
     }
 
-    function autoload($id = 0)
+    function autoload($id = 0,$key="")
     {
         if ($id > 0) {
 
@@ -124,27 +149,30 @@ class CatalogController extends Controller
                 }
 
                 $servers = CFLServers::model()->getClientServers($this->zone, $file->sgroup, $letter);
-                    if ($this->userRole == "admin") {
-                       $eco_data = '';
-                       $eco_data .= "Вы находитесь ".$this->zone;
-                       $eco_data .= "<br/>Вы запросили файл ".$id;
-                       $eco_data .= "<br/>Файл принадлежит группе ".$file->sgroup;
-                       $eco_data .= "<br/>Имя файла ".$file->original_name;
-                       $eco_data .= "<br/>Каталог ". $file->dir.'/'.$preset_str;
-                        if (count($servers)) {
-                            $url_list = array();
-                            $eco_data .= "<br /><br />Ссылки:<br />";
-                            foreach ($servers as $a_server) {
+
+                if ($this->userRole == "admin" && $key=="admin") {
+
+                    $eco_data = '';
+                    $eco_data .= "Вы находитесь ".$this->zone;
+                    $eco_data .= "<br/>Вы запросили файл ".$id;
+                    $eco_data .= "<br/>Файл принадлежит группе ".$file->sgroup;
+                    $eco_data .= "<br/>Имя файла ".$file->original_name;
+                    $eco_data .= "<br/>Каталог ". $file->dir.'/'.$preset_str;
+                    if (count($servers)) {
+                        $url_list = array();
+                        $eco_data .= "<br /><br />Ссылки:<br />";
+                        foreach ($servers as $a_server) {
 
                             $url_list = 'http://' . $a_server['server_ip'] . ':' . $a_server['server_port'] . '/' . $file->dir . '/'.$preset_str.'/' . $file->original_name;
                             $eco_data .= "<i>".$url_list."<br>";
-                          }
-                        }else $eco_data .= "<br/><b>Сервера не найдены</b>";
-                        
-                       $eco_data .= '</pre>';
-                       $this->render('load', array('data'=>$eco_data));
-                        exit();
-                     }
+                        }
+                    }else $eco_data .= "<br/><b>Сервера не найдены</b>";
+
+                    $eco_data .= '</pre>';
+                    $this->render('load', array('data'=>$eco_data));
+                    exit();
+                }
+
                 if (count($servers)) {
                     $server = $servers[array_rand($servers)];
                     if (!CFLCatalogClicks::model()->CheckTime($file,$this->ip)){
@@ -170,10 +198,11 @@ class CatalogController extends Controller
         $this->layout = '/layouts/playlist';
         $files = array();
         $sid = (int)$sid;
+        if(in_array($sid,array(2,5,6,7)))$sid="2,5,6,7";
         //var_dump($_GET);
         if (($gid > 0) && ($sid >= 0)) {
             $criteria = new CDbCriteria();
-            $criteria->condition = ' s.group = ' . $gid . ' and s.sgroup =' . $sid;
+            $criteria->condition = ' s.group = ' . $gid . ' and s.sgroup in (' . $sid.") ";
             $criteria->order = 's.name ASC';
             $criteria->alias = 's';
             //$files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group' => $id, 'sgroup' => $int1), array('order' => 'original_name ASC')); //order Catalog.orginal_name ASC	                               
@@ -209,14 +238,108 @@ class CatalogController extends Controller
         $out = $this->renderPartial('/elements/filelist', array('files' => $files), true);
         header("Content-Type: application/metalink+xml; charset=utf-8");
         header("Content-Length: " . strlen($out));
-
-        // header("Content-disposition: attachment; filename=\"list.metalink\"");
+        header("Content-disposition: attachment; filename=\"list.metalink\"");
         echo $out;
         exit();
         //header("Content-Type: application/xml; charset=utf-8");
 
 //        echo $out;
     }
+
+    //
+    public function actionPlaylist($gid = 0, $sid = 0, $gtype = 0)
+    {
+        $this->layout = '/layouts/playlist';
+        $files = array();
+        $sid = (int)$sid;
+        //var_dump($_GET);
+        if (($gid > 0) && ($sid >= 0)) {
+            $criteria = new CDbCriteria();
+            $criteria->condition = 's.cloud_ready=1 and s.cloud_state=0 and s.group = ' . $gid . ' and s.sgroup =' . $sid;
+            $criteria->order = 's.name ASC';
+            $criteria->alias = 's';
+            //$files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group' => $id, 'sgroup' => $int1), array('order' => 'original_name ASC')); //order Catalog.orginal_name ASC
+            $files = CFLCatalog::model()->getCommandBuilder()
+                ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
+                ->queryAll();
+        }
+
+        foreach ($files as &$file) {
+            $file['preset'] =='unknown'? $preset_str='': $preset_str =$file['preset'];
+            $letter = '';
+            if ($file['sgroup'] == 1) {
+                $letter = strtolower($file['dir'][0]);
+                $file['dir'] = $letter . '/' . $file['dir'];
+            }
+            $file['cloud'] = CFLCatalog::model()->cache(3600)->getCloudReadyFiles($file['id']);
+        }
+        $this->layout = '/layouts/playlist';
+        $out = $this->renderPartial('/elements/playlist', array('files' => $files), true);
+        echo $out;
+        exit();
+    }
+    public function actionGetLastFileCloudReady($gid = 0, $sid = 0, $gtype = 0,$client_ip=NULL)
+    {
+        $this->layout = '/layouts/playlist';
+        $files = array();
+        $sid = (int)$sid;
+        if (($gid > 0) && ($sid >= 0)) {
+            $criteria = new CDbCriteria();
+            $criteria->condition = 's.cloud_ready=1 and s.cloud_state=0 and s.group = ' . $gid . ' and s.sgroup =' . $sid;
+
+            $criteria->order = 's.id DESC';
+            $criteria->alias = 's';
+            $criteria->limit = 1;
+            $files = CFLCatalog::model()->getCommandBuilder()
+                ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
+                ->queryAll();
+        }
+        $out=array();
+        //$out['cdn1']=Yii::app()->params['UppodServer'];
+        if($client_ip){
+
+            $this->zone = CFLZones::model()->getActiveZoneslst($client_ip);
+        }
+        $out['cdn1'] = CFLServers::model()->getClientServerString($this->zone,10,"");
+            foreach ($files as &$file) {
+            $file['preset'] =='unknown'? $preset_str='': $preset_str =$file['preset'];
+            $letter = '';
+            if ($file['sgroup'] == 1) {
+                $letter = strtolower($file['dir'][0]);
+                $file['dir'] = $letter . '/' . $file['dir'];
+            }
+            $file['cloud'] = CFLCatalog::model()->cache(3600)->getCloudReadyFiles($file['id']);
+            $name=pathinfo($file['title'],PATHINFO_FILENAME);
+            $out['name']=str_replace("_"," ",$name);
+            foreach($file['cloud'] as $v)$out['cloud_files'][$v['id']]=$v['fpath'];
+
+        $this->layout = '/layouts/playlist';
+        $i=0;
+        $count=count($files);
+        $out = serialize($out);//$this->renderPartial('/elements/playfile', array('files' => $files), true);
+        echo $out;
+        exit();
+        }
+    }
+
+
+//
+    public function actionGetGroupCloudReady($gid = 0, $sid = 0, $gtype = 0)
+    {
+        $this->layout = '/layouts/playlist';
+        $files = array();
+        $sid = (int)$sid;
+        if (($gid > 0) && ($sid >= 0)) {
+            $criteria = new CDbCriteria();
+            $criteria->condition = 's.cloud_ready=1 and s.cloud_state=0 and s.group = ' . $gid . ' and s.sgroup =' . $sid;
+            $criteria->alias = 's';
+            echo CFLCatalog::model()->count($criteria);
+        }
+        exit();
+    }
+
+
+
 
     public function actionUser(){
         if (Yii::app()->user->id){

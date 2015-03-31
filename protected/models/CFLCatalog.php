@@ -144,6 +144,11 @@ class CFLCatalog extends CActiveRecord {
         return Yii::app()->db->cache(20)->createCommand('SHOW FULL COLUMNS FROM ' . $this->tableName())->queryAll();
     }
 
+    public function getCloudReadyFiles($id) {
+	$sql="SELECT pr.id,pr.dir,CONCAT(  `p`.`partner_id` ,  '/',  `p`.`original_id` ,  '/', pr.dir,  '/', f.fname )as fpath  FROM  `dm_products` AS  `p` INNER JOIN  `dm_product_variants` AS  `pv` ON (  `p`.`id` =  `pv`.`product_id` ) INNER JOIN  `dm_variant_qualities` AS  `vq` ON (  `pv`.`id` =  `vq`.`variant_id` ) INNER JOIN  `dm_presets` AS pr ON ( pr.id = vq.preset_id ) INNER JOIN  `dm_product_files` AS  `f` ON (  `vq`.`id` =  `f`.`variant_quality_id` ) WHERE  `p`.`original_id` =".$id;
+        return Yii::app()->dbcloud->cache(3600)->createCommand($sql)->queryAll();
+    }
+
     public function SearchByTitle($query, CPagination &$pages, $sphinx_search = true) {
         if ($sphinx_search) {
             $criteria = new stdClass();
@@ -255,7 +260,7 @@ class CFLCatalog extends CActiveRecord {
     }
     public function FreeGidNotInListGid($gid, $lst_id, $sg=2){
         if ($sg==2){
-            $sql='UPDATE {{catalog}} set `group` = 0 WHERE (`id` NOT in ("' . $lst_id . '")) AND (`group` ='.(int)$gid.') AND (`sgroup` in (2,6))';
+            $sql='UPDATE {{catalog}} set `group` = 0 WHERE (`id` NOT in ("' . $lst_id . '")) AND (`group` ='.(int)$gid.') AND (`sgroup` in (2,5,6,7))';
         } else
             $sql='UPDATE {{catalog}} set `group` = 0 WHERE (`id` NOT in ("' . $lst_id . '")) AND (`group` ='.(int)$gid.') AND (`sgroup` = '.$sg.')';
         //$sql;

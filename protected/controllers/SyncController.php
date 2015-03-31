@@ -12,7 +12,9 @@ class SyncController extends CController {
         $this->ip = $ip = Yii::app()->request->getUserHostAddress();
         if (isset($_REQUEST['key']) && isset($_REQUEST['fdata'])) {
             if(!isset(Yii::app()->params[$ip . '_skey'])){
+
                 echo base64_encode(serialize(array('error_message' => "unknown server key")));
+                file_put_contents('/1.txt',var_export(array('error_message' => "unknown server key"),1));
                 return false;
             }
             $skey = Yii::app()->params[$ip . '_skey'];
@@ -31,6 +33,8 @@ class SyncController extends CController {
             } else{
                 echo base64_encode(serialize(array('error_message' => "bad hash ")));
                 Yii::log(base64_decode($this->fdata),CLOGGER::LEVEL_ERROR,"application");
+                file_put_contents('/1.txt',var_export(array('error_message' => "unknown server key"),1));
+
             }
         } else{
             echo base64_encode(serialize(array('error_message' => "nodata")));
@@ -124,9 +128,16 @@ class SyncController extends CController {
     }
 
     public function actionData() {
+        echo "action=Data\n";
         $data = unserialize(base64_decode($this->fdata));
         if ($data) {
-            //var_dump($data);
+            var_dump($data);
+            if (isset($data['delete']) && $data['delete'] == 1) {
+                $gid = (int) $data['gid'];
+                CFLCatalog::model()->FreeGidNotInListGid($gid, array());
+                echo "Free";
+            }
+
             if (isset($data['gid']) && ($data['gid'] > 0) && isset($data['ids']) && count($data['ids'])) {
                 $gid = (int) $data['gid'];
                 $ids_list = implode('","', $data['ids']);
@@ -143,5 +154,6 @@ class SyncController extends CController {
             echo "Bad";
         exit();
     }
+
 
 }

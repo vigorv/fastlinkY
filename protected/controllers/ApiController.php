@@ -90,11 +90,11 @@ class ApiController extends Controller
         }
     }
 
-    public function actionCloudNotReady($sg = 2, $ftype = 'video')
+    public function actionCloudNotReady($sg = 2, $ftype = 'video',$limit=10)
     {
         switch ($ftype) {
             case 'video':
-                $likes = '((original_name LIKE "%.avi") OR (original_name LIKE "%.mkv") OR (original_name LIKE "%.mp4"))';
+                $likes = '((original_name LIKE "%.avi") OR (original_name LIKE "%.mkv") OR (original_name LIKE "%.mp4")) AND `group`<>0 AND dt >DATE_SUB(CURDATE(),INTERVAL 30 DAY)';
                 break;
             default:
                 $likes = ' 1=1';
@@ -105,7 +105,7 @@ class ApiController extends Controller
             ->from('{{catalog}}')
             ->where('(cloud_ready=0 AND sgroup = :sg) AND ' . $likes, array(':sg' => $sg))
             ->order('id DESC')
-            ->limit(50)
+            ->limit($limit)
             ->queryAll();
         if (empty($id_list) && $sg == 2)
             $id_list = Yii::app()->db->createCommand()
@@ -113,7 +113,7 @@ class ApiController extends Controller
                 ->from('{{catalog}}')
                 ->where('(cloud_ready=0 AND sgroup = :sg) AND ' . $likes, array(':sg' => 6))
                 ->order('id DESC')
-                ->limit(50)
+                ->limit($limit)
                 ->queryAll();
 
         if (!empty($id_list)) {
@@ -168,9 +168,20 @@ class ApiController extends Controller
         // TO DO: hash key
         $file = CFLCatalog::model()->findByAttributes(array('id' => $id));
         $file->cloud_ready = 1;
+        $file->cloud_state = 0;
         if ($file->save()) echo 1;
     }
-    
+
+    public function actionCloudFail($id = 0,$cmd_id=0)
+    {
+        // TO DO: hash key
+        $file = CFLCatalog::model()->findByAttributes(array('id' => $id));
+        $file->cloud_ready =50;
+        $file->cloud_state =$cmd_id;
+        if ($file->save()) echo 1;
+    }
+
+
     //определяет самый популярный контент для категории контента входящий в опредленный обьем данных
     public function actionGetSpeed($sgroup,$sizelimit=4,$debug=0)
     {   
@@ -207,4 +218,44 @@ class ApiController extends Controller
 
     //Yii::app()->exit();
    }
+
+    public function actionSgroupFiles($gid = 0, $sid = 0,$client_ip)
+    {
+        //$this->layout = '/layouts/playlist';
+        $files = array();$files2=array();
+        $sid = (int)$sid;
+        //var_dump($_GET);
+        if (($gid > 0) && ($sid >= 0)) {
+            $criteria = new CDbCriteria();
+            $criteria->select="id,title,dir,preset,sgroup";
+            $criteria->condition = 's.cloud_ready=1 and s.cloud_state=0 and s.group = ' . $gid . ' and s.sgroup =' . $sid;
+            $criteria->order = 's.name ASC';
+            $criteria->alias = 's';
+            //$files = CFLCatalog::model()->cache(10)->findAllByAttributes(array('group' => $id, 'sgroup' => $int1), array('order' => 'original_name ASC')); //order Catalog.orginal_name ASC
+            $files = CFLCatalog::model()->getCommandBuilder()
+                ->createFindCommand(CFLCatalog::model()->tableSchema, $criteria)
+                ->queryAll();
+           // var_dump($files);
+        }
+        $this->zone = CFLZones::model()->getActiveZoneslst($client_ip);
+        foreach ($files as &$file) {
+            $file['preset'] =='unknown'? $preset_str='': $preset_str =$file['preset'];
+            $letter = '';
+            if ($file['sgroup'] == 1) {
+                $letter = strtolower($file['dir'][0]);
+                $file['dir'] = $letter . '/' . $file['dir'];
+            }
+            $file['cloud'] = CFLCatalog::model()->cache(3600)->getCloudReadyFiles($file['id']);
+            $file['server'] = CFLServers::model()->getClientServerString($this->zone,10,"");
+            $file['name']=pathinfo($file['title'],PATHINFO_FILENAME);
+            $file['name']=str_replace("_"," ",$file['name']);
+            //var_dump($file);
+            $files2[]=$file;
+        }
+        echo base64_encode(serialize($files2));
+        //$this->layout = '/layouts/playlist';
+        //$out = $this->renderPartial('/elements/playlist', array('files' => $files), true);
+        exit();
+    }
+
 }

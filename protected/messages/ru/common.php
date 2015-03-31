@@ -15,6 +15,7 @@ return array(
     'File not found' => 'Файл не найден',
     'What you want?' => 'Чего изволите?',
     'Please disable Opera Turbo and refresh page to continue' => 'Для продолжения отключите Opera Turbo и обновите страницу',
-    'Typically, this file also loaded with' =>'Обычно, вместе с этим файлом скачивают: '
+    'Typically, this file also loaded with' =>'Обычно, вместе с этим файлом скачивают: ',
+    'All Files' =>'<b>Скачать все файлы</b>'
 );
 ?>

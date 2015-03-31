@@ -192,6 +192,33 @@ class CFLServers extends CActiveRecord {
         return $actual_servers;
     }
 
+    /**
+     *
+     * @param string $lst_zones
+     * @param int $group
+     * @param string $letter
+     * @return mixed
+     */
+    public function getClientServerString($lst_zones, $group, $letter) {
+
+        $servers=$this->getClientServers($lst_zones, $group, $letter);
+        if (count($servers)) {
+        $server = $servers[array_rand($servers)];
+        $server_string = 'http://' . $server['server_ip'] . ':' . $server['server_port'] . '/';
+        //file_put_contents("/1.log",print_r($server_string,1));
+          //file_put_contents("/1.log",print_r($server_string,1));
+          //file_put_contents("/1.log",print_r($this->ip,1),FILE_APPEND);
+        }
+        return $server_string;
+    }
+
+    public function setActive($id,$active)
+    {
+            $sql='UPDATE {{servers}} set `server_is_active` = '.$active.' WHERE `server_id` ='.$id;
+             return Yii::app()->db->createCommand($sql)->execute();
+    }
+
 }
+
 
 ?>

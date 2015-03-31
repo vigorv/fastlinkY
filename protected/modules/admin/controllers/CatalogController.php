@@ -100,13 +100,22 @@ class CatalogController extends AdmController {
              case 6:
              case 5:
                  // TODO: delete from group5
-                //$urls[] = 'http://'. Yii::app()->params['group5_server  '].'/files/delete';
+                $urls[] = 'http://'. Yii::app()->params['group5_server'].'/files/delete';
+             break;
+             case 7:
+                 // TODO: delete from group7
+                 $urls[] = 'http://'. Yii::app()->params['group7_server'].'/files/delete';
+                 break;
+
              default:
          }
             $res=array();
             foreach($urls as $url){
                 $res[]=@file_get_contents($url.'?data='.$data.'&key='.$sdata);
             }
+                //echo $urls[0].'?data='.$data.'&key='.$sdata."<br>";
+                //print_r($res);
+
                 if ((count($res)==1 && $res[0]=="OK") || (count($res)>1 && $res[0]=="OK" && $res[1]=="OK" )){
                     $model->deleteByPk($id);
                     echo 'Deleted';

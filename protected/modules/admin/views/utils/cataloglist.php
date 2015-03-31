@@ -16,9 +16,10 @@
 
     <tbody>
     <?php
-//echo count($data);
-
+echo count($data);
+    $sum=0;
     foreach ($data as $item){
+	$sum+=$item['sz'];
         echo '<tr>
             <td>'.$item['id'].'</td><td>'.$item['name'].'</td><td>'.$item['dir'].'</td><td>'.$item['original_name'].'</td><td>'.$item['group'].'</td><td>'.$item['tp'].'</td>
             <td>'.$item['dt'].'</td><td>'.$item['sz'].'</td><td>'.$item['sgroup'].'</td>
@@ -27,5 +28,6 @@
 
         ';
     }
+    echo "Summ:".($sum/1024/1024/1024);
     ?></tbody>
 </table>

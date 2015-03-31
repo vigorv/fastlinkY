@@ -20,7 +20,7 @@ if (!function_exists('substr_replace_mb')) {
 
         return mb_substr($string, 0, $start) . $replacement . mb_substr($string, $start + $length);
     }
-
+}
     function print_item($val, $key, $keys) {
         $str_len = mb_strlen($val);
         $title = '';
@@ -33,28 +33,15 @@ if (!function_exists('substr_replace_mb')) {
         }
         echo '<td title="' . $title . '">' . $val . '</td>';
     }
+    function printAdminLink($url,$userRole)
+    {
+        //file_put_contents("/1.txt", "userRole2: " . $userRole,FILE_APPEND);
+        if ($userRole == "admin") {echo "<a href=\"{$url}?key=admin\">adminLink</a>";}
+    }
+?>
 
-}
-/* * *
-  $autoClick = '';
-  function isOperaTurbo()
-  {
-  $agent = (empty($_SERVER['HTTP_USER_AGENT']) ? '' : strtolower($_SERVER['HTTP_USER_AGENT']));
-  $hostName = strtolower(gethostbyaddr(empty($_SERVER["HTTP_X_REAL_IP"]) ? $_SERVER["REMOTE_ADDR"] : $_SERVER["HTTP_X_REAL_IP"]));
-  return (
-  (strpos($hostName, 'opera-mini.net') !== false)
-  ||
-  (strpos($agent, 'opera mini') !== false)
-  );
-  }
 
-  //if (isOperaTurbo())
-  if ($isOpera)
-  {
-  echo '<h3>' . __('Turn off the option Opera Turbo', true) . '</h3>';
-  unset($files);
-  }
- */
+<?
 if (!empty($files[0])):
     ?>
     <h3> <?= $files[0]['title']; ?></h3>
@@ -73,14 +60,29 @@ if (!empty($files[0])):
     $str_len = strlen($name);
     if ($str_len > 43)
         $name = substr_replace_mb($name, '...', 20, $str_len - 40);
+    if(isset($cloud)&&is_array($cloud))
+    {?>
+            <!-- single playlist entry as an "template" -->
+            <a href="<?= $url; ?>">
+                <?= $file['name']; ?>
+            </a>
+            <?printAdminLink($url,$userrole);?>
+            &nbsp;<button id="mainPlay" class="play" rel="#mies"><i class="icon-play"></i>
+        </button>
 
-    switch ($ext) {
-        case 'mp4':
+    <?
+    }
+    else
+    {
+     switch ($ext) {
+
+         case 'mp4':
             ?>
             <!-- single playlist entry as an "template" -->
             <a href="<?= $url; ?>">
                 <?= $file['name']; ?>
-            </a>            
+            </a>
+            <?printAdminLink($url,$userrole);?>
             &nbsp;<button id="mainPlay" class="play" rel="#mies"><i class="icon-play"></i>
                 <div id="playlist" style="display:none;">
                     <a href="<?= $aurl; ?>">
@@ -94,16 +96,17 @@ if (!empty($files[0])):
 
             <?
             break;
-        case 'avi':
-        case 'mkv':
+        case 'avi2':
+        case 'mkv2':
             ?>
             <a href="<?= $url; ?>">
                 <?= $file['name']; ?>
+                <?printAdminLink($url,$userrole);?>
                 <?php if ($cloud_partner_id && isset($_GET['cloud'])):?>
                 <a href="http://<?=$cloud_service_uri;?>/api/cloudButton?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"> <img width="32px" height="22px" src="http://<?=$cloud_service_uri;?>/api/statusimage?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"></a>
                 <?endif;?>
-            </a> 
-            <div class="overlay" id="mies2">
+            </a>
+                <div class="overlay" id="mies2">
                 <object classid="clsid:67DABFBF-D0AB-41fa-9C46-CC0F21721616" width="560" height="450" codebase="http://go.divx.com/plugin/DivXBrowserPlugin.cab">
 
                     <param name="custommode" value="none" />
@@ -120,13 +123,16 @@ if (!empty($files[0])):
             <?
             break;
         default:
-            echo '<a href="' . $url . '">' . $name . '</a>';
-              /*<a href="http://<?=$cloud_service_uri;?>/api/cloudButton?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"> <img width="32px" height="22px"  src="http://<?=$cloud_service_uri;?>/api/statusimage?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"></a>*/
+            echo '<a href="' . $url . '">' . $name . '</a><br/>';
+            printAdminLink($url,$userrole);
+
+
+    /*<a href="http://<?=$cloud_service_uri;?>/api/cloudButton?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"> <img width="32px" height="22px"  src="http://<?=$cloud_service_uri;?>/api/statusimage?partner_id=<?=$cloud_partner_id;?>&partner_item_id=<?=$file['id'];?>"></a>*/
 
             break;
     }
+    }
     ?>
-
 
 
 
@@ -162,48 +168,109 @@ if (!empty($files[0])):
 // $urlFull = AppController::set_input_server($f['dir'] . '/' . $f['name'], false, $f['sgroup']);
             $url = '/catalog/load/' . $f['id'];
             $aurl = Yii::app()->createAbsoluteUrl($url);
+            $pageurl = '/catalog/file/' . $f['id'];
+            $purl = Yii::app()->createAbsoluteUrl($pageurl);
+            
             $name = $f['name'];
 //$ext= pathinfo($name,$name);
             $str_len = strlen($name);
             if ($str_len > 40)
                 $name = substr_replace($name, '...', 20, $str_len - 40);
+            if($f["cloud_ready"]==1 &&$f["cloud_state"]==0)
+            {?>
+                <a href="<?= $url; ?>"><?= $name; ?></a>
+                &nbsp;<button onclick="javascript: document.location.href = '<?=$purl."/1"?>';"><i class="icon-play"></i>
+            </button> <br/>
+    
+            <?
+
+            }else{
             switch ($ext):
                 case 'mp4':
+                case 'avi2':
+                case 'mkv2':
                     ?>
+                    <a href="<?= $url; ?>"><?= $name; ?></a>
+                    &nbsp;<button onclick="javascript: document.location.href = '<?=$purl."/1"?>';"><i class="icon-play"></i>
+                    </button> <br/>
 
-                    <a href="<?= $url; ?>"><?= $name; ?></a>
-                    &nbsp;<button class="play" rel="#mies"><i class="icon-play"></i>
-                        <div id="playlist" style="display:none;">
-                            <a href="<?= $aurl; ?>">
-                                <?= $name; ?>
-                            </a>      
-                        </div>
-                    </button> <br/>
-                    <?
-                    break;
-                case 'avi':
-                case 'mkv':
-                    ?>
-                    <a href="<?= $url; ?>"><?= $name; ?></a>
-                    &nbsp;<button class="play2" rel="#mies2"><i class="icon-play"></i>
-                        <div id="playlist" style="display:none;">
-                            <a href="<?= $aurl; ?>">
-                                <?= $name; ?>
-                            </a>      
-                        </div>
-                    </button> <br/>
                     <?
                     break;
                 default:
                     ?>
-                    <a href="<?= $url; ?>"><?= $name; ?></a>
-
-            <? endswitch; ?>
+                    <a href="<?= $url; ?>"><?= $name; ?></a><br/>
+            <? endswitch;} ?>
         <? endforeach; ?>
     <? endif; ?>
 <? else: ?>
     <h3><?= Yii::t('common', "File not found"); ?></h3>
-<? endif; ?>
+<? endif; 
+
+    if(isset($cloud)&&is_array($cloud))
+    {
+?>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+	<script src="/js/uppod/uppod-0.4.9.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/js/uppod/video33-1468.js"></script>
+<script type="text/javascript">
+   var ua = navigator.userAgent.toLowerCase();
+   var flashInstalled = false;
+<?
+//$cdn1 = Yii::app()->params['UppodServer'];
+$cdn1 = CFLServers::model()->getClientServerString($this->zone,10,"");
+
+$cloud_files=array();$nameIpone="";$nameIpad="";$names="";
+foreach($cloud as $v)
+{
+$cloud_files[$v['id']]=$v['fpath'];
+}
+$cloud=$cloud_files;
+if(isset($cloud[1]))$nameIpone=$cloud[1];
+if(isset($cloud[2]))$nameIpad=$cloud[2];else $nameIpad=$nameIpone;
+if(isset($cloud[1]))$names= "\"".$cdn1.$cloud[1];
+if(isset($cloud[2]))$names.= ",".$cdn1.$cloud[2];else $names.=",";
+if(isset($cloud[3]))$names.= ",".$cdn1.$cloud[3];else $names.=",";
+if(isset($cloud[4]))$names.= ",".$cdn1.$cloud[4];else $names.=",";
+$names.="\"";
+?>	
+	var names= <?=$names?>;
+	ScreenWidth = screen.width;     
+   if (typeof(navigator.plugins)!="undefined"&&typeof(navigator.plugins["Shockwave Flash"])=="object"){
+      flashInstalled = true;
+   } else if (typeof window.ActiveXObject != "undefined") {
+      try {
+         if (new ActiveXObject("ShockwaveFlash.ShockwaveFlash")) {
+            flashInstalled = true;
+         }
+      } catch(e) {};
+   };
+   if(ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1 || ua.indexOf("android") != -1 || ua.indexOf("Windows Phone") != -1 || ua.indexOf("BlackBerry") != -1){
+      //код HTML5
+	  if (ScreenWidth > 720) var name="<?=$cdn1.$nameIpone?>";
+	  if (ScreenWidth > 1000) var name="<?=$cdn1.$nameIpad?>";
+	  this.player = new Uppod({m:"video",uid:"player",file:names,st:"uppodvideo",pl:"/catalog/playlist/gid/<?= $file['group']; ?>/sid/<?= $file['sgroup']; ?>"});
+	  
+   }else{
+      if(!flashInstalled){
+         //просим установить Flash
+         document.getElementById("player").innerHTML="<a href=http://www.adobe.com/go/getflashplayer>Требуется обновить Flash-плеер</a>";
+      }else{
+         //код Flash (SWFObject)
+	var flashvars = {
+			file:names,
+			st:"/js/uppod/video33-1468.txt",
+            pl:"/catalog/playlist/gid/<?= $file['group']; ?>/sid/<?= $file['sgroup']; ?>"
+			}; 
+   var params = {bgcolor:"#ffffff", wmode:"window", allowFullScreen:"true", allowScriptAccess:"always"}; 
+   swfobject.embedSWF("/js/uppod/uppod.swf", "player","640","100%", "10.0.0.0", false, flashvars, params);
+
+
+		 }
+   }</script>
+
+<?	
+	}
+?>
 <script language="JavaScript">
     var player = flowplayer("player", "/js/player/flowplayer-3.2.8.swf",{
         plugins: {
@@ -222,6 +289,8 @@ if (!empty($files[0])):
         }
 
     }).playlist("#myplaylist", {loop:false});
+</script>
+    <script language="JavaScript">
     $("button.play").overlay({
         // use the Apple effect for overlay
         effect: 'apple',
@@ -262,194 +331,3 @@ if (!empty($files[0])):
 <? endif; ?>
 
 </script>
-<?
-/*
-
-
-  $key = $files[0]['Catalog']['id'];
-  $play = '<a rel="video" id="autoclick' . $key . '" href="#video' . $key . '"><img rel="play" src="/img/play.gif" width="19" title="' . __('Watch online', true) . '" alt="' . __('Watch online', true) . '" onclick="switchPlay(this);" /></a>';
-  $autoClick = '$("#autoclick' . $key . '").click();';
-  if (empty($url)) {
-  $name = __('Sorry. File is not accessible', true);
-  $href = 'noref="noref"';
-  $play = '';
-  } else {
-  $fileInfo = pathinfo(strtolower($urlFull));
-  if (!empty($fileInfo['extension'])) {
-  switch ($fileInfo['extension'])
-  {
-
-  case "mp4":
-  $hideContent .= '<div id="video' . $key . '"><a style="width:640px; height:480px; display:block" id="ipad' . $key . '" onclick="return addMp4Video(' . $key . ', \'' . $urlFull . '\');"></a></div>';
-  break;
-
-  case "mkv":
-  case "avi":
-  $hideContent .= '<div id="video' . $key . '" style="width:640px; height:480px; overflow: hidden; " >
-  <a onclick="return addAviVideo(' . $key . ', \'' . $urlFull . '\');"></a>
-  <object id="videoobj' . $key . '" classid="clsid:67DABFBF-D0AB-41fa-9C46-CC0F21721616" width="640" height="480" codebase="http://go.divx.com/plugin/DivXBrowserPlugin.cab">
-  <param name="wmode" value="opaque" />
-  <param name="autoPlay" value="true" />
-  <param name="src" value="' . $urlFull . '" />
-  <embed type="video/divx" src="' . $urlFull . '"	width="640" height="480" wmode="opaque" autoPlay="true" previewImage="" pluginspage="http://go.divx.com/plugin/download/">
-  </embed>
-  </object>
-  </div>';
-  break;
-  default:
-  $play = '';
-
-  }
-  } else {
-  $play = '';
-  }
-  }
-  echo '<p><a ' . $href . '>' . $name . '</a> ' . $app->sizeFormat($file['Catalog']['sz']) . ' ' . $play . '</p>';
-
-  $str = __('Typically, this file also loaded with', true);
-  }
-
-  if (count($files) > 1) {
-  echo'<h3>' . $str . '</h3><table cellspacing="3">';
-  echo'<tr valign="middle">
-  <td><a target="_blank" href="/catalog/meta/' . $file['Catalog']['group'] . '/0/1">' . __('All Files', true) . '</td>
-  <td></td></tr>';
-  foreach ($files as $f) {
-  if ($f['Catalog']['id'] == $file['Catalog']['id']) {
-  continue;
-  }
-  echo'<tr valign="middle"><td>';
-  $urlFull = AppController::set_input_server($f['Catalog']['dir'] . '/' . $f['Catalog']['name'], false, $f['Catalog']['sgroup']);
-  $url = '/catalog/load/' . $f['Catalog']['id'];
-  $href = 'href="' . $url . '"';
-  $name = $f['Catalog']['original_name'];
-  if (strlen($name) > 40) {
-  $part1 = substr($name, 0, 20);
-  $part2 = substr($name, -20, 20);
-  $name = $part1 . '...' . $part2;
-  }
-  $play = '<a rel="video" href="#video' . $key . '"><img rel="play" src="/img/play.gif" width="19" title="' . __('Watch online', true) . '" alt="' . __('Watch online', true) . '" onclick="switchPlay(this);" /></a>';
-  if (empty($url)) {
-  $name = __('Sorry. File is not accessible', true);
-  $href = 'noref="noref"';
-  $play = '';
-  } else {
-  $key = $f['Catalog']['id'];
-  $fileInfo = pathinfo(strtolower($urlFull));
-  if (!empty($fileInfo['extension'])) {
-  switch ($fileInfo['extension']) {
-  //*
-  case "mp4":
-  $hideContent .= '<div id="video' . $key . '"><a style="width:640px; height:480px; display:block" id="ipad' . $key . '" onclick="return addMp4Video(' . $key . ', \'' . $urlFull . '\');"></a></div>';
-  break;
-  // *//*
-  case "mkv":
-  case "avi":
-  $hideContent .= '<div id="video' . $key . '" style="width:640px; height:480px; overflow: hidden; " >
-  <a onclick="return addAviVideo(' . $key . ', \'' . $urlFull . '\');"></a>
-  <object id="videoobj' . $key . '" classid="clsid:67DABFBF-D0AB-41fa-9C46-CC0F21721616" width="640" height="480" codebase="http://go.divx.com/plugin/DivXBrowserPlugin.cab">
-  <param name="wmode" value="opaque" />
-  <param name="autoPlay" value="true" />
-  <param name="src" value="' . $urlFull . '" />
-  <embed type="video/divx" src="' . $urlFull . '"	width="640" height="480" wmode="opaque" autoPlay="true" previewImage="" pluginspage="http://go.divx.com/plugin/download/">
-  </embed>
-  </object>
-  </div>';
-  break;
-  default:
-  $play = '';
-  // *//*
-  }
-  } else {
-  $play = '';
-  }
-  }
-  echo '<a ' . $href . '>' . $name . '</a></td><td>' . $app->sizeFormat($file['Catalog']['sz']) . '</td><td>' . $play . '</tr>';
-  }
-  echo'</table>';
-  }
-  echo '<div style="display:none">' . $hideContent . '</div>';
-
-  if (!$autoPlay)
-  $autoClick = '';
-  /*
-  ?>
-
-  <script type="text/javascript">
-  <!--
-  $(document).ready(function() {
-  $("a[rel=video]").fancybox({
-  'zoomSpeedIn':  0,
-  'zoomSpeedOut': 0,
-  'overlayShow':  true,
-  'overlayOpacity': 0.8,
-  'showNavArrows': false,
-  'onComplete': function() { $(this.href + " a").trigger('click'); return false; }
-  });
-  <?php echo $autoClick; ?>
-  });
-
-  function addAviVideo(num, path)
-  {
-  //document.getElementById("video" + num).style.display="";
-  //$("#videoobj" + num).trigger('click');
-  return true;
-  }
-
-  function addMp4Video(num, path) {
-  document.getElementById("ipad" + num).href=path;
-  document.getElementById("video" + num).style.display="";
-  $f("ipad" + num, "/js/flowplayer/flowplayer-3.2.5.swf",
-  {plugins: {
-  h264streaming: {
-  url: "/js/flowplayer/flowplayer.pseudostreaming-3.2.5.swf"
-  }
-  },
-  clip: {
-  provider: "h264streaming",
-  autoPlay: true,
-  scaling: "fit",
-  autoBuffering: true,
-  scrubber: true
-  },
-  canvas: {
-  backgroundGradient: "none",
-  backgroundColor: "#000000"
-  }
-  }
-  ).ipad();
-  return false;
-  }
-
-  -->
-  </script>
-  <script type="text/javascript" src="/js/flowplayer/flowplayer-3.2.4.min.js"></script>
-  <script type="text/javascript" src="/js/flowplayer/flowplayer.ipad-3.2.1.js"></script>
-  <?php
-  $javascript->link('jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack', false);
-  $html->css('fancybox-1.3.4/jquery.fancybox-1.3.4', null, array(), false);
-  $javascript->link('jquery.pngFix', false);
-  $ret = '';
-  if (count($files) <= 1)
-  $ret = 'return false;';
-  echo '
-  <script type="text/javascript">
-  <!--
-  function switchPlay(cur)
-  {
-  ' . $ret . '
-  $("a img[rel=play]").css({display: \'\'});
-  cur.style.display="none";
-  }
-
-  -->
-  </script>
-  ';
-
-  }
-  else
-  __("File not found");
-  ?>
-  <br />
- */
-?>

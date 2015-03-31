@@ -61,8 +61,8 @@ if (!empty($files[0])):
 	
         ?>
         <p>
-           <a href="<?= $url; ?>"><?= $name; ?></a>
-        <a href="magnet:?<?=$tth?>&dn=<?=$name?><?=$sz?>">p2p</a><a href='http://videoxq.com/pages/dc-hub' target=_blank><img src=/images/p2p.jpg alt='p2p' width=20></a></p>
+         <?if(0){?>  <a href="<?= $url; ?>"><?= $name."!!"; ?></a><?}?>
+        <a href="magnet:?<?=$tth?>&dn=<?=$name?><?=$sz?>"><?=$name?></a><a href='http://videoxq.com/pages/dc-hub' target=_blank><img src=/images/p2p.jpg alt='p2p' width=20></a></p>
         <?
 
     if (count($files) > 1) :

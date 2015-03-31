@@ -255,11 +255,11 @@ class RMData
      * @return array
      */
     public function FindNewsWithoutLinks()
-    {
+    {//alternative: SELECT id,`category`,xfields FROM `rum_c_cat` WHERE xfields not like '%/catalog/viewv/%' and category not in (51,50,59,76,70,88,90,1,0)
         return Yii::app()->db->createCommand()
             ->select('rc.id,rc.title, rc.xfields')
             ->from('{{catalog}} c')
-            ->rightJoin('rum_c_cat rc', ' c.`group` = rc.id && (c.sgroup = 2 || c.sgroup = 5)')
+            ->rightJoin('rum_c_cat rc', ' c.`group` = rc.id && (c.sgroup = 2 || c.sgroup = 5 || c.sgroup = 6 || c.sgroup = 7)')
         //     ->group('c.group')
             ->where('c.id is NULL and  !(rc.category  in (' . Yii::app()->params['news_categories_sg2'] . '))')
             ->queryAll();
@@ -269,15 +269,62 @@ class RMData
      *
      * @return array
      */
-    public function FindLinksWithoutNews()
+    public function FindLinksWithoutNewsAll()
     {
+        //ѕроверка что все новости однообразные
+        //SELECT id,`category`,xfields FROM `rum_c_cat` WHERE xfields not like '%/catalog/viewv/%' and xfields like '%/catalog/%' and category not in (88,70,51,50,1,59,76,0)  ORDER BY `rum_c_cat`.`id`  DESC
+        $sgroupIds=array(5,6,7);//,2
+        $totalCount = Yii::app()->db->createCommand('SELECT Count(`id`) FROM {{catalog}} where `sgroup` IN ('.implode(',',$sgroupIds).")" )->queryScalar();
+        echo "totalcount:".$totalCount."<br>";
+        $count=500;
+        $offset = 0;
+        file_put_contents("/1.txt","totalcount:".$totalCount."\n");
+
+        while($offset<$totalCount){
+        $data=Yii::app()->db->createCommand()
+            ->select("id")
+            ->from('{{catalog}} c')
+            ->where('`sgroup` IN ('.implode(',',$sgroupIds).") and `group`<>0")
+            ->limit($count,$offset)
+            ->order('id desc')
+            ->queryAll();
+            //print_r($data);
+            $offset+=$count;
+            foreach($data as $ids)
+            {   $id=$ids['id'];
+                $count0=Yii::app()->db->createCommand("SELECT Count(`id`) FROM rum_c_cat where `xfields` like '%/catalog/viewv/".$id."%'") ->queryScalar();
+                if(!$count0)
+                    file_put_contents("/1.txt",$id."\n",FILE_APPEND);
+                    //Yii::app()->db->createCommand('UPDATE {{catalog}} set `group`=0 WHERE id =:item_id')->bindValues(array(':item_id'=>$id))->execute();
+            }
+            file_put_contents("/1.txt","..".$offset."\n",FILE_APPEND);
+
+            //break;
+
+        }
+        echo "..end<br>";
+
+        return NULL;
+
+    }
+
+
+    /**
+     *
+     * @return array
+     */
+    public function FindLinksWithoutNews($sgroup=NULL,$group=NULL)
+    {
+        if(!$sgroup)$sgroup="2,5,6,7";
+        if($group)$group="AND c.group<>".(int)$group;else $group="";
         return Yii::app()->db->createCommand()
             ->select('c.id,c.name, c.dir, c.original_name, c.group, c.tp, c.dt, c.sz, c.sgroup')
             ->from('{{catalog}} c')
             ->leftJoin('rum_c_cat rc', ' c.group = rc.id')
-            ->where('rc.id is NULL && (c.sgroup = 2 || c.sgroup = 5)')
-            ->order('c.id')
+            ->where('rc.id is NULL && c.sgroup in('.$sgroup.') '.$group)
+            ->order('c.name')
             ->queryAll();
+    //|| c.sgroup = 5 || c.sgroup = 6
     }
 
     public function MakeCache(){

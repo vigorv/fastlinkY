@@ -7,7 +7,7 @@
 <?php if ($file['sz'] > 0): ?>
 <size><?= $file['sz']; ?></size>
 <?php endif; ?>
-<?php if ((isset($file['chk_md5']))&&($file['chk_md5']<>'')): ?>
+<?php if ((isset($file['chk_md5']))&&($file['chk_md5']<>''&&($file['chk_md5']<>0))): ?>
 <verification>
 <hash type="md5"><?= $file['chk_md5']; ?></hash>
 </verification>

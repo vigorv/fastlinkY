@@ -61,7 +61,26 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         */
         array(
             'class'=>'CButtonColumn',
+        	'template'=> '{on} {off} {view} {update} {delete}',
+            'buttons' => array(
+                      'on' => array(
+                                       'label' => 'Деактивировать',
+                                        'imageUrl' => Yii::app()->baseUrl.'/images/nochek.gif',
+                                         'visible' => '$data->server_is_active == 1',
+                                          'url'   => 'Yii::app()->controller->createUrl("activate",array("id"=>$data->primaryKey,"state"=>0))',
+					    'options' => array( 'ajax' => array('type' => 'get', 'url'=>'js:$(this).attr("href")', 'success' => 'js:function(data) { $.fn.yiiGridView.update("cflservers-grid")}')),
+                                          
+                               ),
+                    	'off' => array(
+                    	                    'label' => 'Активировать',
+                    	                    'imageUrl' => Yii::app()->baseUrl.'/images/chek.gif',
+                    	                    'visible' => '$data->server_is_active == 0',
+                    	                    'url'   => 'Yii::app()->controller->createUrl("activate",array("id"=>$data->primaryKey,"state"=>1))',
+					    'options' => array( 'ajax' => array('type' => 'get', 'url'=>'js:$(this).attr("href")', 'success' => 'js:function(data) { $.fn.yiiGridView.update("cflservers-grid")}')),
+                    	                    
+                    	                     ),
+                               
+	    ),
         ),
     ),
 )); ?>
-close

@@ -37,8 +37,9 @@ class ServersController extends AdmController {
             $this->actionIndex();
         else {
             $item = CFLServers::model()->findByPk($id);
+            //$item['id']=$item['server_id'];
             $columns = CFLServers::model()->getFullColumnsList();
-            $table = $this->renderPartial('/elements/view_edit', array('item' => $item, 'columns' => $columns), true);
+            $table = $this->renderPartial('/elements/view', array('item' => $item, 'columns' => $columns), true);
             $this->render('index', array('table' => $table));
         }
     }
@@ -53,11 +54,51 @@ class ServersController extends AdmController {
                 echo "Added";
             }
         }
-        //var_dump($item);exit();
         $table = $this->renderPartial('/elements/add', array('item' => $item), true);
         $this->render('index', array('table' => $table));
     }
 
-}
+    public function actionUpdate($id) {
+        $model = $this->loadModel($id);
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+        if (isset($_POST['CFLServers'])) {
+        $model->attributes = $_POST['CFLServers'];
+        if ($model->save())
+                //$this->redirect(array('view', 'id' => $model->server_id));
+                $this->redirect(array('index'));
+        }
+        $this->render('update', array(
+                            'model' => $model,
+            ));
+    }
+    public function loadModel($id) {
+            $model = CFLServers::model()->findByPk($id);
+            if ($model === null)
+                    throw new CHttpException(404, 'The requested page does not exist.');
+                    return $model;
+            }
+    public function actionActivate($id,$state)
+    {
+            $model = $this->loadModel($id);
+            if ($model){
+             $model->setActive($id,$state);
+             echo 'Updated';
+          } else {
+          echo "not found";
+    	  }
 
+    
+    }
+
+    public function actionDelete($id){
+            $model = $this->loadModel($id);
+            if ($model){
+             $model->deleteByPk($id);
+             echo 'Deleted';
+          } else {
+          echo "not found";
+    	  }
+    }
+}
 ?>
